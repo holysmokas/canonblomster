@@ -2,7 +2,7 @@
 # CanonBlomster
 Canon Blomster boutique i københavn website. 
 =======
-# My Website
+# Canon Blomster
 
 This is a simple website project that can be hosted on GitHub Pages with a unique domain.
 
@@ -27,12 +27,12 @@ To get started with this project, follow these steps:
 
 1. Clone the repository to your local machine:
    ```
-   git clone https://github.com/yourusername/my-website.git
+   git clone https://github.com/yourusername/CanonBlomster.git
    ```
 
 2. Navigate to the project directory:
    ```
-   cd my-website
+   cd CanonBlomster
    ```
 
 3. Install any necessary dependencies (if applicable):
