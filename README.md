@@ -53,7 +53,7 @@ To deploy the website on GitHub Pages:
 1. Push your changes to the `main` branch of your GitHub repository.
 2. Go to the repository settings on GitHub.
 3. Scroll down to the "GitHub Pages" section and select the `main` branch as the source.
-4. Your website will be available at `https://yourusername.github.io/my-website`.
+4. Your website will be available at `https://babakmilani.github.io/CanonBlomster`.
 
 ## License
 
