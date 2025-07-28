@@ -1,6 +1,6 @@
 /* ...existing code... */
 body {
-    background-image: url('../images/background.jpg');
+    background-image: url('../images/background.jpeg');
     /* Adjusted path for CSS file location */
     background-size: cover;
     background-position: center;
