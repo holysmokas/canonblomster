@@ -7,12 +7,45 @@ body {
     min-height: 100vh;
 }
 
-
+/* ----header------ */
 header {
     background: none;
     color: #df20af;
     padding: 10px 0;
     text-align: center;
+}
+
+.header-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Center content horizontally */
+    padding: 10px 16px;
+    position: relative;
+}
+
+.header-flex h1 {
+    flex: 0 1 auto;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 1.5em;
+}
+
+@media (max-width: 600px) {
+    .header-flex h1 {
+        font-size: 1.1em;
+    }
+
+    .hamburger-nav {
+        margin-left: 8px;
+    }
+}
+
+/* ------header----END */
+
+.hamburger-nav {
+    position: static;
+    margin-left: 16px;
 }
 
 nav {
@@ -47,19 +80,18 @@ footer {
 
 /* ...unique classes... */
 .intro {
-    font-size: 2.2em;
-    line-height: 1.6;
+    font-size: 1.1em;
+    /* or your preferred size */
+    line-height: 1.5;
     color: #000;
-    margin: 20px 0;
-    text-align: center;
-    /* Add text outline */
-    -webkit-text-stroke: 1px #000;
-    /* Black outline */
-    text-shadow:
-        1px 1px 0 #df20af,
-        -1px 1px 0 #df20af,
-        1px -1px 0 #df20af,
-        -1px -1px 0 #df20af;
+    margin: 0;
+    text-align: left;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(223, 32, 175, 0.07);
+    max-height: 370px;
+    overflow-y: auto;
 }
 
 /* ...unique classes end... */
@@ -68,8 +100,9 @@ footer {
 /* ...hamburger menu icon... */
 .hamburger-nav {
     position: absolute;
-    top: 20px;
-    right: 30px;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .hamburger {
@@ -180,3 +213,107 @@ footer {
         opacity: 1;
     }
 }
+
+/* ...Kurater.html styling... */
+
+.kurater-flex {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 40px auto;
+    max-width: 900px;
+    flex-wrap: wrap;
+}
+
+.kurater-flex {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 40px auto;
+    max-width: 900px;
+    flex-wrap: wrap;
+}
+
+.kurater-left {
+    flex: 1 1 300px;
+    min-width: 250px;
+}
+
+.kurater-right {
+    flex: 1 1 320px;
+    min-width: 260px;
+    max-width: 350px;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #faf6fb;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(223, 32, 175, 0.07);
+    margin-bottom: 20px;
+}
+
+.contact-form h2 {
+    margin-top: 0;
+    color: #df20af;
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 8px;
+    border: 1px solid #df20af;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.contact-form button {
+    background: #df20af;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.contact-form button:hover {
+    background: #b81a8c;
+}
+
+.business-info {
+    background: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(223, 32, 175, 0.05);
+}
+
+.business-info h3 {
+    margin-top: 0;
+    color: #df20af;
+}
+
+.business-info a {
+    color: #df20af;
+    text-decoration: none;
+}
+
+@media (max-width: 800px) {
+    .kurater-flex {
+        flex-direction: column;
+        gap: 24px;
+        align-items: stretch;
+    }
+
+    .kurater-right,
+    .kurater-left {
+        max-width: 100%;
+    }
+}
+
+/* ...Kurater.html styling END... */
