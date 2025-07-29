@@ -134,31 +134,37 @@ footer {
 
 /* ...Index Page slideshow... */
 .auto-slideshow {
-    width: 900px;
-    /* Thumbnail width + padding */
+    width: 500px;
     margin: 40px auto;
     position: relative;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .mySlides {
     display: none;
-    width: 100%;
-    height: 440px;
-    /* Thumbnail height */
+    width: 480px;
+    /* Fixed width to match image */
+    height: 420px;
+    /* Fixed height to match image */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    /* Center horizontally */
 }
 
 .mySlides img {
-    width: 800px;
-    /* Thumbnail width */
-    height: 400px;
-    /* Thumbnail height */
+    width: 480px;
+    height: 420px;
     object-fit: cover;
     border-radius: 10px;
     display: block;
-    margin: 0 auto;
 }
 
 .fade {
