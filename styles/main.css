@@ -360,22 +360,38 @@ footer {
 
 /* ...index.html side popups... */
 
-.side-popups {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    width: 0;
-    pointer-events: none;
-    z-index: 2000;
-}
-
 .side-popups.left {
     left: 0;
+    top: auto;
+    /* Remove top constraint */
+    bottom: 20px;
+    /* Position container 20px from bottom */
+    width: auto;
+    /* Allow width for contents */
+    height: auto;
+    /* Content-defined height */
+    pointer-events: auto;
+    /* Enable pointer events */
 }
 
-.side-popups.right {
-    right: 0;
+/* Position popups from bottom instead of top */
+.popup-left-top {
+    bottom: 160px;
+    /* e.g., align bottom 160px from container bottom */
+    top: auto;
+    /* override top */
 }
+
+.popup-left-middle {
+    bottom: 90px;
+    top: auto;
+}
+
+.popup-left-bottom {
+    bottom: 20px;
+    top: auto;
+}
+
 
 .popup {
     position: absolute;
@@ -436,4 +452,5 @@ footer {
     opacity: 1;
     transform: translateX(0);
 }
+
 /*...index.html side popups end...*/

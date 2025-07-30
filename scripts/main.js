@@ -1,5 +1,3 @@
-/* main.js */
-
 
 // scripts/main.js
 document.addEventListener("DOMContentLoaded", function () {
@@ -36,20 +34,20 @@ function showSidePopups() {
     setTimeout(() => {
         const popup = document.querySelector('.popup-left-top');
         popup.classList.add('show');
-        setTimeout(() => popup.classList.remove('show'), 2000);
+        setTimeout(() => popup.classList.remove('show'), 800);
     }, 400);
 
     setTimeout(() => {
         const popup = document.querySelector('.popup-left-middle');
         popup.classList.add('show');
-        setTimeout(() => popup.classList.remove('show'), 2000);
-    }, 1400);
+        setTimeout(() => popup.classList.remove('show'), 1200);
+    }, 800);
 
     setTimeout(() => {
         const popup = document.querySelector('.popup-left-bottom');
         popup.classList.add('show');
-        setTimeout(() => popup.classList.remove('show'), 2000);
-    }, 2400);
+        setTimeout(() => popup.classList.remove('show'), 1400);
+    }, 1200);
 
 
     // Right side
@@ -57,18 +55,18 @@ function showSidePopups() {
         const popup = document.querySelector('.popup-right-top');
         popup.classList.add('show');
         setTimeout(() => popup.classList.remove('show'), 2000);
-    }, 400);
+    }, 1600);
 
     setTimeout(() => {
         const popup = document.querySelector('.popup-right-middle');
         popup.classList.add('show');
-        setTimeout(() => popup.classList.remove('show'), 2000);
-    }, 1400);
+        setTimeout(() => popup.classList.remove('show'), 2400);
+    }, 2000);
 
     setTimeout(() => {
         const popup = document.querySelector('.popup-right-bottom');
         popup.classList.add('show');
-        setTimeout(() => popup.classList.remove('show'), 2000);
+        setTimeout(() => popup.classList.remove('show'), 2800);
     }, 2400);
 }
 
