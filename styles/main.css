@@ -6,41 +6,78 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     min-height: 100vh;
+
+
 }
 
 /* ----header------ */
-header {
-    background: none;
-    color: #df20af;
-    padding: 10px 0;
-    text-align: center;
-}
 
 .header-flex {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Center content horizontally */
-    padding: 10px 16px;
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    /* use viewport width to avoid overflow */
+    padding: 20px 16px 10px 16px;
+    z-index: 3000;
+    background: transparent;
+    pointer-events: auto;
+    gap: 40px;
+    box-sizing: border-box;
+    /* ensure padding inside the width */
+    overflow: visible;
+    /* allow children overflow if needed */
 }
 
+
+/* Center the h1 horizontally and push it down a bit */
 .header-flex h1 {
     flex: 0 1 auto;
-    text-align: center;
-    margin: 0 auto;
+    margin: 0;
     font-size: 1.5em;
+    color: #df20af;
+    position: absolute;
+    left: 50%;
+    top: 24px;
+    /* Push down from top */
+    transform: translateX(-50%);
+    pointer-events: none;
 }
 
+/* Move hamburger menu back to the top right corner */
+.hamburger-nav {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    /* adjust this to your preference */
+    left: auto;
+    pointer-events: auto;
+}
+
+
+
+/* Adjust main content padding to avoid overlap with taller header */
+main {
+    padding-top: 70px;
+    /* Increase padding to header's new height */
+}
+
+/* Responsive adjustments */
 @media (max-width: 600px) {
     .header-flex h1 {
         font-size: 1.1em;
+        top: 20px;
     }
 
     .hamburger-nav {
-        margin-left: 8px;
+        top: 12px;
+        right: 12px;
     }
 }
+
 
 /* ------header----END */
 
