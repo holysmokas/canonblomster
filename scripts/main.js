@@ -34,25 +34,43 @@ function autoShowSlides() {
 function showSidePopups() {
     // Left side
     setTimeout(() => {
-        document.querySelector('.popup-left-top').classList.add('show');
+        const popup = document.querySelector('.popup-left-top');
+        popup.classList.add('show');
+        setTimeout(() => popup.classList.remove('show'), 2000);
     }, 400);
+
     setTimeout(() => {
-        document.querySelector('.popup-left-middle').classList.add('show');
+        const popup = document.querySelector('.popup-left-middle');
+        popup.classList.add('show');
+        setTimeout(() => popup.classList.remove('show'), 2000);
     }, 1400);
+
     setTimeout(() => {
-        document.querySelector('.popup-left-bottom').classList.add('show');
+        const popup = document.querySelector('.popup-left-bottom');
+        popup.classList.add('show');
+        setTimeout(() => popup.classList.remove('show'), 2000);
     }, 2400);
+
 
     // Right side
     setTimeout(() => {
-        document.querySelector('.popup-right-top').classList.add('show');
+        const popup = document.querySelector('.popup-right-top');
+        popup.classList.add('show');
+        setTimeout(() => popup.classList.remove('show'), 2000);
     }, 400);
+
     setTimeout(() => {
-        document.querySelector('.popup-right-middle').classList.add('show');
+        const popup = document.querySelector('.popup-right-middle');
+        popup.classList.add('show');
+        setTimeout(() => popup.classList.remove('show'), 2000);
     }, 1400);
+
     setTimeout(() => {
-        document.querySelector('.popup-right-bottom').classList.add('show');
+        const popup = document.querySelector('.popup-right-bottom');
+        popup.classList.add('show');
+        setTimeout(() => popup.classList.remove('show'), 2000);
     }, 2400);
 }
+
 
 document.addEventListener("DOMContentLoaded", showSidePopups);
