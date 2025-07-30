@@ -454,3 +454,65 @@ footer {
 }
 
 /*...index.html side popups end...*/
+
+/* Reviews Section Styling */
+.reviews-section {
+    max-width: 960px;
+    margin: 40px auto 60px auto;
+    padding: 0 20px;
+}
+
+.reviews-section h2 {
+    font-size: 1.8em;
+    color: #df20af;
+    margin-bottom: 16px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Container for horizontal scrolling */
+.reviews-container {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+    /* for Firefox */
+}
+
+/* For Webkit browsers */
+.reviews-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.reviews-container::-webkit-scrollbar-thumb {
+    background-color: #df20af;
+    border-radius: 4px;
+}
+
+/* Each review card styling */
+.review-card {
+    flex: 0 0 280px;
+    /* fixed width */
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(223, 32, 175, 0.12);
+    padding: 20px;
+    box-sizing: border-box;
+    color: #333;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.review-text {
+    font-size: 1.1em;
+    margin-bottom: 14px;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.review-author {
+    font-weight: 700;
+    color: #df20af;
+    font-size: 0.95em;
+    text-align: right;
+}
