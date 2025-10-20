@@ -730,25 +730,25 @@ footer {
     text-align: center;
 }
 
-/* ===== PAGE-SPECIFIC HEADER COLORS ===== */
-body.botanisk header.header-flex,
-body.kurater header.header-flex {
+/* ===== UNIFIED WHITE HEADER FOR ALL PAGES ===== */
+header.header-flex {
     background-color: white !important;
     color: #df20af !important;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-body.botanisk .hamburger span,
-body.kurater .hamburger span {
-    background-color: #df20af !important;
-}
-
-body.botanisk header.header-flex h1,
-body.kurater header.header-flex h1 {
+header.header-flex h1 {
     color: #df20af !important;
 }
 
-body.botanisk .menu a,
-body.kurater .menu a {
+header.header-flex .opening-hours {
+    color: #df20af !important;
+}
+
+.hamburger span {
+    background-color: #df20af !important;
+}
+
+.menu a {
     color: #df20af !important;
 }
