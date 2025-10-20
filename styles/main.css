@@ -1,0 +1,731 @@
+/* main.css */
+
+/* ===== GLOBAL STYLES ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url('../images/background.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+/* ===== HEADER ===== */
+.header-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    padding: 20px 16px 10px 16px;
+    z-index: 3000;
+    background: transparent;
+    pointer-events: auto;
+    gap: 40px;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+.header-flex h1 {
+    flex: 0 1 auto;
+    margin: 0;
+    font-size: 1.5em;
+    color: #df20af;
+    position: absolute;
+    left: 50%;
+    top: 24px;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.header-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.opening-hours {
+    font-size: 0.9rem;
+    color: #444;
+    margin-top: 4px;
+    letter-spacing: 0.3px;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .opening-hours {
+        font-size: 0.8rem;
+    }
+}
+
+
+/* ===== HAMBURGER MENU ===== */
+.hamburger-nav {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    left: auto;
+    pointer-events: auto;
+}
+
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 56px;
+    height: 48px;
+    cursor: pointer;
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.6);
+    /* more visible against light bg */
+    padding: 8px;
+    border-radius: 10px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.hamburger span {
+    display: block;
+    height: 8px;
+    width: 100%;
+    background: #df20af;
+    /* bright purple for visibility */
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+
+#menu-toggle {
+    display: none;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 16px 24px;
+    z-index: 1000;
+}
+
+.menu li {
+    margin: 12px 0;
+}
+
+.menu a {
+    color: purple;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+#menu-toggle:checked+.hamburger+.menu {
+    display: block;
+}
+
+/* ===== MAIN CONTENT ===== */
+main {
+    padding-top: 70px;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    background: none;
+    color: #df20af;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* ===== INTRO TEXT ===== */
+.intro {
+    font-size: 1.1em;
+    line-height: 1.5;
+    color: #000;
+    margin: 0;
+    text-align: left;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(223, 32, 175, 0.07);
+    max-height: 370px;
+    overflow-y: auto;
+}
+
+/* ===== INDEX PAGE SLIDESHOW ===== */
+.auto-slideshow {
+    width: 500px;
+    margin: 40px auto;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mySlides {
+    display: none;
+    width: 480px;
+    height: 420px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.mySlides img {
+    width: 480px;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+}
+
+.fade {
+    animation: fadeEffect 1s;
+}
+
+@keyframes fadeEffect {
+    from {
+        opacity: 0.4;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ===== SIDE POPUPS (INDEX PAGE) ===== */
+.side-popups.left {
+    position: fixed;
+    left: 0;
+    top: auto;
+    bottom: 20px;
+    width: auto;
+    height: auto;
+    pointer-events: auto;
+}
+
+.popup {
+    position: absolute;
+    width: 320px;
+    height: 48px;
+    background: #fff;
+    color: #df20af;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(223, 32, 175, 0.12);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    font-size: 1.1em;
+    font-weight: bold;
+    opacity: 0;
+    transform: translateX(-120%);
+    transition: transform 0.7s cubic-bezier(.77, 0, .18, 1), opacity 0.7s;
+    pointer-events: auto;
+}
+
+.popup-right {
+    right: 0;
+    left: auto;
+    transform: translateX(120%);
+}
+
+.popup-left-top {
+    top: 40px;
+}
+
+.popup-left-middle {
+    top: 120px;
+}
+
+.popup-left-bottom {
+    top: 200px;
+}
+
+.popup-right-top {
+    top: 40px;
+}
+
+.popup-right-middle {
+    top: 120px;
+}
+
+.popup-right-bottom {
+    top: 200px;
+}
+
+.popup.show.popup-left {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.popup.show.popup-right {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ===== REVIEWS SECTION (INDEX PAGE) ===== */
+.reviews-section {
+    max-width: 960px;
+    margin: 40px auto 60px auto;
+    padding: 0 20px;
+}
+
+.reviews-section h2 {
+    font-size: 1.8em;
+    color: #df20af;
+    margin-bottom: 16px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.reviews-container {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+}
+
+.reviews-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.reviews-container::-webkit-scrollbar-thumb {
+    background-color: #df20af;
+    border-radius: 4px;
+}
+
+.review-card {
+    flex: 0 0 280px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(223, 32, 175, 0.12);
+    padding: 20px;
+    box-sizing: border-box;
+    color: #333;
+}
+
+.review-text {
+    font-size: 1.1em;
+    margin-bottom: 14px;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.review-author {
+    font-weight: 700;
+    color: #df20af;
+    font-size: 0.95em;
+    text-align: right;
+}
+
+/* ===== BOTANISK PAGE - IMAGE GRID ===== */
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 28px;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 16px;
+}
+
+.image-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(223, 32, 175, 0.07);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.image-desc {
+    padding: 12px 10px;
+    font-size: 1em;
+    color: #222;
+    text-align: center;
+    min-height: 48px;
+}
+
+/* ===== KURATER PAGE LAYOUT ===== */
+.kurater-flex {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 40px auto;
+    max-width: 900px;
+    flex-wrap: wrap;
+}
+
+.kurater-left {
+    flex: 1 1 300px;
+    min-width: 250px;
+}
+
+.kurater-right {
+    flex: 1 1 320px;
+    min-width: 260px;
+    max-width: 350px;
+}
+
+/* ===== CONTACT FORM (KURATER PAGE) ===== */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #faf6fb;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(223, 32, 175, 0.07);
+    margin-bottom: 20px;
+}
+
+.contact-form h2 {
+    margin-top: 0;
+    color: #df20af;
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 10px 15px;
+    border: 2px solid #e8e8e8;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: #df20af;
+    box-shadow: 0 0 0 3px rgba(223, 32, 175, 0.1);
+}
+
+.contact-form select,
+.contact-form input[type="date"],
+.contact-form input[type="time"],
+.contact-form input[type="number"] {
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid #e8e8e8;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.contact-form select:focus,
+.contact-form input[type="date"]:focus,
+.contact-form input[type="time"]:focus,
+.contact-form input[type="number"]:focus {
+    outline: none;
+    border-color: #df20af;
+    box-shadow: 0 0 0 3px rgba(223, 32, 175, 0.1);
+}
+
+.contact-form button {
+    background: linear-gradient(135deg, #df20af 0%, #e85d75 100%);
+    color: #fff;
+    border: none;
+    padding: 14px 30px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.05em;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+}
+
+.contact-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(223, 32, 175, 0.3);
+    background: linear-gradient(135deg, #c91a9a 0%, #d44f65 100%);
+}
+
+/* ===== BUSINESS INFO ===== */
+.business-info {
+    background: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(223, 32, 175, 0.05);
+}
+
+.business-info h3 {
+    margin-top: 0;
+    color: #df20af;
+}
+
+.business-info a {
+    color: #df20af;
+    text-decoration: none;
+}
+
+/* ===== FORM SECTIONS (FOR QUOTE FORM) ===== */
+.form-section {
+    margin-bottom: 35px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+}
+
+.section-title {
+    font-size: 1.3em;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
+.required {
+    color: #e74c3c;
+    margin-left: 3px;
+}
+
+/* ===== CHECKBOXES AND RADIO BUTTONS ===== */
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.checkbox-item label {
+    margin: 0;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.radio-item {
+    display: flex;
+    align-items: center;
+}
+
+.radio-item input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.radio-item label {
+    margin: 0;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+/* ===== FILE UPLOAD ===== */
+.file-upload {
+    border: 2px dashed #e8e8e8;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+.file-upload:hover {
+    border-color: #df20af;
+    background: #ffeef8;
+}
+
+.file-upload input[type="file"] {
+    display: none;
+}
+
+.file-upload-label {
+    color: #666;
+    font-size: 0.95em;
+}
+
+.help-text {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 800px) {
+    .kurater-flex {
+        flex-direction: column;
+        gap: 24px;
+        align-items: stretch;
+    }
+
+    .kurater-right,
+    .kurater-left {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-flex h1 {
+        font-size: 1.1em;
+        top: 20px;
+    }
+
+    .hamburger-nav {
+        top: 12px;
+        right: 12px;
+    }
+}
+
+/* ========== Header: two-line title + opening hours ========== */
+/* Put this at the end of styles/main.css */
+
+.header-flex {
+    /* make room for two lines and keep it fixed at top */
+    padding: 18px 16px;
+    min-height: 72px;
+    /* adjust if you want more space */
+    align-items: center;
+    /* center contents vertically */
+    gap: 12px;
+}
+
+/* Target the title wrapper to stack title + hours */
+.header-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Override the absolute positioning used earlier for the H1 */
+.header-flex h1 {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    margin: 0;
+    font-size: 1.5em;
+    pointer-events: auto;
+    color: #df20af;
+    /* keep your brand color */
+}
+
+/* Opening hours style */
+.opening-hours {
+    font-size: 0.9rem;
+    color: #444;
+    margin-top: 4px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+/* Keep hamburger positioned at top-right but vertically centered */
+.hamburger-nav {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Slight responsive tweaks */
+@media (max-width: 768px) {
+    .header-flex {
+        padding: 12px 12px;
+        min-height: 64px;
+    }
+
+    .header-flex h1 {
+        font-size: 1.1em;
+    }
+
+    .opening-hours {
+        font-size: 0.8rem;
+    }
+
+    .hamburger-nav {
+        right: 12px;
+    }
+}
+
+/* ===== FORM STYLES (MAPS) ===== */
+
+.maps-section {
+    
+    max-width: 800px;
+    margin: 40px auto 60px auto;
+    padding: 0 20px;
+    text-align: center;
+}
