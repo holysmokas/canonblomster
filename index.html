@@ -1,32 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canon Blomster</title>
+    <title>Forespørgsel om blomsterarrangement – Canon Blomster</title>
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/kurater.css">
     <link rel="icon" type="image/jpeg" href="images/favicon.jpeg">
-
 </head>
 
 <body>
     <header class="header-flex">
-<<<<<<< HEAD
-<<<<<<< HEAD
-        <h1>CANON BLOMSTER</h1>
-=======
         <div class="header-title">
             <h1>CANON BLOMSTER</h1>
-            <p class="opening-hours">Åbent: Mandag – Fredag 10:00–17:00 &nbsp; | &nbsp; Lørdag 10:00–16:00 | &nbsp; Søndag 10:00–16:00</p>
+            <p class="opening-hours">
+                Åbent: Mandag – Lørdag 9:00–16:00 &nbsp; | &nbsp; Søndag 10:00–16:00
+            </p>
         </div>
->>>>>>> 948a15d (modified the font text of the intro class intro in botanisk.html)
-=======
-        <div class="header-title">
-            <h1>CANON BLOMSTER</h1>
-            <p class="opening-hours">Åbent: Mandag – Lørdag 9:00–16:00 &nbsp; | &nbsp; Søndag 10:00–16:00</p>
-        </div>
->>>>>>> 68cb46d4b1c908fbabdb8495fb253d86757c917a
+
         <nav class="hamburger-nav">
             <input type="checkbox" id="menu-toggle" />
             <label for="menu-toggle" class="hamburger">
@@ -35,98 +27,216 @@
                 <span></span>
             </label>
             <ul class="menu">
-                <li><a href="index.html">Hjemside</a></li>
+                <li><a href="index.html" class="active">Hjem</a></li>
                 <li><a href="botanisk.html">Botanisk</a></li>
                 <li><a href="kurater.html">Kurater</a></li>
             </ul>
         </nav>
     </header>
+
     <main>
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 68cb46d4b1c908fbabdb8495fb253d86757c917a
-        <a href="botanisk.html" style="display: block; width: fit-content; margin: 0 auto;">
-            <div class="auto-slideshow">
-                <div class="mySlides fade">
-                    <img src="images/image_1.jpeg" alt="Blomst 1">
-                </div>
-                <div class="mySlides fade">
-                    <img src="images/image_2.jpeg" alt="Blomst 2">
-                </div>
-                <div class="mySlides fade">
-                    <img src="images/image_3.jpeg" alt="Blomst 3">
-                </div>
-                <div class="mySlides fade">
-                    <img src="images/image_4.jpeg" alt="Blomst 4">
-                </div>
-                <div class="mySlides fade">
-                    <img src="images/image_5.jpeg" alt="Blomst 5">
-                </div>
+        <div class="container">
+            <div class="header">
+                <h1>🌸 Forespørgsel om blomsterarrangement</h1>
+                <p>Lad os skabe noget smukt til din særlige begivenhed</p>
             </div>
-        </a>
 
-        <section class="reviews-section" aria-label="Kundeanmeldelser">
-            <h2>Kundeanmeldelser</h2>
-            <div class="reviews-container">
-                <article class="review-card">
-                    <p class="review-text">"Fantastisk service! Jeg bestilte blomster til min mors fødselsdag, og Canon
-                        Blomster leverede hurtigt og smukt bundt."</p>
-                    <p class="review-author">- Mette, København</p>
-                </article>
-                <article class="review-card">
-                    <p class="review-text">"Jeg har bestilt flere gange online, og hver gang er blomsterne friske og
-                        smukke. Kan varmt anbefales!"</p>
-                    <p class="review-author">- Anne, Frederiksberg</p>
-                </article>
-                <article class="review-card">
-                    <p class="review-text">"Perfekt til bryllupsdekorationer. Levering på dagen og utrolig venlig
-                        betjening."</p>
-                    <p class="review-author">- Rikke, Amager</p>
-                </article>
-                <article class="review-card">
-                    <p class="review-text">"Blomsterne var en stor succes til festen – alle spurgte, hvor de kom fra."
-                    </p>
-                    <p class="review-author">- Lise, Østerbro</p>
-                </article>
-                <article class="review-card">
-                    <p class="review-text">"Bestilte til begravelse. Respektfuld og hurtig levering. Tak for god hjælp."
-                    </p>
-                    <p class="review-author">- Thomas, Valby</p>
-                </article>
+            <div class="form-content">
+                <form id="quoteForm">
+                    <!-- Kontaktoplysninger -->
+                    <div class="section">
+                        <h2 class="section-title">Kontaktoplysninger</h2>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Fornavn <span class="required">*</span></label>
+                                <input type="text" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Efternavn <span class="required">*</span></label>
+                                <input type="text" name="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>E-mailadresse <span class="required">*</span></label>
+                                <input type="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Telefonnummer <span class="required">*</span></label>
+                                <input type="tel" name="phone" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Foretrukken kontaktmetode <span class="required">*</span></label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="contactMethod" value="email" checked> E-mail</label>
+                                <label><input type="radio" name="contactMethod" value="phone"> Telefon</label>
+                                <label><input type="radio" name="contactMethod" value="text"> SMS</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Begivenhedsdetaljer -->
+                    <div class="section">
+                        <h2 class="section-title">Begivenhedsdetaljer</h2>
+
+                        <div class="form-group">
+                            <label>Type af begivenhed <span class="required">*</span></label>
+                            <select name="occasionType" required>
+                                <option value="">Vælg begivenhed...</option>
+                                <option value="wedding">Bryllup</option>
+                                <option value="birthday">Fødselsdag</option>
+                                <option value="anniversary">Jubilæum</option>
+                                <option value="corporate">Firmaevent</option>
+                                <option value="funeral">Begravelse</option>
+                                <option value="other">Andet</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Dato for begivenhed <span class="required">*</span></label>
+                                <input type="date" name="eventDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Tidspunkt for begivenhed</label>
+                                <input type="time" name="eventTime">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Antal gæster (hvis relevant)</label>
+                            <input type="number" name="guestCount" min="0" placeholder="Ca. antal">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Sted/Adresse for begivenheden</label>
+                            <input type="text" name="venue" placeholder="Navn og adresse på stedet">
+                        </div>
+                    </div>
+
+                    <!-- Blomsterpræferencer -->
+                    <div class="section">
+                        <h2 class="section-title">Blomsterpræferencer</h2>
+
+                        <div class="form-group">
+                            <label>Foretrukne blomsterarter</label>
+                            <input type="text" name="flowerTypes" placeholder="f.eks. roser, pæoner, tulipaner...">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Farveønsker <span class="required">*</span></label>
+                            <input type="text" name="colorPreferences" placeholder="f.eks. rosa, elfenben, pasteller..."
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Stilpræference</label>
+                            <select name="style">
+                                <option value="">Vælg en stil...</option>
+                                <option value="classic">Klassisk</option>
+                                <option value="romantic">Romantisk</option>
+                                <option value="modern">Moderne</option>
+                                <option value="rustic">Rustik</option>
+                                <option value="elegant">Elegant</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Budget og detaljer -->
+                    <div class="section">
+                        <h2 class="section-title">Budget og yderligere oplysninger</h2>
+
+                        <div class="form-group">
+                            <label>Forventet budget <span class="required">*</span></label>
+                            <select name="budget" required>
+                                <option value="">Vælg interval...</option>
+                                <option value="under-1500">Under 1500 kr.</option>
+                                <option value="1500-3500">1500 - 3500 kr.</option>
+                                <option value="3500-7000">3500 - 7000 kr.</option>
+                                <option value="7000-plus">Over 7000 kr.</option>
+                                <option value="flexible">Fleksibelt</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Leveringsadresse (hvis relevant)</label>
+                            <textarea name="deliveryAddress" placeholder="Gade, by, postnummer"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Yderligere ønsker eller kommentarer</label>
+                            <textarea name="additionalDetails" placeholder="Fortæl os om tema, stil, særlige ønsker..."
+                                rows="5"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Inspirationsbilleder (valgfrit)</label>
+                            <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                                <input type="file" id="fileInput" name="photos" accept="image/*" multiple>
+                                <div class="file-upload-label">
+                                    📷 Klik for at uploade billeder eller træk dem herind<br>
+                                    <small>Upload gerne inspirationsbilleder</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Send forespørgsel</button>
+                </form>
             </div>
-        </section>
-<<<<<<< HEAD
-=======
-        <section class="maps-section" aria-label="Butikkens placering=">
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2251.4767353231255!2d12.611672377320161!3d55.64591667304484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4653aca985d9f60b%3A0x29f40141e32fcae6!2sCanon%20Blomster!5e0!3m2!1sen!2sus!4v1760950475572!5m2!1sen!2sus"
-                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </section>
-
-
->>>>>>> 68cb46d4b1c908fbabdb8495fb253d86757c917a
-
+        </div>
     </main>
-    <footer>
-        <p>&copy; 2025 Canon Blomster www.canonblomster.dk</p>
-    </footer>
-    <script src="scripts/main.js"></script>
 
-    <!-- Left popups -->
-    <div class="side-popups left">
-        <div class="popup popup-left popup-left-top">Online bestilling</div>
-        <div class="popup popup-left popup-left-middle">Vi leverer</div>
-        <div class="popup popup-left popup-left-bottom">Samme dags levering</div>
-    </div>
-    <!-- Right popups -->
-    <div class="side-popups right">
-        <div class="popup popup-right popup-right-top">Bryllupper</div>
-        <div class="popup popup-right popup-right-middle">Begravelse</div>
-        <div class="popup popup-right popup-right-bottom">til enhver event</div>
-    </div>
+    <footer>
+        <p>&copy; 2025 Canon Blomster — <a href="https://www.canonblomster.dk">www.canonblomster.dk</a></p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('quoteForm');
+        const fileInput = document.getElementById('fileInput');
+        const fileUpload = document.querySelector('.file-upload');
+
+        fileInput.addEventListener('change', function () {
+            const fileCount = this.files.length;
+            const label = fileUpload.querySelector('.file-upload-label');
+            label.innerHTML = fileCount > 0
+                ? `✔ ${fileCount} fil${fileCount > 1 ? 'er' : ''} valgt<br><small>Klik for at ændre filer</small>`
+                : '📷 Klik for at uploade billeder eller træk dem herind<br><small>Upload gerne inspirationsbilleder</small>';
+            fileUpload.style.borderColor = '#e85d75';
+            fileUpload.style.background = '#ffeef8';
+        });
+
+        fileUpload.addEventListener('dragover', e => {
+            e.preventDefault();
+            fileUpload.style.borderColor = '#e85d75';
+            fileUpload.style.background = '#ffeef8';
+        });
+
+        fileUpload.addEventListener('dragleave', () => {
+            fileUpload.style.borderColor = '#e8e8e8';
+            fileUpload.style.background = 'transparent';
+        });
+
+        fileUpload.addEventListener('drop', e => {
+            e.preventDefault();
+            fileInput.files = e.dataTransfer.files;
+            fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            alert('Tak for din forespørgsel! Vi vender tilbage inden for 24 timer.');
+            form.reset();
+            fileUpload.querySelector('.file-upload-label').innerHTML =
+                '📷 Klik for at uploade billeder eller træk dem herind<br><small>Upload gerne inspirationsbilleder</small>';
+            fileUpload.style.borderColor = '#e8e8e8';
+            fileUpload.style.background = 'transparent';
+        });
+    </script>
 </body>
 
 </html>
