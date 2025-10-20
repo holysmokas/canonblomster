@@ -754,3 +754,29 @@ header.header-flex .opening-hours {
 .menu a {
     color: #df20af !important;
 }
+
+/* ===== DELIVERY INFO BOX ===== */
+.delivery-info {
+    background: #fff5fb;
+    border: 2px solid #f2cce3;
+    color: #df20af;
+    text-align: center;
+    padding: 16px 20px;
+    font-size: 1.05em;
+    font-weight: 500;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(223, 32, 175, 0.08);
+    width: 80%;
+    max-width: 800px;
+    margin: 110px auto 30px auto;
+    /* sits below fixed header */
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .delivery-info {
+        font-size: 0.95em;
+        width: 90%;
+        margin: 90px auto 20px auto;
+    }
+}
