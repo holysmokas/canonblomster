@@ -1,7 +1,11 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # CanonBlomster
 Canon Blomster boutique i københavn website. 
 =======
+=======
+
+>>>>>>> 68cb46d4b1c908fbabdb8495fb253d86757c917a
 # Canon Blomster
 
 This is a simple website project that can be hosted on GitHub Pages with a unique domain.
@@ -53,7 +57,11 @@ To deploy the website on GitHub Pages:
 1. Push your changes to the `main` branch of your GitHub repository.
 2. Go to the repository settings on GitHub.
 3. Scroll down to the "GitHub Pages" section and select the `main` branch as the source.
+<<<<<<< HEAD
 4. Your website will be available at `https://babakmilani.github.io/CanonBlomster`.
+=======
+4. Your website will be available at ``.
+>>>>>>> 68cb46d4b1c908fbabdb8495fb253d86757c917a
 
 ## License
 
