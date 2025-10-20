@@ -254,29 +254,31 @@ footer {
     transform: translateX(120%);
 }
 
+/* Center popups vertically on both sides */
 .popup-left-top {
-    top: 40px;
+    top: 35%;
 }
 
 .popup-left-middle {
-    top: 120px;
+    top: 45%;
 }
 
 .popup-left-bottom {
-    top: 200px;
+    top: 55%;
 }
 
 .popup-right-top {
-    top: 40px;
+    top: 35%;
 }
 
 .popup-right-middle {
-    top: 120px;
+    top: 45%;
 }
 
 .popup-right-bottom {
-    top: 200px;
+    top: 55%;
 }
+
 
 .popup.show.popup-left {
     opacity: 1;
