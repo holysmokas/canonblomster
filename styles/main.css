@@ -723,9 +723,32 @@ footer {
 /* ===== FORM STYLES (MAPS) ===== */
 
 .maps-section {
-    
+
     max-width: 800px;
     margin: 40px auto 60px auto;
     padding: 0 20px;
     text-align: center;
+}
+
+/* ===== PAGE-SPECIFIC HEADER COLORS ===== */
+body.botanisk header.header-flex,
+body.kurater header.header-flex {
+    background-color: white !important;
+    color: black !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+body.botanisk .hamburger span,
+body.kurater .hamburger span {
+    background-color: black !important;
+}
+
+body.botanisk header.header-flex h1,
+body.kurater header.header-flex h1 {
+    color: black !important;
+}
+
+body.botanisk .menu a,
+body.kurater .menu a {
+    color: black !important;
 }
