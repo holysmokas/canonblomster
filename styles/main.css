@@ -848,7 +848,8 @@ body {
     .delivery-info {
         width: 90%;
         padding: 30px 15px;
-        margin: 90px auto 20px auto;
+        margin: 140px auto 20px auto;
+        /* Increased from 90px to 140px */
         font-size: 0.9em;
     }
 }
@@ -857,7 +858,8 @@ body {
     .delivery-info {
         width: 95%;
         padding: 20px 12px;
-        margin: 80px auto 15px auto;
+        margin: 120px auto 15px auto;
+        /* Increased from 80px to 120px */
         font-size: 0.85em;
         line-height: 1.5;
     }
