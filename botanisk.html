@@ -51,13 +51,89 @@
                 historie – perfekt til at lyse dit hjem op eller glæde en særlig person.
             </p>
         </section>
+
+        <section class="product-filter">
+            <label for="categoryFilter">Filtrér efter kategori:</label>
+            <select id="categoryFilter">
+                <option value="all">Alle</option>
+                <option value="bouquets">Buketter</option>
+                <option value="plants">Planter</option>
+                <option value="seasonal">Sæson</option>
+            </select>
+        </section>
+
         <div class="image-grid" id="imageGrid"></div>
 
     </main>
     <footer>
         <p>&copy; 2025 Canon Blomster www.canonblomster.dk</p>
     </footer>
-    <script src="scripts/main.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAZWzsKzT8Fc-_aI9gbWhZogrvmAmNs8Yg",
+            authDomain: "canon-blomster.firebaseapp.com",
+            projectId: "canon-blomster",
+            storageBucket: "canon-blomster.appspot.com",
+            messagingSenderId: "549469063023",
+            appId: "1:549469063023:web:35cbf9a9c84af8c1e70a9a"
+        };
+
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const productsRef = collection(db, "products");
+
+        const imageGrid = document.getElementById("imageGrid");
+        const categoryFilter = document.getElementById("categoryFilter");
+
+        let allProducts = []; // cache products
+
+        // Real-time listener for all products
+        onSnapshot(productsRef, (snapshot) => {
+            allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderProducts(allProducts);
+        });
+
+        // Render filtered products
+        function renderProducts(products) {
+            imageGrid.innerHTML = '';
+
+            if (products.length === 0) {
+                imageGrid.innerHTML = '<p style="text-align:center; color:#999;">Ingen produkter fundet 🌸</p>';
+                return;
+            }
+
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.classList.add('product-item');
+                card.innerHTML = `
+      <div class="product-card">
+        <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.src='images/placeholder.jpeg'">
+        <h3>${product.name}</h3>
+        <p>${product.description}</p>
+      </div>
+    `;
+                imageGrid.appendChild(card);
+            });
+        }
+
+        // Filter on dropdown change
+        categoryFilter.addEventListener('change', () => {
+            const selected = categoryFilter.value;
+            if (selected === 'all') {
+                renderProducts(allProducts);
+            } else {
+                const filtered = allProducts.filter(p => (p.category || '').toLowerCase() === selected);
+                renderProducts(filtered);
+            }
+        });
+    </script>
+
+
+
 </body>
 
 </html>

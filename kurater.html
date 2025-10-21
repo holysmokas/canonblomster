@@ -14,7 +14,7 @@
     <header class="header-flex">
         <div class="header-title">
             <h1>CANON BLOMSTER</h1>
-            <p class="opening-hours">Åbent: M – F 10:00–17:00 &nbsp; | &nbsp; Lør. &nbsp; Søn. 10:00–16:00</p>
+            <p class="opening-hours">Åbent: M — F 10:00—17:00 &nbsp; | &nbsp; Lør. &nbsp; Søn. 10:00—16:00</p>
         </div>
         <nav class="hamburger-nav">
             <input type="checkbox" id="menu-toggle" />
@@ -291,7 +291,7 @@
 
                         <div class="form-group">
                             <label>Inspirationsbilleder (valgfrit)</label>
-                            <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                            <div class="file-upload">
                                 <input type="file" id="fileInput" name="photos" accept="image/*" multiple>
                                 <div class="file-upload-label">
                                     📷 Klik for at uploade billeder eller træk dem herind<br>
@@ -325,51 +325,7 @@
         <p>&copy; 2025 Canon Blomster www.canonblomster.dk</p>
     </footer>
 
-    <script>
-        const form = document.getElementById('quoteForm');
-        const fileInput = document.getElementById('fileInput');
-        const fileUpload = document.querySelector('.file-upload');
-
-        fileInput.addEventListener('change', function () {
-            const fileCount = this.files.length;
-            if (fileCount > 0) {
-                fileUpload.querySelector('.file-upload-label').innerHTML =
-                    `✓ ${fileCount} fil${fileCount > 1 ? 'er' : ''} valgt<br><small>Klik for at ændre filer</small>`;
-                fileUpload.style.borderColor = '#e85d75';
-                fileUpload.style.background = '#ffeef8';
-            }
-        });
-
-        fileUpload.addEventListener('dragover', function (e) {
-            e.preventDefault();
-            this.style.borderColor = '#e85d75';
-            this.style.background = '#ffeef8';
-        });
-
-        fileUpload.addEventListener('dragleave', function () {
-            this.style.borderColor = '#e8e8e8';
-            this.style.background = 'transparent';
-        });
-
-        fileUpload.addEventListener('drop', function (e) {
-            e.preventDefault();
-            fileInput.files = e.dataTransfer.files;
-            const event = new Event('change', { bubbles: true });
-            fileInput.dispatchEvent(event);
-        });
-
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            alert('Tak for din forespørgsel! Vi gennemgår dine oplysninger og vender tilbage inden for 24 timer med et skræddersyet tilbud. Tjek din e-mail for bekræftelse.');
-
-            form.reset();
-            fileUpload.querySelector('.file-upload-label').innerHTML =
-                '📷 Klik for at uploade billeder eller træk dem herind<br><small>Upload gerne inspirationsbilleder eller referencer</small>';
-            fileUpload.style.borderColor = '#e8e8e8';
-            fileUpload.style.background = 'transparent';
-        });
-    </script>
+    <script src="scripts/main.js"></script>
 </body>
 
 </html>

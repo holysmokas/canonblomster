@@ -1,31 +1,58 @@
 // scripts/main.js
 document.addEventListener("DOMContentLoaded", function () {
+    // Initialize image grid for botanisk page
     const imageGrid = document.getElementById('imageGrid');
     if (imageGrid) {
-        for (let i = 1; i <= 37; i++) {
-            const card = document.createElement('div');
-            card.className = 'image-card';
-            card.innerHTML = `
-          <img src="images/image_${i}.jpeg" alt="Blomst ${i}">
-          <div class="image-desc">Beskrivelse for billede ${i}</div>
-        `;
-            imageGrid.appendChild(card);
+        // Load products from localStorage (set by admin dashboard)
+        const products = JSON.parse(localStorage.getItem('canonProducts')) || [];
+
+        if (products.length > 0) {
+            // Display products from admin dashboard
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'image-card';
+                card.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='images/placeholder.jpeg'">
+                    <div class="image-desc">${product.description}</div>
+                `;
+                imageGrid.appendChild(card);
+            });
+        } else {
+            // Fallback to default images if no products in admin
+            for (let i = 1; i <= 37; i++) {
+                const card = document.createElement('div');
+                card.className = 'image-card';
+                card.innerHTML = `
+                    <img src="images/image_${i}.jpeg" alt="Blomst ${i}">
+                    <div class="image-desc">Beskrivelse for billede ${i}</div>
+                `;
+                imageGrid.appendChild(card);
+            }
         }
     }
 
-    // Form submission handler
+    // Initialize contact form handler
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', handleFormSubmit);
+    }
+
+    // Initialize quote form handler (from kurater.html)
+    const quoteForm = document.getElementById('quoteForm');
+    if (quoteForm) {
+        initializeQuoteForm();
     }
 
     // Show side popups if on index page
     if (document.querySelector('.side-popups')) {
         showSidePopups();
     }
+
+    // Initialize slideshow
+    autoShowSlides();
 });
 
-// Handle form submission
+// Handle contact form submission
 async function handleFormSubmit(e) {
     e.preventDefault();
 
@@ -58,7 +85,6 @@ async function handleFormSubmit(e) {
         });
 
         // With no-cors mode, we can't read the response, so we assume success
-        // Show success message
         submitBtn.textContent = 'Sendt! ✓';
         submitBtn.style.background = '#28a745';
 
@@ -85,9 +111,62 @@ async function handleFormSubmit(e) {
     }
 }
 
+// Initialize quote form from kurater.html
+function initializeQuoteForm() {
+    const form = document.getElementById('quoteForm');
+    const fileInput = document.getElementById('fileInput');
+    const fileUpload = document.querySelector('.file-upload');
+
+    if (!form || !fileInput || !fileUpload) return;
+
+    // Handle file input changes
+    fileInput.addEventListener('change', function () {
+        const fileCount = this.files.length;
+        if (fileCount > 0) {
+            fileUpload.querySelector('.file-upload-label').innerHTML =
+                `✓ ${fileCount} fil${fileCount > 1 ? 'er' : ''} valgt<br><small>Klik for at ændre filer</small>`;
+            fileUpload.style.borderColor = '#e85d75';
+            fileUpload.style.background = '#ffeef8';
+        }
+    });
+
+    // Handle drag over
+    fileUpload.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        this.style.borderColor = '#e85d75';
+        this.style.background = '#ffeef8';
+    });
+
+    // Handle drag leave
+    fileUpload.addEventListener('dragleave', function () {
+        this.style.borderColor = '#e8e8e8';
+        this.style.background = 'transparent';
+    });
+
+    // Handle file drop
+    fileUpload.addEventListener('drop', function (e) {
+        e.preventDefault();
+        fileInput.files = e.dataTransfer.files;
+        const event = new Event('change', { bubbles: true });
+        fileInput.dispatchEvent(event);
+    });
+
+    // Handle form submission
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        alert('Tak for din forespørgsel! Vi gennemgår dine oplysninger og vender tilbage inden for 24 timer med et skræddersyet tilbud. Tjek din e-mail for bekræftelse.');
+
+        form.reset();
+        fileUpload.querySelector('.file-upload-label').innerHTML =
+            '📷 Klik for at uploade billeder eller træk dem herind<br><small>Upload gerne inspirationsbilleder eller referencer</small>';
+        fileUpload.style.borderColor = '#e8e8e8';
+        fileUpload.style.background = 'transparent';
+    });
+}
+
 // Slideshow functionality
 let slideIndex = 0;
-autoShowSlides();
 
 function autoShowSlides() {
     let i;
@@ -98,14 +177,16 @@ function autoShowSlides() {
         slides[i].style.display = "none";
     }
     slideIndex++;
-    if (slideIndex > slides.length) { slideIndex = 1 }
+    if (slideIndex > slides.length) {
+        slideIndex = 1;
+    }
     slides[slideIndex - 1].style.display = "block";
     setTimeout(autoShowSlides, 3000);
 }
 
 // Show popups in sequence
 function showSidePopups() {
-    // Left side
+    // Left side popups
     setTimeout(() => {
         const popup = document.querySelector('.popup-left-top');
         if (popup) {
@@ -130,7 +211,7 @@ function showSidePopups() {
         }
     }, 1200);
 
-    // Right side
+    // Right side popups
     setTimeout(() => {
         const popup = document.querySelector('.popup-right-top');
         if (popup) {
