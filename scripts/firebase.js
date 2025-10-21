@@ -1,8 +1,9 @@
 // scripts/firebase.js
-// scripts/firebase.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import {
     getAuth,
+    setPersistence,
+    browserLocalPersistence,
     signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged
@@ -18,31 +19,28 @@ import {
     onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-
-// ✅ Replace with your Firebase project configuration
 const firebaseConfig = {
     apiKey: "AIzaSyAZWzsKzT8Fc-_aI9gbWhZogrvmAmNs8Yg",
     authDomain: "canon-blomster.firebaseapp.com",
     projectId: "canon-blomster",
-    storageBucket: "canon-blomster.appspot.com", // ✅ corrected
+    storageBucket: "canon-blomster.appspot.com",
     messagingSenderId: "549469063023",
     appId: "1:549469063023:web:35cbf9a9c84af8c1e70a9a",
     measurementId: "G-B1VLK21EH1"
 };
 
-
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app, "europe-north2"); // ✅ match your region
 
-// Export Firebase services for reuse
-export const auth = getAuth(app);
-export const db = getFirestore(app, "europe-north2");
+// ✅ Keep user logged in between pages
+setPersistence(auth, browserLocalPersistence);
 
-
-
-// Export Firebase helper functions (optional convenience)
 export {
+    app,
+    auth,
+    db,
     signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged,
@@ -51,5 +49,6 @@ export {
     getDocs,
     updateDoc,
     deleteDoc,
-    doc
+    doc,
+    onSnapshot
 };

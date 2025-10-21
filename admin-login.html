@@ -171,6 +171,7 @@
 
     <script type="module">
         import { auth, signInWithEmailAndPassword } from "./scripts/firebase.js";
+        import { setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
         const loginForm = document.getElementById('loginForm');
         const errorMessage = document.getElementById('errorMessage');
@@ -178,18 +179,23 @@
 
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+
+            const email = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
 
             loginBtn.disabled = true;
             loginBtn.textContent = 'Logger ind...';
             errorMessage.classList.remove('show');
 
             try {
+                // ✅ Enable persistent login
+                await setPersistence(auth, browserLocalPersistence);
                 await signInWithEmailAndPassword(auth, email, password);
-                sessionStorage.setItem('adminLoggedIn', 'true');
+
+                // ✅ Redirect after successful login
                 window.location.href = 'admin-dashboard.html';
             } catch (error) {
+                console.error(error);
                 errorMessage.textContent = 'Forkert login. Tjek email og adgangskode.';
                 errorMessage.classList.add('show');
             } finally {
@@ -198,6 +204,7 @@
             }
         });
     </script>
+
 
 
 

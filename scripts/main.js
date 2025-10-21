@@ -11,6 +11,19 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
+
+import { auth } from "./firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        // If no one is logged in, send them back to the login page
+        window.location.href = "admin-login.html";
+    } else {
+        console.log("✅ Logged in as:", user.email);
+    }
+});
+
 // ---------------------
 // DOM Elements
 // ---------------------
@@ -20,6 +33,8 @@ const cancelBtn = document.getElementById("cancelBtn");
 const productForm = document.getElementById("productForm");
 const logoutBtn = document.getElementById("logoutBtn");
 const dashboardContainer = document.querySelector(".dashboard-container");
+
+
 
 // ---------------------
 // Show & Hide Modal

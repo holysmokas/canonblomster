@@ -347,6 +347,27 @@
         </div>
     </div>
 
+    <script type="module">
+        import { auth } from "./scripts/firebase.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+
+        // ✅ Protect the page
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                console.warn("❌ Not logged in — redirecting to login...");
+                window.location.href = "admin-login.html";
+            } else {
+                console.log("✅ Logged in as:", user.email);
+            }
+        });
+
+        // ✅ Logout button
+        const logoutBtn = document.getElementById('logoutBtn');
+        logoutBtn.addEventListener('click', async () => {
+            await signOut(auth);
+            window.location.href = "admin-login.html";
+        });
+    </script>
 
 
     <script type="module" src="scripts/firebase.js"></script>
