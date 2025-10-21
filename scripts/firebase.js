@@ -32,7 +32,9 @@ const app = initializeApp(firebaseConfig);
 
 // Export Firebase services for reuse
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+export const db = getFirestore(app, "europe-north2");
+
+
 
 // Export Firebase helper functions (optional convenience)
 export {
