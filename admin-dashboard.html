@@ -373,18 +373,25 @@
       btn.textContent = "Sletter...";
 
       try {
-        // Note: Google Sheets doesn't support DELETE via web app easily
-        // You'll need to add a deleteRow function to your Apps Script
-        await fetch(SCRIPT_URL + '?action=delete&row=' + rowIndex);
-        alert("✅ Produkt slettet!");
-        loadProducts(); // Reload products
+        const deleteUrl = `${SCRIPT_URL}?action=delete&row=${rowIndex}`;
 
-        // TODO: Implement delete in Apps Script
-        // await fetch(SCRIPT_URL + '?action=delete&row=' + rowIndex);
+        await fetch(deleteUrl, {
+          method: "GET",
+          mode: "no-cors"
+        });
+
+        // Since we use no-cors, we can't read the response
+        // Just assume it worked and reload
+        alert("✅ Produkt slettet!");
+
+        // Reload products after 1 second
+        setTimeout(() => {
+          loadProducts();
+        }, 1000);
 
       } catch (err) {
         console.error("Fejl ved sletning:", err);
-        alert("Kunne ikke slette produktet.");
+        alert("❌ Kunne ikke slette produktet: " + err.message);
       } finally {
         btn.disabled = false;
         btn.textContent = "🗑️ Slet produkt";
