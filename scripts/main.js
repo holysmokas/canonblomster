@@ -1,238 +1,172 @@
 // scripts/main.js
-document.addEventListener("DOMContentLoaded", function () {
-    // Initialize image grid for botanisk page
-    const imageGrid = document.getElementById('imageGrid');
-    if (imageGrid) {
-        // Load products from localStorage (set by admin dashboard)
-        const products = JSON.parse(localStorage.getItem('canonProducts')) || [];
+import { db, auth } from "./firebase.js";
+import {
+    collection,
+    addDoc,
+    getDocs,
+    updateDoc,
+    deleteDoc,
+    doc,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-        if (products.length > 0) {
-            // Display products from admin dashboard
-            products.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'image-card';
-                card.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}" onerror="this.src='images/placeholder.jpeg'">
-                    <div class="image-desc">${product.description}</div>
-                `;
-                imageGrid.appendChild(card);
-            });
-        } else {
-            // Fallback to default images if no products in admin
-            for (let i = 1; i <= 37; i++) {
-                const card = document.createElement('div');
-                card.className = 'image-card';
-                card.innerHTML = `
-                    <img src="images/image_${i}.jpeg" alt="Blomst ${i}">
-                    <div class="image-desc">Beskrivelse for billede ${i}</div>
-                `;
-                imageGrid.appendChild(card);
-            }
-        }
-    }
+// ---------------------
+// DOM Elements
+// ---------------------
+const addProductBtn = document.getElementById("addProductBtn");
+const productModal = document.getElementById("productModal");
+const cancelBtn = document.getElementById("cancelBtn");
+const productForm = document.getElementById("productForm");
+const logoutBtn = document.getElementById("logoutBtn");
+const dashboardContainer = document.querySelector(".dashboard-container");
 
-    // Initialize contact form handler
-    const contactForm = document.querySelector('.contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', handleFormSubmit);
-    }
-
-    // Initialize quote form handler (from kurater.html)
-    const quoteForm = document.getElementById('quoteForm');
-    if (quoteForm) {
-        initializeQuoteForm();
-    }
-
-    // Show side popups if on index page
-    if (document.querySelector('.side-popups')) {
-        showSidePopups();
-    }
-
-    // Initialize slideshow
-    autoShowSlides();
+// ---------------------
+// Show & Hide Modal
+// ---------------------
+addProductBtn.addEventListener("click", () => {
+    productModal.classList.add("show");
 });
 
-// Handle contact form submission
-async function handleFormSubmit(e) {
+cancelBtn.addEventListener("click", () => {
+    productModal.classList.remove("show");
+    productForm.reset();
+});
+
+// ---------------------
+// Add New Product
+// ---------------------
+productForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const form = e.target;
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.textContent;
+    const name = document.getElementById("productName").value.trim();
+    const description = document.getElementById("productDescription").value.trim();
+    const image = document.getElementById("productImage").value.trim();
 
-    // Get form data
-    const formData = {
-        navn: form.querySelector('#name').value,
-        email: form.querySelector('#email').value,
-        besked: form.querySelector('#message').value
-    };
-
-    // Disable button and show loading state
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Sender...';
+    if (!name || !description || !image) {
+        alert("Udfyld venligst alle felter.");
+        return;
+    }
 
     try {
-        // Replace this URL with your actual Google Apps Script Web App URL
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbw-fQE46SHZP7MQWi5JqM9WKxdU-fgqHciGc05NG9weIC1zsx6Q1VxQeGbbrotuA0w/exec';
-
-        const response = await fetch(scriptURL, {
-            method: 'POST',
-            mode: 'no-cors', // Important for Google Apps Script
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
+        await addDoc(collection(db, "products"), {
+            name,
+            description,
+            image,
+            createdAt: new Date()
         });
 
-        // With no-cors mode, we can't read the response, so we assume success
-        submitBtn.textContent = 'Sendt! ✓';
-        submitBtn.style.background = '#28a745';
-
-        // Reset form
-        form.reset();
-
-        // Reset button after 3 seconds
-        setTimeout(() => {
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalBtnText;
-            submitBtn.style.background = '';
-        }, 3000);
-
+        alert("Produkt tilføjet!");
+        productModal.classList.remove("show");
+        productForm.reset();
     } catch (error) {
-        console.error('Error:', error);
-        submitBtn.textContent = 'Fejl - prøv igen';
-        submitBtn.style.background = '#dc3545';
-
-        setTimeout(() => {
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalBtnText;
-            submitBtn.style.background = '';
-        }, 3000);
+        console.error("Fejl ved tilføjelse af produkt:", error);
+        alert("Noget gik galt, prøv igen.");
     }
+});
+
+// ---------------------
+// Display Products in Real-Time
+// ---------------------
+const productsContainer = document.createElement("div");
+productsContainer.classList.add("products-container");
+dashboardContainer.appendChild(productsContainer);
+
+function renderProducts(snapshot) {
+    productsContainer.innerHTML = ""; // Clear before rendering
+
+    snapshot.forEach((docSnap) => {
+        const product = docSnap.data();
+        const productId = docSnap.id;
+
+        const productCard = document.createElement("div");
+        productCard.classList.add("product-card");
+        productCard.innerHTML = `
+      <div class="product">
+        <img src="${product.image}" alt="${product.name}" class="product-img">
+        <h3>${product.name}</h3>
+        <p>${product.description}</p>
+        <div class="product-actions">
+          <button class="edit-btn" data-id="${productId}">Rediger</button>
+          <button class="delete-btn" data-id="${productId}">Slet</button>
+        </div>
+      </div>
+    `;
+        productsContainer.appendChild(productCard);
+    });
+
+    attachEditDeleteListeners();
 }
 
-// Initialize quote form from kurater.html
-function initializeQuoteForm() {
-    const form = document.getElementById('quoteForm');
-    const fileInput = document.getElementById('fileInput');
-    const fileUpload = document.querySelector('.file-upload');
+onSnapshot(collection(db, "products"), (snapshot) => {
+    renderProducts(snapshot);
+});
 
-    if (!form || !fileInput || !fileUpload) return;
+// ---------------------
+// Edit & Delete Logic
+// ---------------------
+function attachEditDeleteListeners() {
+    document.querySelectorAll(".delete-btn").forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+            const id = e.target.getAttribute("data-id");
+            try {
+                await deleteDoc(doc(db, "products", id));
+                alert("Produkt slettet!");
+            } catch (err) {
+                console.error("Fejl ved sletning:", err);
+            }
+        });
+    });
 
-    // Handle file input changes
-    fileInput.addEventListener('change', function () {
-        const fileCount = this.files.length;
-        if (fileCount > 0) {
-            fileUpload.querySelector('.file-upload-label').innerHTML =
-                `✓ ${fileCount} fil${fileCount > 1 ? 'er' : ''} valgt<br><small>Klik for at ændre filer</small>`;
-            fileUpload.style.borderColor = '#e85d75';
-            fileUpload.style.background = '#ffeef8';
+    document.querySelectorAll(".edit-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            const id = e.target.getAttribute("data-id");
+            openEditModal(id);
+        });
+    });
+}
+
+// ---------------------
+// Edit Product Modal (reuse same form)
+// ---------------------
+async function openEditModal(productId) {
+    const docRef = doc(db, "products", productId);
+    const docSnap = await getDocs(collection(db, "products"));
+
+    const product = docSnap.docs.find((d) => d.id === productId)?.data();
+    if (!product) return alert("Produkt ikke fundet!");
+
+    productModal.classList.add("show");
+    document.getElementById("productName").value = product.name;
+    document.getElementById("productDescription").value = product.description;
+    document.getElementById("productImage").value = product.image;
+
+    productForm.onsubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await updateDoc(doc(db, "products", productId), {
+                name: document.getElementById("productName").value.trim(),
+                description: document.getElementById("productDescription").value.trim(),
+                image: document.getElementById("productImage").value.trim()
+            });
+            alert("Produkt opdateret!");
+            productModal.classList.remove("show");
+            productForm.reset();
+            productForm.onsubmit = null; // reset listener
+        } catch (error) {
+            console.error("Fejl ved opdatering:", error);
         }
-    });
-
-    // Handle drag over
-    fileUpload.addEventListener('dragover', function (e) {
-        e.preventDefault();
-        this.style.borderColor = '#e85d75';
-        this.style.background = '#ffeef8';
-    });
-
-    // Handle drag leave
-    fileUpload.addEventListener('dragleave', function () {
-        this.style.borderColor = '#e8e8e8';
-        this.style.background = 'transparent';
-    });
-
-    // Handle file drop
-    fileUpload.addEventListener('drop', function (e) {
-        e.preventDefault();
-        fileInput.files = e.dataTransfer.files;
-        const event = new Event('change', { bubbles: true });
-        fileInput.dispatchEvent(event);
-    });
-
-    // Handle form submission
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        alert('Tak for din forespørgsel! Vi gennemgår dine oplysninger og vender tilbage inden for 24 timer med et skræddersyet tilbud. Tjek din e-mail for bekræftelse.');
-
-        form.reset();
-        fileUpload.querySelector('.file-upload-label').innerHTML =
-            '📷 Klik for at uploade billeder eller træk dem herind<br><small>Upload gerne inspirationsbilleder eller referencer</small>';
-        fileUpload.style.borderColor = '#e8e8e8';
-        fileUpload.style.background = 'transparent';
-    });
+    };
 }
 
-// Slideshow functionality
-let slideIndex = 0;
-
-function autoShowSlides() {
-    let i;
-    let slides = document.getElementsByClassName("mySlides");
-    if (slides.length === 0) return;
-
-    for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
+// ---------------------
+// Logout
+// ---------------------
+logoutBtn.addEventListener("click", async () => {
+    try {
+        await signOut(auth);
+        window.location.href = "admin-login.html";
+    } catch (error) {
+        console.error("Fejl ved log ud:", error);
     }
-    slideIndex++;
-    if (slideIndex > slides.length) {
-        slideIndex = 1;
-    }
-    slides[slideIndex - 1].style.display = "block";
-    setTimeout(autoShowSlides, 3000);
-}
-
-// Show popups in sequence
-function showSidePopups() {
-    // Left side popups
-    setTimeout(() => {
-        const popup = document.querySelector('.popup-left-top');
-        if (popup) {
-            popup.classList.add('show');
-            setTimeout(() => popup.classList.remove('show'), 800);
-        }
-    }, 400);
-
-    setTimeout(() => {
-        const popup = document.querySelector('.popup-left-middle');
-        if (popup) {
-            popup.classList.add('show');
-            setTimeout(() => popup.classList.remove('show'), 1200);
-        }
-    }, 800);
-
-    setTimeout(() => {
-        const popup = document.querySelector('.popup-left-bottom');
-        if (popup) {
-            popup.classList.add('show');
-            setTimeout(() => popup.classList.remove('show'), 1400);
-        }
-    }, 1200);
-
-    // Right side popups
-    setTimeout(() => {
-        const popup = document.querySelector('.popup-right-top');
-        if (popup) {
-            popup.classList.add('show');
-            setTimeout(() => popup.classList.remove('show'), 2000);
-        }
-    }, 1600);
-
-    setTimeout(() => {
-        const popup = document.querySelector('.popup-right-middle');
-        if (popup) {
-            popup.classList.add('show');
-            setTimeout(() => popup.classList.remove('show'), 2400);
-        }
-    }, 2000);
-
-    setTimeout(() => {
-        const popup = document.querySelector('.popup-right-bottom');
-        if (popup) {
-            popup.classList.add('show');
-            setTimeout(() => popup.classList.remove('show'), 2800);
-        }
-    }, 2400);
-}
+});
