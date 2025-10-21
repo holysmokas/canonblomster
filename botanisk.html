@@ -71,14 +71,47 @@
 
     <script type="module">
         import { db } from "./scripts/firebase.js";
-        import { collection, getDocs }
+        import { collection, onSnapshot }
             from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-        console.log("Connecting to Firebase...");
-        const snapshot = await getDocs(collection(db, "products"));
-        console.log("🌸 Products found:", snapshot.size);
-        snapshot.forEach((doc) => console.log("🪻", doc.id, doc.data()));
+        const imageGrid = document.getElementById("imageGrid");
+        const categoryFilter = document.getElementById("categoryFilter");
+
+        function renderProducts(products) {
+            imageGrid.innerHTML = "";
+            if (products.length === 0) {
+                imageGrid.innerHTML = "<p>Ingen produkter fundet 🌸</p>";
+                return;
+            }
+
+            products.forEach((product) => {
+                const card = document.createElement("div");
+                card.classList.add("product-card");
+                card.innerHTML = `
+        <img src="${product.imageUrl}" alt="${product.name}">
+        <h3>${product.name}</h3>
+        <p>${product.description}</p>
+        <p><b>${product.price} kr</b></p>
+      `;
+                imageGrid.appendChild(card);
+            });
+        }
+
+        // Live updates from Firestore
+        let allProducts = [];
+        onSnapshot(collection(db, "products"), (snapshot) => {
+            allProducts = snapshot.docs.map((doc) => doc.data());
+            renderProducts(allProducts);
+        });
+
+        // Filter
+        categoryFilter.addEventListener("change", (e) => {
+            const value = e.target.value;
+            if (value === "all") renderProducts(allProducts);
+            else renderProducts(allProducts.filter(p => p.category === value));
+        });
     </script>
+
 
 
 

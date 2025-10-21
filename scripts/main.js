@@ -1,4 +1,23 @@
 // scripts/main.js
+import { auth } from "./scripts/firebase.js";
+import { onAuthStateChanged, signOut }
+    from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        // not logged in → kick them back to login
+        window.location.href = "admin-login.html";
+    } else {
+        console.log("✅ Logged in as:", user.email);
+    }
+});
+
+// Logout button
+document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.href = "admin-login.html";
+});
+
 import {
     db,
     auth,

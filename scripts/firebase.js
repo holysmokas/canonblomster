@@ -1,23 +1,19 @@
-// ✅ Firebase core imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-// ✅ Your Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyAWZsxKzT8Fc-_aI9gbWhZogrvmANnS8Yg",
+    apiKey: "AIzaSyAZWzsKzT8Fc-_aI9gbWhZogrvmAmNs8Yg",
     authDomain: "canon-blomster.firebaseapp.com",
     projectId: "canon-blomster",
-    storageBucket: "canon-blomster.appspot.com",
-    messagingSenderId: "819646132514",
-    appId: "1:819646132514:web:cfc43f1700e5aa8c46386d",
-    measurementId: "G-4R2C7BCFZN"
+    storageBucket: "canon-blomster.firebasestorage.app",
+    messagingSenderId: "549469063023",
+    appId: "1:549469063023:web:35cbf9a9c84af8c1e70a9a",
+    measurementId: "G-B1VLK21EH1"
 };
 
-// ✅ Initialize Firebase
-export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-// ✅ Optional debug log (can remove later)
-console.log("🔥 Firebase initialized:", app.name);
+export { app, auth, db };

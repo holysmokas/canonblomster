@@ -52,10 +52,11 @@
 
         // ✅ Check admin authentication
         onAuthStateChanged(auth, (user) => {
-            if (!user || user.email !== "holysmokasthatscheap@gmail.com") {
-                alert("⛔ Kun admin har adgang!");
+            if (!user) {
+                alert("⛔ Du skal logge ind for at få adgang!");
                 window.location.href = "admin-login.html";
             }
+
         });
 
         // ✅ Logout

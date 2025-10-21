@@ -178,35 +178,31 @@
 
         loginForm.addEventListener("submit", async (e) => {
             e.preventDefault();
-            const email = document.getElementById("email").value;
+
+            // match these to your form IDs:
+            const email = document.getElementById("username").value.trim();
             const password = document.getElementById("password").value;
 
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
+                console.log("✅ Logged in as:", user.email);
 
-                if (user.email === "holysmokasthatscheap@gmail.com") {
-                    alert("✅ Logged in successfully!");
-                    window.location.href = "admin-dashboard.html";
-                } else {
-                    alert("⛔ Access denied — only admin allowed.");
-                }
+                // redirect after successful login
+                window.location.href = "admin-dashboard.html";
             } catch (error) {
-                console.error("Login error:", error.message);
-                alert("Login failed: " + error.message);
+                console.error("❌ Login error:", error);
+                alert("Forkert login. Tjek brugernavn og adgangskode.");
             }
         });
 
+        // Optional: auto-redirect if already logged in
         onAuthStateChanged(auth, (user) => {
-            if (user && user.email === "holysmokasthatscheap@gmail.com") {
+            if (user) {
                 window.location.href = "admin-dashboard.html";
             }
         });
     </script>
-
-
-
-
 
 </body>
 
