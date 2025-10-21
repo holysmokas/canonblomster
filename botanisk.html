@@ -72,37 +72,33 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
         import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-
-
         const firebaseConfig = {
             apiKey: "AIzaSyAZWzsKzT8Fc-_aI9gbWhZogrvmAmNs8Yg",
             authDomain: "canon-blomster.firebaseapp.com",
             projectId: "canon-blomster",
-            storageBucket: "canon-blomster.appspot.com", // ✅ corrected
+            storageBucket: "canon-blomster.appspot.com",
             messagingSenderId: "549469063023",
             appId: "1:549469063023:web:35cbf9a9c84af8c1e70a9a",
             measurementId: "G-B1VLK21EH1"
         };
 
-
-
+        // ✅ Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app, "europe-north2");
+        const db = getFirestore(app); // ✅ FIXED (remove europe-north2)
 
         const productsRef = collection(db, "products");
-
         const imageGrid = document.getElementById("imageGrid");
         const categoryFilter = document.getElementById("categoryFilter");
 
-        let allProducts = []; // cache products
+        let allProducts = [];
 
-        // Real-time listener for all products
+        // ✅ Real-time listener for all products
         onSnapshot(productsRef, (snapshot) => {
             allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             renderProducts(allProducts);
         });
 
-        // Render filtered products
+        // ✅ Render all products
         function renderProducts(products) {
             imageGrid.innerHTML = '';
 
@@ -115,17 +111,17 @@
                 const card = document.createElement('div');
                 card.classList.add('product-item');
                 card.innerHTML = `
-      <div class="product-card">
-        <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.src='images/placeholder.jpeg'">
-        <h3>${product.name}</h3>
-        <p>${product.description}</p>
-      </div>
-    `;
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.src='images/placeholder.jpeg'">
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                </div>
+            `;
                 imageGrid.appendChild(card);
             });
         }
 
-        // Filter on dropdown change
+        // ✅ Filter by category
         categoryFilter.addEventListener('change', () => {
             const selected = categoryFilter.value;
             if (selected === 'all') {
@@ -136,6 +132,7 @@
             }
         });
     </script>
+
 
 
 
