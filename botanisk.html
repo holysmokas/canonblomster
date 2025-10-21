@@ -69,13 +69,35 @@
         <p>&copy; 2025 Canon Blomster www.canonblomster.dk</p>
     </footer>
 
-    <script type="module">
-        import { db } from "./scripts/firebase.js";
-        import { collection, onSnapshot }
-            from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+    <script>
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RhMeaE4bO57KcUZVlgc9oXG5Sp5FyJ9u_6wQmPBLvlDMOeHsM-E_iAx7cMx6CwdTZ21JKGiPgpSO/gviz/tq?tqx=out:json";
 
         const imageGrid = document.getElementById("imageGrid");
         const categoryFilter = document.getElementById("categoryFilter");
+
+        async function loadProducts() {
+            try {
+                const res = await fetch(SHEET_URL);
+                const text = await res.text();
+
+                // Google Sheets JSON has extra characters at start/end, so we trim them
+                const json = JSON.parse(text.substr(47).slice(0, -2));
+                const rows = json.table.rows;
+
+                // Convert each row into a product object
+                const products = rows.map(row => ({
+                    name: row.c[0]?.v || "Ukendt produkt",
+                    price: row.c[1]?.v || "",
+                    description: row.c[2]?.v || "",
+                    imageUrl: row.c[3]?.v || ""
+                }));
+
+                renderProducts(products);
+            } catch (err) {
+                console.error("Fejl ved indlæsning af produkter:", err);
+                imageGrid.innerHTML = "<p>Kunne ikke indlæse produkter 🌸</p>";
+            }
+        }
 
         function renderProducts(products) {
             imageGrid.innerHTML = "";
@@ -84,33 +106,22 @@
                 return;
             }
 
-            products.forEach((product) => {
+            products.forEach(product => {
                 const card = document.createElement("div");
                 card.classList.add("product-card");
                 card.innerHTML = `
-        <img src="${product.imageUrl}" alt="${product.name}">
-        <h3>${product.name}</h3>
-        <p>${product.description}</p>
-        <p><b>${product.price} kr</b></p>
-      `;
+      <img src="${product.imageUrl}" alt="${product.name}">
+      <h3>${product.name}</h3>
+      <p>${product.description}</p>
+      ${product.price ? `<p><b>${product.price} kr</b></p>` : ""}
+    `;
                 imageGrid.appendChild(card);
             });
         }
 
-        // Live updates from Firestore
-        let allProducts = [];
-        onSnapshot(collection(db, "products"), (snapshot) => {
-            allProducts = snapshot.docs.map((doc) => doc.data());
-            renderProducts(allProducts);
-        });
-
-        // Filter
-        categoryFilter.addEventListener("change", (e) => {
-            const value = e.target.value;
-            if (value === "all") renderProducts(allProducts);
-            else renderProducts(allProducts.filter(p => p.category === value));
-        });
+        document.addEventListener("DOMContentLoaded", loadProducts);
     </script>
+
 
 
 

@@ -1,0 +1,87 @@
+/* ===========================
+   Admin Dashboard Styling
+   =========================== */
+
+.dashboard-container {
+    max-width: 800px;
+    margin: 120px auto;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(223, 32, 175, 0.15);
+    padding: 40px;
+    text-align: left;
+    font-family: "Poppins", sans-serif;
+}
+
+.dashboard-container h2 {
+    text-align: center;
+    color: #df20af;
+    margin-bottom: 30px;
+    font-size: 1.8em;
+}
+
+.dashboard-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
+.dashboard-form input[type="text"],
+.dashboard-form input[type="number"],
+.dashboard-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e8e8e8;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.dashboard-form input:focus,
+.dashboard-form textarea:focus {
+    outline: none;
+    border-color: #df20af;
+    box-shadow: 0 0 0 3px rgba(223, 32, 175, 0.1);
+}
+
+.dashboard-form input[type="file"] {
+    border: 2px dashed #df20af;
+    border-radius: 10px;
+    padding: 25px;
+    background: #fff5fb;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+    text-align: center;
+}
+
+.dashboard-form input[type="file"]:hover {
+    background: #ffeef8;
+}
+
+.dashboard-form button {
+    background: linear-gradient(135deg, #df20af 0%, #e85d75 100%);
+    color: #fff;
+    border: none;
+    padding: 14px 40px;
+    font-size: 1.1em;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(223, 32, 175, 0.3);
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        margin: 100px 20px;
+        padding: 25px;
+    }
+}
