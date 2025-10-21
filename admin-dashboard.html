@@ -14,90 +14,98 @@
 <body>
 
     <!-- HEADER (Same as other pages) -->
-    <header class="site-header">
-        <div class="header-container">
-            <a href="index.html" class="logo">🌸 Canon Blomster</a>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="index.html">Hjem</a></li>
-                    <li><a href="botanisk.html">Botanisk</a></li>
-                    <li><a href="kurater.html">Kurater</a></li>
-                    <li><a href="admin-login.html">Log ud</a></li>
-                </ul>
-            </nav>
+    <<header class="header-flex">
+        <div class="header-title">
+            <h1>CANON BLOMSTER</h1>
+            <p class="opening-hours">Åbent: M — F 10:00—17:00 &nbsp; | &nbsp; Lør. og Søn. 10:00—16:00</p>
         </div>
-    </header>
+        <nav class="hamburger-nav">
+            <input type="checkbox" id="menu-toggle" />
+            <label for="menu-toggle" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul class="menu">
+                <li><a href="index.html">Hjem</a></li>
+                <li><a href="botanisk.html">Botanisk</a></li>
+                <li><a href="kurater.html">Kurater</a></li>
+                <li><a href="admin-login.html">Log ud</a></li>
+            </ul>
+        </nav>
+        </header>
 
-    <!-- DASHBOARD MAIN -->
-    <main>
-        <div class="dashboard-container">
-            <h2>🌼 Tilføj nyt produkt</h2>
 
-            <form class="dashboard-form" id="addProductForm">
-                <label for="productName">Produktnavn</label>
-                <input type="text" id="productName" placeholder="F.eks. Roser i buket" required>
+        <!-- DASHBOARD MAIN -->
+        <main>
+            <div class="dashboard-container">
+                <h2>🌼 Tilføj nyt produkt</h2>
 
-                <label for="productPrice">Pris (kr)</label>
-                <input type="number" id="productPrice" placeholder="F.eks. 150" required>
+                <form class="dashboard-form" id="addProductForm">
+                    <label for="productName">Produktnavn</label>
+                    <input type="text" id="productName" placeholder="F.eks. Roser i buket" required>
 
-                <label for="productDescription">Beskrivelse</label>
-                <textarea id="productDescription" rows="3" placeholder="Kort beskrivelse af produktet"></textarea>
+                    <label for="productPrice">Pris (kr)</label>
+                    <input type="number" id="productPrice" placeholder="F.eks. 150" required>
 
-                <label for="productImage">Upload billede</label>
-                <input type="file" id="productImage" accept="image/*">
+                    <label for="productDescription">Beskrivelse</label>
+                    <textarea id="productDescription" rows="3" placeholder="Kort beskrivelse af produktet"></textarea>
 
-                <button type="submit">➕ Tilføj produkt</button>
-            </form>
+                    <label for="productImage">Upload billede</label>
+                    <input type="file" id="productImage" accept="image/*">
 
-            <div id="statusMessage" style="margin-top:20px; text-align:center;"></div>
-        </div>
-    </main>
+                    <button type="submit">➕ Tilføj produkt</button>
+                </form>
 
-    <!-- FOOTER -->
-    <footer class="site-footer">
-        <p>&copy; 2025 Canon Blomster | Admin Dashboard</p>
-    </footer>
+                <div id="statusMessage" style="margin-top:20px; text-align:center;"></div>
+            </div>
+        </main>
 
-    <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3iStt0_WE6Pluyi-WaheHrXyfrZQfDlWs2G8aVcPp7dvykMGGeHYpX6Zm_1HgZ8VJ/exec";
+        <!-- FOOTER -->
+        <footer class="site-footer">
+            <p>&copy; 2025 Canon Blomster | Admin Dashboard</p>
+        </footer>
 
-        const form = document.getElementById('addProductForm');
-        const statusMessage = document.getElementById('statusMessage');
+        <script>
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3iStt0_WE6Pluyi-WaheHrXyfrZQfDlWs2G8aVcPp7dvykMGGeHYpX6Zm_1HgZ8VJ/exec";
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
+            const form = document.getElementById('addProductForm');
+            const statusMessage = document.getElementById('statusMessage');
 
-            const name = document.getElementById('productName').value.trim();
-            const price = document.getElementById('productPrice').value.trim();
-            const description = document.getElementById('productDescription').value.trim();
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
 
-            // For now, just use local file name or future Drive URL
-            const imageInput = document.getElementById('productImage');
-            const imageUrl = imageInput.files.length ? imageInput.files[0].name : "";
+                const name = document.getElementById('productName').value.trim();
+                const price = document.getElementById('productPrice').value.trim();
+                const description = document.getElementById('productDescription').value.trim();
 
-            const product = { name, price, description, imageUrl };
+                // For now, just use local file name or future Drive URL
+                const imageInput = document.getElementById('productImage');
+                const imageUrl = imageInput.files.length ? imageInput.files[0].name : "";
 
-            statusMessage.textContent = "💾 Tilføjer produkt...";
-            statusMessage.style.color = "#555";
+                const product = { name, price, description, imageUrl };
 
-            try {
-                const res = await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(product)
-                });
+                statusMessage.textContent = "💾 Tilføjer produkt...";
+                statusMessage.style.color = "#555";
 
-                form.reset();
-                statusMessage.textContent = "✅ Produkt tilføjet!";
-                statusMessage.style.color = "green";
-            } catch (err) {
-                console.error(err);
-                statusMessage.textContent = "❌ Der opstod en fejl. Prøv igen.";
-                statusMessage.style.color = "red";
-            }
-        });
-    </script>
+                try {
+                    const res = await fetch(SCRIPT_URL, {
+                        method: "POST",
+                        mode: "no-cors",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(product)
+                    });
+
+                    form.reset();
+                    statusMessage.textContent = "✅ Produkt tilføjet!";
+                    statusMessage.style.color = "green";
+                } catch (err) {
+                    console.error(err);
+                    statusMessage.textContent = "❌ Der opstod en fejl. Prøv igen.";
+                    statusMessage.style.color = "red";
+                }
+            });
+        </script>
 
 
 </body>
