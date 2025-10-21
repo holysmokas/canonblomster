@@ -2,378 +2,136 @@
 <html lang="da">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard - Canon Blomster</title>
-    <link rel="stylesheet" href="styles/main.css">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ffeef8 0%, #fff5f0 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .dashboard-container {
-            max-width: 1400px;
-            margin: 160px auto 0;
-            /* pushes content below fixed header */
-            padding: 0 20px;
-        }
-
-        @media (max-width: 768px) {
-            .dashboard-container {
-                margin-top: 120px;
-                /* less space for smaller screens */
-            }
-        }
-
-
-        .dashboard-header {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .dashboard-header h1 {
-            color: #df20af;
-            font-size: 1.8em;
-        }
-
-        .logout-btn {
-            padding: 10px 20px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .logout-btn:hover {
-            background: #c82333;
-        }
-
-        .dashboard-container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .controls {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
-        }
-
-        .add-product-btn {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #df20af 0%, #e85d75 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .add-product-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            transition: transform 0.2s ease;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .product-info {
-            padding: 15px;
-        }
-
-        .product-name {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .product-description {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-
-        .product-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .edit-btn,
-        .delete-btn {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9em;
-        }
-
-        .edit-btn {
-            background: #28a745;
-            color: white;
-        }
-
-        .edit-btn:hover {
-            background: #218838;
-        }
-
-        .delete-btn {
-            background: #dc3545;
-            color: white;
-        }
-
-        .delete-btn:hover {
-            background: #c82333;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            margin-bottom: 20px;
-        }
-
-        .modal-header h2 {
-            color: #df20af;
-            font-size: 1.5em;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e8e8e8;
-            border-radius: 8px;
-            font-size: 1em;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #df20af;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .modal-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .save-btn {
-            background: linear-gradient(135deg, #df20af 0%, #e85d75 100%);
-            color: white;
-        }
-
-        .cancel-btn {
-            background: #6c757d;
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .dashboard-header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles/main.css" />
 </head>
 
 <body>
     <header class="header-flex">
-        <div class="header-title">
-            <h1>CANON BLOMSTER</h1>
-
-        </div>
-        <nav class="hamburger-nav">
-            <input type="checkbox" id="menu-toggle" />
-            <label for="menu-toggle" class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
-            <ul class="menu">
-                <li><a href="index.html">Hjem</a></li>
-                <li><a href="botanisk.html">Botanisk</a></li>
-                <li><a href="kurater.html">Kurater</a></li>
-                <li><a href="admin-dashboard.html" class="active">Admin</a></li>
-            </ul>
-        </nav>
+        <h1>🌸 Produktstyring</h1>
+        <button id="logoutBtn" class="logout-btn">Log ud</button>
     </header>
 
-    <div class="dashboard-container">
-        <div class="dashboard-header">
-            <h1>🌸 Produktstyring</h1>
-            <button class="logout-btn" id="logoutBtn">Log ud</button>
-        </div>
+    <main class="dashboard-container">
+        <button id="addProductBtn" class="add-btn">+ Tilføj nyt produkt</button>
 
-        <div class="controls">
-            <button class="add-product-btn" id="addProductBtn">+ Tilføj nyt produkt</button>
-        </div>
+        <div id="productList" class="product-list"></div>
 
-        <div class="products-grid" id="productsGrid">
-            <!-- Products will be dynamically loaded here -->
-        </div>
-    </div>
-
-    <!-- Modal for Add/Edit Product -->
-    <div class="modal" id="productModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">Tilføj nyt produkt</h2>
+        <!-- Modal til produkt tilføjelse -->
+        <div id="productModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <h2>Tilføj produkt</h2>
+                <form id="productForm">
+                    <input type="text" id="name" placeholder="Produktnavn" required />
+                    <input type="text" id="description" placeholder="Beskrivelse" required />
+                    <input type="text" id="category" placeholder="Kategori (fx: buket, plante)" required />
+                    <input type="number" id="price" placeholder="Pris" required />
+                    <input type="text" id="imageUrl" placeholder="Billede URL" required />
+                    <button type="submit" class="save-btn">Gem</button>
+                    <button type="button" id="closeModal" class="close-btn">Luk</button>
+                </form>
             </div>
-            <form id="productForm">
-                <div class="form-group">
-                    <label for="productName">Produktnavn *</label>
-                    <input type="text" id="productName" required>
-                </div>
-                <div class="form-group">
-                    <label for="productDescription">Beskrivelse *</label>
-                    <textarea id="productDescription" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="productImage">Billede URL *</label>
-                    <input type="text" id="productImage" placeholder="images/image_1.jpeg" required>
-                    <small style="color: #666; font-size: 0.85em;">Indtast billedstien (f.eks.
-                        images/image_1.jpeg)</small>
-                </div>
-                <input type="hidden" id="productId">
-                <div class="modal-actions">
-                    <button type="button" class="modal-btn cancel-btn" id="cancelBtn">Annuller</button>
-                    <button type="submit" class="modal-btn save-btn">Gem</button>
-                </div>
-            </form>
         </div>
-    </div>
+    </main>
 
     <script type="module">
-        import { auth } from "./scripts/firebase.js";
-        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+        import { auth, db } from "./scripts/firebase.js";
+        import {
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+        import {
+            collection,
+            addDoc,
+            deleteDoc,
+            doc,
+            onSnapshot
+        } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-        // ✅ Protect the page
+        // ✅ Check admin authentication
         onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                console.warn("❌ Not logged in — redirecting to login...");
+            if (!user || user.email !== "holysmokasthatscheap@gmail.com") {
+                alert("⛔ Kun admin har adgang!");
                 window.location.href = "admin-login.html";
-            } else {
-                console.log("✅ Logged in as:", user.email);
             }
         });
 
-        // ✅ Logout button
-        const logoutBtn = document.getElementById('logoutBtn');
-        logoutBtn.addEventListener('click', async () => {
+        // ✅ Logout
+        document.getElementById("logoutBtn").addEventListener("click", async () => {
             await signOut(auth);
             window.location.href = "admin-login.html";
         });
+
+        const productList = document.getElementById("productList");
+        const modal = document.getElementById("productModal");
+        const addProductBtn = document.getElementById("addProductBtn");
+        const closeModal = document.getElementById("closeModal");
+        const productForm = document.getElementById("productForm");
+
+        // ✅ Modal open/close
+        addProductBtn.addEventListener("click", () => (modal.style.display = "block"));
+        closeModal.addEventListener("click", () => (modal.style.display = "none"));
+
+        // ✅ Realtime product display
+        onSnapshot(collection(db, "products"), (snapshot) => {
+            productList.innerHTML = "";
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const card = document.createElement("div");
+                card.classList.add("product-card");
+                card.innerHTML = `
+          <img src="${data.imageUrl}" alt="${data.name}" />
+          <h3>${data.name}</h3>
+          <p>${data.description}</p>
+          <p><b>${data.price} kr</b></p>
+          <button class="delete-btn" data-id="${docSnap.id}">Slet</button>
+        `;
+                productList.appendChild(card);
+            });
+
+            // ✅ Delete product
+            document.querySelectorAll(".delete-btn").forEach((btn) => {
+                btn.addEventListener("click", async (e) => {
+                    const id = e.target.dataset.id;
+                    await deleteDoc(doc(db, "products", id));
+                });
+            });
+        });
+
+        // ✅ Add new product
+        productForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const name = document.getElementById("name").value.trim();
+            const description = document.getElementById("description").value.trim();
+            const category = document.getElementById("category").value.trim();
+            const price = parseFloat(document.getElementById("price").value.trim());
+            const imageUrl = document.getElementById("imageUrl").value.trim();
+
+            if (!name || !description || !category || !price || !imageUrl) {
+                alert("⚠️ Udfyld alle felter!");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "products"), {
+                    name,
+                    description,
+                    category,
+                    price,
+                    imageUrl,
+                    createdAt: new Date().toISOString()
+                });
+                alert("✅ Produkt tilføjet!");
+                productForm.reset();
+                modal.style.display = "none";
+            } catch (error) {
+                console.error("Fejl ved tilføjelse:", error);
+                alert("⛔ Kun admin kan tilføje produkter.");
+            }
+        });
     </script>
-
-
-    <script type="module" src="scripts/firebase.js"></script>
-    <script type="module" src="scripts/main.js"></script>
-
-
 </body>
 
 </html>

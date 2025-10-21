@@ -170,40 +170,40 @@
     </div>
 
     <script type="module">
-        import { auth, signInWithEmailAndPassword } from "./scripts/firebase.js";
-        import { setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+        import { auth } from "./scripts/firebase.js";
+        import { signInWithEmailAndPassword, onAuthStateChanged }
+            from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-        const loginForm = document.getElementById('loginForm');
-        const errorMessage = document.getElementById('errorMessage');
-        const loginBtn = document.getElementById('loginBtn');
+        const loginForm = document.getElementById("loginForm");
 
-        loginForm.addEventListener('submit', async (e) => {
+        loginForm.addEventListener("submit", async (e) => {
             e.preventDefault();
-
-            const email = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
-
-            loginBtn.disabled = true;
-            loginBtn.textContent = 'Logger ind...';
-            errorMessage.classList.remove('show');
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
 
             try {
-                // ✅ Enable persistent login
-                await setPersistence(auth, browserLocalPersistence);
-                await signInWithEmailAndPassword(auth, email, password);
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
 
-                // ✅ Redirect after successful login
-                window.location.href = 'admin-dashboard.html';
+                if (user.email === "holysmokasthatscheap@gmail.com") {
+                    alert("✅ Logged in successfully!");
+                    window.location.href = "admin-dashboard.html";
+                } else {
+                    alert("⛔ Access denied — only admin allowed.");
+                }
             } catch (error) {
-                console.error(error);
-                errorMessage.textContent = 'Forkert login. Tjek email og adgangskode.';
-                errorMessage.classList.add('show');
-            } finally {
-                loginBtn.disabled = false;
-                loginBtn.textContent = 'Log ind';
+                console.error("Login error:", error.message);
+                alert("Login failed: " + error.message);
+            }
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === "holysmokasthatscheap@gmail.com") {
+                window.location.href = "admin-dashboard.html";
             }
         });
     </script>
+
 
 
 

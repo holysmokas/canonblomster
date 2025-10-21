@@ -70,35 +70,16 @@
     </footer>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+        import { db } from "./scripts/firebase.js";
+        import { collection, getDocs }
+            from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-        // ✅ Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAWzsKzT8Fc--aI9gbWhZogrvmAmNs8Yg",
-            authDomain: "canon-blomster.firebaseapp.com",
-            projectId: "canon-blomster",
-        };
-
-        // ✅ Initialize Firebase
         console.log("Connecting to Firebase...");
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        console.log("✅ Firestore initialized:", db);
-
-        // ✅ Test Firestore connection
-        async function testRead() {
-            try {
-                const snapshot = await getDocs(collection(db, "products"));
-                console.log("📦 Products found:", snapshot.size);
-                snapshot.forEach(doc => console.log("→", doc.id, doc.data()));
-            } catch (err) {
-                console.error("❌ Firestore error:", err);
-            }
-        }
-
-        testRead();
+        const snapshot = await getDocs(collection(db, "products"));
+        console.log("🌸 Products found:", snapshot.size);
+        snapshot.forEach((doc) => console.log("🪻", doc.id, doc.data()));
     </script>
+
 
 
 
