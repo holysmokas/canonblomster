@@ -20,11 +20,13 @@ import {
 const firebaseConfig = {
     apiKey: "AIzaSyAZWzsKzT8Fc-_aI9gbWhZogrvmAmNs8Yg",
     authDomain: "canon-blomster.firebaseapp.com",
-    projectId: "canon0-blomster",
-    storageBucket: "canon-blomser.appspot.com",
+    projectId: "canon-blomster",
+    storageBucket: "canon-blomster.appspot.com", // ✅ corrected
     messagingSenderId: "549469063023",
-    appId: "1:549469063023:web:35cbf9a9c84af8c1e70a9a"
+    appId: "1:549469063023:web:35cbf9a9c84af8c1e70a9a",
+    measurementId: "G-B1VLK21EH1"
 };
+
 
 
 // Initialize Firebase
