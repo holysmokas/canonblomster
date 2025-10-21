@@ -19,6 +19,7 @@ import {
     onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
+// ✅ Firebase project config
 const firebaseConfig = {
     apiKey: "AIzaSyAZWzsKzT8Fc-_aI9gbWhZogrvmAmNs8Yg",
     authDomain: "canon-blomster.firebaseapp.com",
@@ -29,12 +30,12 @@ const firebaseConfig = {
     measurementId: "G-B1VLK21EH1"
 };
 
-// Initialize Firebase
+// ✅ Initialize
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app, "europe-north2"); // ✅ match your region
+const db = getFirestore(app, "europe-north2");
 
-// ✅ Keep user logged in between pages
+// ✅ Persist login between pages
 setPersistence(auth, browserLocalPersistence);
 
 export {
