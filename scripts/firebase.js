@@ -1,11 +1,12 @@
 // scripts/firebase.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+// scripts/firebase.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import {
     getAuth,
     signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 import {
     getFirestore,
     collection,
@@ -13,8 +14,10 @@ import {
     getDocs,
     updateDoc,
     deleteDoc,
-    doc
-} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    doc,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
 
 // ✅ Replace with your Firebase project configuration
 const firebaseConfig = {
