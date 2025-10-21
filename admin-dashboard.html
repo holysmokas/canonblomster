@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="da">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +16,7 @@
   <header class="header-flex">
     <div class="header-title">
       <h1>CANON BLOMSTER</h1>
-      <p class="opening-hours">Åbent: M — F 10:00—17:00 &nbsp; | &nbsp; Lør. og Søn. 10:00—16:00</p>
+      <p class="opening-hours">Åbent: M – F 10:00–17:00 &nbsp; | &nbsp; Lør. og Søn. 10:00–16:00</p>
     </div>
     <nav class="hamburger-nav">
       <input type="checkbox" id="menu-toggle" />
@@ -26,7 +27,7 @@
         <li><a href="index.html">Hjem</a></li>
         <li><a href="botanisk.html">Botanisk</a></li>
         <li><a href="kurater.html">Kurater</a></li>
-        <li><a href="admin-login.html" id="logoutLink">Log ud</a></li>
+        <li><a href="#" id="logoutLink">Log ud</a></li>
       </ul>
     </nav>
   </header>
@@ -47,7 +48,7 @@
         <textarea id="productDescription" rows="3" placeholder="Kort beskrivelse af produktet"></textarea>
 
         <label for="productImage">Upload billede</label>
-        <input type="file" id="productImage" accept="image/*">
+        <input type="file" id="productImage" accept="image/*" required>
 
         <button type="submit" class="submit-btn">➕ Tilføj produkt</button>
       </form>
@@ -58,16 +59,31 @@
   </main>
 
   <footer class="site-footer">
-    <p>&copy; 2025 Canon Blomster | Admin Dashboard | <a href="admin-login.html">Log ud</a></p>
+    <p>&copy; 2025 Canon Blomster | Admin Dashboard</p>
   </footer>
 
-  <!-- JS for Google Apps Script Integration -->
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4j259X9kYVAmg8TgA4gKNZ0sg0O762c7OghB_6fj0R7DY2wz5zIEkKaAaAXmLkcMX/exec";
+  <!-- Firebase + App Script Integration -->
+  <script type="module">
+    import { auth } from "./scripts/firebase.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+
+    // ⚠️ REPLACE THIS WITH YOUR DEPLOYED APPS SCRIPT URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbztzbsm5WQtvLNL57OYuJxIj7R017yfsCpCXHrgCmxJJFadBzZB4GHsEkb49UWhrI4/exec";
 
     const form = document.getElementById('addProductForm');
     const addAnotherBtn = document.getElementById('addAnotherBtn');
     const statusMessage = document.getElementById('statusMessage');
+    const logoutLink = document.getElementById('logoutLink');
+
+    // Auth Guard - redirect if not logged in
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        console.warn("⚠️ Not logged in – redirecting...");
+        window.location.href = "admin-login.html";
+      } else {
+        console.log("✅ Logged in as:", user.email);
+      }
+    });
 
     // Handle form submission
     form.addEventListener('submit', async (e) => {
@@ -78,49 +94,52 @@
       const description = document.getElementById('productDescription').value.trim();
       const imageInput = document.getElementById('productImage');
 
+      if (!imageInput.files.length) {
+        statusMessage.textContent = "⚠️ Vælg venligst et billede";
+        statusMessage.style.color = "orange";
+        return;
+      }
+
       let imageBase64 = "";
       let imageName = "";
       let imageType = "";
 
-      if (imageInput.files.length > 0) {
-        const file = imageInput.files[0];
-        imageName = file.name;
-        imageType = file.type;
+      const file = imageInput.files[0];
+      imageName = file.name;
+      imageType = file.type;
 
-        const reader = new FileReader();
-        await new Promise((resolve) => {
-          reader.onload = () => {
-            imageBase64 = reader.result.split(",")[1];
-            resolve();
-          };
-          reader.readAsDataURL(file);
-        });
-      }
+      // Convert image to base64
+      const reader = new FileReader();
+      await new Promise((resolve) => {
+        reader.onload = () => {
+          imageBase64 = reader.result.split(",")[1];
+          resolve();
+        };
+        reader.readAsDataURL(file);
+      });
 
       const product = { name, price, description, imageBase64, imageName, imageType };
 
-      statusMessage.textContent = "⏳ Uploading produkt...";
+      statusMessage.textContent = "⏳ Uploader produkt...";
       statusMessage.style.color = "#555";
 
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
+          mode: "no-cors", // Important for Apps Script
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(product),
         });
 
-        const result = await res.json();
-        if (result.result === "success") {
-          statusMessage.textContent = "✅ Produkt tilføjet!";
-          statusMessage.style.color = "green";
-          form.reset();
-          form.style.display = "none";
-          addAnotherBtn.style.display = "inline-block";
-        } else {
-          throw new Error(result.message || "Ukendt fejl");
-        }
+        // Note: no-cors means we can't read the response, so we assume success
+        statusMessage.textContent = "✅ Produkt tilføjet!";
+        statusMessage.style.color = "green";
+        form.reset();
+        form.style.display = "none";
+        addAnotherBtn.style.display = "inline-block";
+
       } catch (err) {
-        console.error(err);
+        console.error("❌ Fejl:", err);
         statusMessage.textContent = "❌ Fejl: " + err.message;
         statusMessage.style.color = "red";
       }
@@ -133,11 +152,13 @@
       statusMessage.textContent = "";
     });
 
-    // Simple logout (redirect)
-    document.getElementById("logoutLink").addEventListener("click", () => {
-      localStorage.removeItem("adminUser");
+    // Logout
+    logoutLink.addEventListener("click", async (e) => {
+      e.preventDefault();
+      await signOut(auth);
       window.location.href = "admin-login.html";
     });
   </script>
 </body>
+
 </html>

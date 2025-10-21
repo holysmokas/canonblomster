@@ -1,11 +1,10 @@
-<!--  botanisk.html  -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kurater – Canon Blomster</title>
+    <title>Botanisk – Canon Blomster</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="icon" type="image/jpeg" href="images/favicon.jpeg">
 </head>
@@ -15,7 +14,7 @@
     <header class="header-flex">
         <div class="header-title">
             <h1>CANON BLOMSTER</h1>
-            <p class="opening-hours">Åbent: M – F 10:00–17:00 &nbsp; | &nbsp; Lør. &nbsp; Søn. 10:00–16:00</p>
+            <p class="opening-hours">Åbent: M – F 10:00–17:00 &nbsp; | &nbsp; Lør. og Søn. 10:00–16:00</p>
         </div>
         <nav class="hamburger-nav">
             <input type="checkbox" id="menu-toggle" />
@@ -62,15 +61,20 @@
             </select>
         </section>
 
-        <div class="image-grid" id="imageGrid"></div>
+        <div class="image-grid" id="imageGrid">
+            <p style="text-align: center; color: #df20af;">Indlæser produkter... 🌸</p>
+        </div>
 
     </main>
+
     <footer>
         <p>&copy; 2025 Canon Blomster www.canonblomster.dk</p>
     </footer>
 
     <script>
-        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RhMeaE4bO57KcUZVlgc9oXG5Sp5FyJ9u_6wQmPBLvlDMOeHsM-E_iAx7cMx6CwdTZ21JKGiPgpSO/gviz/tq?tqx=out:json";
+        // ⚠️ IMPORTANT: Update this URL to match your Google Sheet's published CSV link
+        // Go to: File → Share → Publish to web → Select "Sheet1" → Choose "Comma-separated values (.csv)"
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RhMeaE4bO57KcUZVlgc9oXG5Sp5FyJ9u_6wQmPBLvlDMOeHsM-E_iAx7cMx6CwdTZ21JKGiPgpSO/pub?gid=0&single=true&output=csv";
 
         const imageGrid = document.getElementById("imageGrid");
         const categoryFilter = document.getElementById("categoryFilter");
@@ -80,29 +84,38 @@
                 const res = await fetch(SHEET_URL);
                 const text = await res.text();
 
-                // Google Sheets JSON has extra characters at start/end, so we trim them
-                const json = JSON.parse(text.substr(47).slice(0, -2));
-                const rows = json.table.rows;
+                // Parse CSV manually
+                const lines = text.trim().split('\n');
+                const products = [];
 
-                // Convert each row into a product object
-                const products = rows.map(row => ({
-                    name: row.c[0]?.v || "Ukendt produkt",
-                    price: row.c[1]?.v || "",
-                    description: row.c[2]?.v || "",
-                    imageUrl: row.c[3]?.v || ""
-                }));
+                // Skip header row (index 0), start from 1
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i];
+                    // Simple CSV parsing (assuming no commas in fields)
+                    const cols = line.split(',');
+
+                    if (cols.length >= 4) {
+                        products.push({
+                            name: cols[0]?.trim() || "Ukendt produkt",
+                            price: cols[1]?.trim() || "",
+                            description: cols[2]?.trim() || "",
+                            imageUrl: cols[3]?.trim() || ""
+                        });
+                    }
+                }
 
                 renderProducts(products);
             } catch (err) {
                 console.error("Fejl ved indlæsning af produkter:", err);
-                imageGrid.innerHTML = "<p>Kunne ikke indlæse produkter 🌸</p>";
+                imageGrid.innerHTML = "<p style='text-align: center; color: red;'>Kunne ikke indlæse produkter. Prøv igen senere. 🌸</p>";
             }
         }
 
         function renderProducts(products) {
             imageGrid.innerHTML = "";
+
             if (products.length === 0) {
-                imageGrid.innerHTML = "<p>Ingen produkter fundet 🌸</p>";
+                imageGrid.innerHTML = "<p style='text-align: center;'>Ingen produkter fundet endnu 🌸</p>";
                 return;
             }
 
@@ -110,24 +123,24 @@
                 const card = document.createElement("div");
                 card.classList.add("product-card");
                 card.innerHTML = `
-      <img src="${product.imageUrl}" alt="${product.name}">
-      <h3>${product.name}</h3>
-      <p>${product.description}</p>
-      ${product.price ? `<p><b>${product.price} kr</b></p>` : ""}
-    `;
+                    <img src="${product.imageUrl}" alt="${product.name}" onerror="this.src='images/placeholder.jpg'">
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    ${product.price ? `<p><b>${product.price} kr</b></p>` : ""}
+                `;
                 imageGrid.appendChild(card);
             });
         }
 
+        // Load products on page load
         document.addEventListener("DOMContentLoaded", loadProducts);
+
+        // Optional: Category filter functionality (you can implement this later)
+        categoryFilter.addEventListener("change", (e) => {
+            // TODO: Implement filtering logic
+            console.log("Filter selected:", e.target.value);
+        });
     </script>
-
-
-
-
-
-
-
 
 </body>
 
