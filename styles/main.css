@@ -843,24 +843,55 @@ body {
     }
 }
 
-/* ===== DELIVERY INFO RESPONSIVE ===== */
+/* ===== COMPACT DELIVERY INFO BOX ===== */
+.delivery-info {
+    background: #fff5fb;
+    border: 2px solid #f2cce3;
+    color: #df20af;
+    text-align: center;
+    padding: 20px 30px;
+    /* Reduced padding */
+    font-size: 1em;
+    /* Slightly smaller */
+    font-weight: 500;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(223, 32, 175, 0.08);
+    width: fit-content;
+    /* Fit content width */
+    max-width: 600px;
+    /* Maximum width */
+    margin: 100px auto 30px auto;
+    /* Reduced top margin */
+    line-height: 1.6;
+    display: inline-block;
+    /* Ensure it wraps content */
+}
+
+/* Center the delivery info */
+body.botanisk main::before {
+    content: '';
+    display: block;
+    text-align: center;
+}
+
+/* Adjust for mobile */
 @media (max-width: 768px) {
     .delivery-info {
-        width: 90%;
-        padding: 30px 15px;
-        margin: 140px auto 20px auto;
-        /* Increased from 90px to 140px */
         font-size: 0.9em;
+        width: 90%;
+        max-width: 90%;
+        margin: 90px auto 20px auto;
+        padding: 15px 20px;
     }
 }
 
 @media (max-width: 480px) {
     .delivery-info {
-        width: 95%;
-        padding: 20px 12px;
-        margin: 120px auto 15px auto;
-        /* Increased from 80px to 120px */
         font-size: 0.85em;
+        width: 95%;
+        max-width: 95%;
+        margin: 85px auto 15px auto;
+        padding: 12px 15px;
         line-height: 1.5;
     }
 }

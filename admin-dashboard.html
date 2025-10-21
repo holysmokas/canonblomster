@@ -9,6 +9,110 @@
   <!-- Styles -->
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/admin-dashboard.css">
+  <style>
+    /* Product Management Styles */
+    .products-section {
+      max-width: 1400px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .products-section h2 {
+      text-align: center;
+      color: #df20af;
+      margin-bottom: 30px;
+      font-size: 1.8em;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .admin-product-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+
+    .admin-product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .admin-product-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .admin-product-card h3 {
+      color: #df20af;
+      font-size: 1.1em;
+      margin: 10px 0 5px;
+    }
+
+    .admin-product-card p {
+      color: #555;
+      font-size: 0.9em;
+      margin: 5px 0;
+      line-height: 1.4;
+    }
+
+    .admin-product-card .price {
+      font-weight: bold;
+      color: #333;
+      font-size: 1em;
+      margin: 10px 0;
+    }
+
+    .delete-btn {
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9em;
+      margin-top: 10px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+    }
+
+    .delete-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+    }
+
+    .delete-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .no-products {
+      text-align: center;
+      color: #999;
+      font-size: 1.1em;
+      padding: 40px;
+      grid-column: 1 / -1;
+    }
+
+    .loading {
+      text-align: center;
+      color: #df20af;
+      font-size: 1.1em;
+      padding: 40px;
+    }
+  </style>
 </head>
 
 <body>
@@ -56,6 +160,14 @@
       <button id="addAnotherBtn" style="display:none; margin-top:20px;">➕ Tilføj endnu et produkt</button>
       <p id="statusMessage" style="margin-top:20px; text-align:center;"></p>
     </div>
+
+    <!-- PRODUCTS MANAGEMENT SECTION -->
+    <div class="products-section">
+      <h2>📦 Administrer produkter</h2>
+      <div class="products-grid" id="productsGrid">
+        <p class="loading">Indlæser produkter... 🌸</p>
+      </div>
+    </div>
   </main>
 
   <footer class="site-footer">
@@ -67,21 +179,24 @@
     import { auth } from "./scripts/firebase.js";
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-    // ⚠️ REPLACE THIS WITH YOUR DEPLOYED APPS SCRIPT URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbztzbsm5WQtvLNL57OYuJxIj7R017yfsCpCXHrgCmxJJFadBzZB4GHsEkb49UWhrI4/exec";
+    // ⚠️ UPDATE THESE URLs
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4j259X9kYVAmg8TgA4gKNZ0sg0O762c7OghB_6fj0R7DY2wz5zIEkKaAaAXmLkcMX/exec";
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RhMeaE4bO57KcUZVlgc9oXG5Sp5FyJ9u_6wQmPBLvlDMOeHsM-E_iAx7cMx6CwdTZ21JKGiPgpSO/pub?output=csv";
 
     const form = document.getElementById('addProductForm');
     const addAnotherBtn = document.getElementById('addAnotherBtn');
     const statusMessage = document.getElementById('statusMessage');
     const logoutLink = document.getElementById('logoutLink');
+    const productsGrid = document.getElementById('productsGrid');
 
-    // Auth Guard - redirect if not logged in
+    // Auth Guard
     onAuthStateChanged(auth, (user) => {
       if (!user) {
         console.warn("⚠️ Not logged in – redirecting...");
         window.location.href = "admin-login.html";
       } else {
         console.log("✅ Logged in as:", user.email);
+        loadProducts();
       }
     });
 
@@ -108,7 +223,6 @@
       imageName = file.name;
       imageType = file.type;
 
-      // Convert image to base64
       const reader = new FileReader();
       await new Promise((resolve) => {
         reader.onload = () => {
@@ -124,19 +238,23 @@
       statusMessage.style.color = "#555";
 
       try {
-        const res = await fetch(SCRIPT_URL, {
+        await fetch(SCRIPT_URL, {
           method: "POST",
-          mode: "no-cors", // Important for Apps Script
+          mode: "no-cors",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(product),
         });
 
-        // Note: no-cors means we can't read the response, so we assume success
         statusMessage.textContent = "✅ Produkt tilføjet!";
         statusMessage.style.color = "green";
         form.reset();
         form.style.display = "none";
         addAnotherBtn.style.display = "inline-block";
+
+        // Reload products after 2 seconds
+        setTimeout(() => {
+          loadProducts();
+        }, 2000);
 
       } catch (err) {
         console.error("❌ Fejl:", err);
@@ -145,12 +263,133 @@
       }
     });
 
-    // Reopen form when adding another product
+    // Reopen form
     addAnotherBtn.addEventListener("click", () => {
       form.style.display = "block";
       addAnotherBtn.style.display = "none";
       statusMessage.textContent = "";
     });
+
+    // Load products from sheet
+    async function loadProducts() {
+      try {
+        const res = await fetch(SHEET_CSV_URL);
+        const text = await res.text();
+
+        const lines = text.trim().split('\n');
+        const products = [];
+
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i];
+          const cols = line.split(',').map(col => col.trim().replace(/^"|"$/g, ''));
+
+          if (cols.length >= 3 && cols[0]) {
+            products.push({
+              rowIndex: i + 1, // Row number in sheet (1-indexed, +1 for header)
+              name: cols[0] || "Ukendt produkt",
+              price: cols[1] || "",
+              description: cols[2] || "",
+              imageUrl: fixDriveUrl(cols[3] || "")
+            });
+          }
+        }
+
+        renderProducts(products);
+      } catch (err) {
+        console.error("Fejl ved indlæsning:", err);
+        productsGrid.innerHTML = '<p class="no-products">Kunne ikke indlæse produkter</p>';
+      }
+    }
+
+    // Fix Drive URLs
+    function fixDriveUrl(url) {
+      if (!url) return "";
+
+      let fileId = "";
+
+      if (url.includes("drive.google.com/uc")) {
+        const match = url.match(/[?&]id=([^&]+)/);
+        if (match) fileId = match[1];
+      } else if (url.includes("drive.google.com/thumbnail")) {
+        return url;
+      }
+
+      if (fileId) {
+        return `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
+      }
+
+      return url;
+    }
+
+    // Render products
+    function renderProducts(products) {
+      productsGrid.innerHTML = "";
+
+      if (products.length === 0) {
+        productsGrid.innerHTML = '<p class="no-products">Ingen produkter endnu 🌸</p>';
+        return;
+      }
+
+      products.forEach(product => {
+        const card = document.createElement("div");
+        card.classList.add("admin-product-card");
+
+        const imageHtml = product.imageUrl
+          ? `<img src="${product.imageUrl}" alt="${product.name}" loading="lazy">`
+          : `<div style="width:100%;height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;border-radius:10px;">
+               <span style="color:#999;">📷 Intet billede</span>
+             </div>`;
+
+        card.innerHTML = `
+          ${imageHtml}
+          <h3>${product.name}</h3>
+          <p>${product.description}</p>
+          <p class="price">${product.price} kr</p>
+          <button class="delete-btn" data-row="${product.rowIndex}" data-name="${product.name}">
+            🗑️ Slet produkt
+          </button>
+        `;
+
+        productsGrid.appendChild(card);
+      });
+
+      // Attach delete listeners
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', handleDelete);
+      });
+    }
+
+    // Handle delete
+    async function handleDelete(e) {
+      const btn = e.currentTarget;
+      const rowIndex = btn.getAttribute('data-row');
+      const productName = btn.getAttribute('data-name');
+
+      if (!confirm(`Er du sikker på at du vil slette "${productName}"?`)) {
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Sletter...";
+
+      try {
+        // Note: Google Sheets doesn't support DELETE via web app easily
+        // You'll need to add a deleteRow function to your Apps Script
+        await fetch(SCRIPT_URL + '?action=delete&row=' + rowIndex);
+        alert("✅ Produkt slettet!");
+        loadProducts(); // Reload products
+
+        // TODO: Implement delete in Apps Script
+        // await fetch(SCRIPT_URL + '?action=delete&row=' + rowIndex);
+
+      } catch (err) {
+        console.error("Fejl ved sletning:", err);
+        alert("Kunne ikke slette produktet.");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "🗑️ Slet produkt";
+      }
+    }
 
     // Logout
     logoutLink.addEventListener("click", async (e) => {
