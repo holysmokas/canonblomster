@@ -85,3 +85,18 @@
         padding: 25px;
     }
 }
+
+#addAnotherBtn {
+    background: linear-gradient(90deg, #ff66b2, #ff3399);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#addAnotherBtn:hover {
+    opacity: 0.8;
+}

@@ -6,15 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | Canon Blomster</title>
 
-    <!-- Global Styles -->
+    <!-- Styles -->
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/admin-dashboard.css">
 </head>
 
 <body>
-
-    <!-- HEADER (Same as other pages) -->
-    <<header class="header-flex">
+    <!-- HEADER -->
+    <header class="header-flex">
         <div class="header-title">
             <h1>CANON BLOMSTER</h1>
             <p class="opening-hours">Åbent: M — F 10:00—17:00 &nbsp; | &nbsp; Lør. og Søn. 10:00—16:00</p>
@@ -22,92 +21,125 @@
         <nav class="hamburger-nav">
             <input type="checkbox" id="menu-toggle" />
             <label for="menu-toggle" class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </label>
             <ul class="menu">
                 <li><a href="index.html">Hjem</a></li>
                 <li><a href="botanisk.html">Botanisk</a></li>
                 <li><a href="kurater.html">Kurater</a></li>
-                <li><a href="admin-login.html">Log ud</a></li>
+                <li><a href="admin-login.html" id="logoutLink">Log ud</a></li>
             </ul>
         </nav>
-        </header>
+    </header>
 
+    <!-- DASHBOARD -->
+    <main>
+        <div class="dashboard-container">
+            <h2>🌼 Tilføj nyt produkt</h2>
 
-        <!-- DASHBOARD MAIN -->
-        <main>
-            <div class="dashboard-container">
-                <h2>🌼 Tilføj nyt produkt</h2>
+            <form class="dashboard-form" id="addProductForm">
+                <label for="productName">Produktnavn</label>
+                <input type="text" id="productName" placeholder="F.eks. Roser i buket" required>
 
-                <form class="dashboard-form" id="addProductForm">
-                    <label for="productName">Produktnavn</label>
-                    <input type="text" id="productName" placeholder="F.eks. Roser i buket" required>
+                <label for="productPrice">Pris (kr)</label>
+                <input type="number" id="productPrice" placeholder="F.eks. 150" required>
 
-                    <label for="productPrice">Pris (kr)</label>
-                    <input type="number" id="productPrice" placeholder="F.eks. 150" required>
+                <label for="productDescription">Beskrivelse</label>
+                <textarea id="productDescription" rows="3" placeholder="Kort beskrivelse af produktet"></textarea>
 
-                    <label for="productDescription">Beskrivelse</label>
-                    <textarea id="productDescription" rows="3" placeholder="Kort beskrivelse af produktet"></textarea>
+                <label for="productImage">Upload billede</label>
+                <input type="file" id="productImage" accept="image/*">
 
-                    <label for="productImage">Upload billede</label>
-                    <input type="file" id="productImage" accept="image/*">
+                <button type="submit" class="submit-btn">➕ Tilføj produkt</button>
+            </form>
 
-                    <button type="submit">➕ Tilføj produkt</button>
-                </form>
+            <button id="addAnotherBtn" style="display:none; margin-top:20px;">➕ Tilføj endnu et produkt</button>
+            <p id="statusMessage" style="margin-top:20px; text-align:center;"></p>
+        </div>
+    </main>
 
-                <div id="statusMessage" style="margin-top:20px; text-align:center;"></div>
-            </div>
-        </main>
+    <footer class="site-footer">
+        <p>&copy; 2025 Canon Blomster | Admin Dashboard | <a href="admin-login.html">Log ud</a></p>
+    </footer>
 
-        <!-- FOOTER -->
-        <footer class="site-footer">
-            <p>&copy; 2025 Canon Blomster | Admin Dashboard</p>
-        </footer>
+    <!-- JS for Google Apps Script Integration -->
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4j259X9kYVAmg8TgA4gKNZ0sg0O762c7OghB_6fj0R7DY2wz5zIEkKaAaAXmLkcMX/exec";
 
-        <script>
-            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3iStt0_WE6Pluyi-WaheHrXyfrZQfDlWs2G8aVcPp7dvykMGGeHYpX6Zm_1HgZ8VJ/exec";
+        const form = document.getElementById('addProductForm');
+        const addAnotherBtn = document.getElementById('addAnotherBtn');
+        const statusMessage = document.getElementById('statusMessage');
 
-            const form = document.getElementById('addProductForm');
-            const statusMessage = document.getElementById('statusMessage');
+        // Handle form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
+            const name = document.getElementById('productName').value.trim();
+            const price = document.getElementById('productPrice').value.trim();
+            const description = document.getElementById('productDescription').value.trim();
+            const imageInput = document.getElementById('productImage');
 
-                const name = document.getElementById('productName').value.trim();
-                const price = document.getElementById('productPrice').value.trim();
-                const description = document.getElementById('productDescription').value.trim();
+            let imageBase64 = "";
+            let imageName = "";
+            let imageType = "";
 
-                // For now, just use local file name or future Drive URL
-                const imageInput = document.getElementById('productImage');
-                const imageUrl = imageInput.files.length ? imageInput.files[0].name : "";
+            if (imageInput.files.length > 0) {
+                const file = imageInput.files[0];
+                imageName = file.name;
+                imageType = file.type;
 
-                const product = { name, price, description, imageUrl };
+                const reader = new FileReader();
+                await new Promise((resolve) => {
+                    reader.onload = () => {
+                        imageBase64 = reader.result.split(",")[1];
+                        resolve();
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
 
-                statusMessage.textContent = "💾 Tilføjer produkt...";
-                statusMessage.style.color = "#555";
+            const product = { name, price, description, imageBase64, imageName, imageType };
 
-                try {
-                    const res = await fetch(SCRIPT_URL, {
-                        method: "POST",
-                        mode: "no-cors",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(product)
-                    });
+            statusMessage.textContent = "⏳ Uploading produkt...";
+            statusMessage.style.color = "#555";
 
-                    form.reset();
+            try {
+                const res = await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(product),
+                });
+
+                const result = await res.json();
+                if (result.result === "success") {
                     statusMessage.textContent = "✅ Produkt tilføjet!";
                     statusMessage.style.color = "green";
-                } catch (err) {
-                    console.error(err);
-                    statusMessage.textContent = "❌ Der opstod en fejl. Prøv igen.";
-                    statusMessage.style.color = "red";
+                    form.reset();
+                    form.style.display = "none";
+                    addAnotherBtn.style.display = "inline-block";
+                } else {
+                    throw new Error(result.message || "Ukendt fejl");
                 }
-            });
-        </script>
+            } catch (err) {
+                console.error(err);
+                statusMessage.textContent = "❌ Fejl: " + err.message;
+                statusMessage.style.color = "red";
+            }
+        });
 
+        // Reopen form when adding another product
+        addAnotherBtn.addEventListener("click", () => {
+            form.style.display = "block";
+            addAnotherBtn.style.display = "none";
+            statusMessage.textContent = "";
+        });
 
+        // Simple logout (redirect)
+        document.getElementById("logoutLink").addEventListener("click", () => {
+            localStorage.removeItem("adminUser");
+            window.location.href = "admin-login.html";
+        });
+    </script>
 </body>
 
 </html>
