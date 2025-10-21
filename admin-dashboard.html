@@ -347,107 +347,10 @@
         </div>
     </div>
 
-    <script type="module">
-        import {
-            auth,
-            db,
-            signOut,
-            onAuthStateChanged,
-            collection,
-            getDocs,
-            addDoc,
-            updateDoc,
-            deleteDoc,
-            doc
-        } from "./scripts/firebase.js";
 
-        const logoutBtn = document.getElementById('logoutBtn');
-        const productsGrid = document.getElementById('productsGrid');
-        const addProductBtn = document.getElementById('addProductBtn');
-        const productModal = document.getElementById('productModal');
-        const productForm = document.getElementById('productForm');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const modalTitle = document.getElementById('modalTitle');
 
-        let editingProductId = null;
-        const productsRef = collection(db, "products");
-
-        // Ensure only authenticated admins can stay
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                sessionStorage.clear();
-                window.location.href = 'admin-login.html';
-            } else {
-                loadProducts();
-            }
-        });
-
-        async function loadProducts() {
-            productsGrid.innerHTML = '';
-            const snapshot = await getDocs(productsRef);
-            snapshot.forEach(docSnap => {
-                const product = { id: docSnap.id, ...docSnap.data() };
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.innerHTML = `
-      <img src="${product.image}" alt="${product.name}" class="product-image">
-      <div class="product-info">
-        <div class="product-name">${product.name}</div>
-        <div class="product-description">${product.description}</div>
-        <div class="product-actions">
-          <button class="edit-btn" onclick="editProduct('${product.id}')">Rediger</button>
-          <button class="delete-btn" onclick="deleteProduct('${product.id}')">Slet</button>
-        </div>
-      </div>`;
-                productsGrid.appendChild(card);
-            });
-        }
-
-        window.editProduct = (id) => {
-            editingProductId = id;
-            modalTitle.textContent = 'Rediger produkt';
-            productModal.classList.add('show');
-        };
-
-        window.deleteProduct = async (id) => {
-            await deleteDoc(doc(db, "products", id));
-            loadProducts();
-        };
-
-        addProductBtn.addEventListener('click', () => {
-            editingProductId = null;
-            modalTitle.textContent = 'Tilføj nyt produkt';
-            productForm.reset();
-            productModal.classList.add('show');
-        });
-
-        cancelBtn.addEventListener('click', () => {
-            productModal.classList.remove('show');
-        });
-
-        productForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('productName').value;
-            const description = document.getElementById('productDescription').value;
-            const image = document.getElementById('productImage').value;
-
-            if (editingProductId) {
-                await updateDoc(doc(db, "products", editingProductId), { name, description, image });
-            } else {
-                await addDoc(productsRef, { name, description, image });
-            }
-
-            productModal.classList.remove('show');
-            loadProducts();
-        });
-
-        logoutBtn.addEventListener('click', async () => {
-            await signOut(auth);
-            sessionStorage.clear();
-            window.location.href = 'admin-login.html';
-        });
-    </script>
-
+    <script type="module" src="scripts/firebase.js"></script>
+    <script type="module" src="scripts/admin-dashboard.js"></script>
 
 </body>
 
