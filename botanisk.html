@@ -68,70 +68,38 @@
     <footer>
         <p>&copy; 2025 Canon Blomster www.canonblomster.dk</p>
     </footer>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
+        // ✅ Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyAZWzsKzT8Fc-_aI9gbWhZogrvmAmNs8Yg",
+            apiKey: "AIzaSyAWzsKzT8Fc--aI9gbWhZogrvmAmNs8Yg",
             authDomain: "canon-blomster.firebaseapp.com",
             projectId: "canon-blomster",
-            storageBucket: "canon-blomster.appspot.com",
-            messagingSenderId: "549469063023",
-            appId: "1:549469063023:web:35cbf9a9c84af8c1e70a9a",
-            measurementId: "G-B1VLK21EH1"
         };
 
         // ✅ Initialize Firebase
+        console.log("Connecting to Firebase...");
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app); // ✅ FIXED (remove europe-north2)
+        const db = getFirestore(app);
+        console.log("✅ Firestore initialized:", db);
 
-        const productsRef = collection(db, "products");
-        const imageGrid = document.getElementById("imageGrid");
-        const categoryFilter = document.getElementById("categoryFilter");
-
-        let allProducts = [];
-
-        // ✅ Real-time listener for all products
-        onSnapshot(productsRef, (snapshot) => {
-            allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            renderProducts(allProducts);
-        });
-
-        // ✅ Render all products
-        function renderProducts(products) {
-            imageGrid.innerHTML = '';
-
-            if (products.length === 0) {
-                imageGrid.innerHTML = '<p style="text-align:center; color:#999;">Ingen produkter fundet 🌸</p>';
-                return;
+        // ✅ Test Firestore connection
+        async function testRead() {
+            try {
+                const snapshot = await getDocs(collection(db, "products"));
+                console.log("📦 Products found:", snapshot.size);
+                snapshot.forEach(doc => console.log("→", doc.id, doc.data()));
+            } catch (err) {
+                console.error("❌ Firestore error:", err);
             }
-
-            products.forEach(product => {
-                const card = document.createElement('div');
-                card.classList.add('product-item');
-                card.innerHTML = `
-                <div class="product-card">
-                    <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.src='images/placeholder.jpeg'">
-                    <h3>${product.name}</h3>
-                    <p>${product.description}</p>
-                </div>
-            `;
-                imageGrid.appendChild(card);
-            });
         }
 
-        // ✅ Filter by category
-        categoryFilter.addEventListener('change', () => {
-            const selected = categoryFilter.value;
-            if (selected === 'all') {
-                renderProducts(allProducts);
-            } else {
-                const filtered = allProducts.filter(p => (p.category || '').toLowerCase() === selected);
-                renderProducts(filtered);
-            }
-        });
+        testRead();
     </script>
+
 
 
 
