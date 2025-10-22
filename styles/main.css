@@ -14,6 +14,10 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     min-height: 100vh;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll on mobile */
+    /* Base padding to push content below the fixed header */
+    padding-top: 120px;
 }
 
 .container {
@@ -22,7 +26,7 @@ body {
     overflow: hidden;
 }
 
-/* ===== HEADER ===== */
+/* ===== HEADER (UNIFIED STYLES) ===== */
 .header-flex {
     display: flex;
     align-items: center;
@@ -31,25 +35,14 @@ body {
     top: 0;
     left: 0;
     width: 100vw;
-    padding: 20px 16px 10px 16px;
+    padding: 18px 16px;
+    min-height: 72px;
     z-index: 3000;
-    background: transparent;
     pointer-events: auto;
-    gap: 40px;
     box-sizing: border-box;
-    overflow: visible;
-}
-
-.header-flex h1 {
-    flex: 0 1 auto;
-    margin: 0;
-    font-size: 1.5em;
-    color: #df20af;
-    position: absolute;
-    left: 50%;
-    top: 24px;
-    transform: translateX(-50%);
-    pointer-events: none;
+    /* UNIFIED WHITE HEADER */
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .header-title {
@@ -59,27 +52,30 @@ body {
     text-align: center;
 }
 
+.header-flex h1 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #df20af;
+    pointer-events: auto;
+    position: static;
+    transform: none;
+}
+
 .opening-hours {
     font-size: 0.9rem;
-    color: #444;
+    color: #df20af;
     margin-top: 4px;
     letter-spacing: 0.3px;
     font-weight: 500;
+    line-height: 1;
 }
-
-@media (max-width: 768px) {
-    .opening-hours {
-        font-size: 0.8rem;
-    }
-}
-
 
 /* ===== HAMBURGER MENU ===== */
 .hamburger-nav {
     position: absolute;
-    top: 16px;
-    right: 24px;
-    left: auto;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
     pointer-events: auto;
 }
 
@@ -92,7 +88,6 @@ body {
     cursor: pointer;
     z-index: 1001;
     background: rgba(255, 255, 255, 0.6);
-    /* more visible against light bg */
     padding: 8px;
     border-radius: 10px;
     backdrop-filter: blur(4px);
@@ -104,7 +99,6 @@ body {
     height: 8px;
     width: 100%;
     background: #df20af;
-    /* bright purple for visibility */
     border-radius: 8px;
     transition: 0.3s;
 }
@@ -127,12 +121,8 @@ body {
     z-index: 1000;
 }
 
-.menu li {
-    margin: 12px 0;
-}
-
 .menu a {
-    color: purple;
+    color: #df20af;
     text-decoration: none;
     font-weight: bold;
     font-size: 1.1em;
@@ -144,7 +134,27 @@ body {
 
 /* ===== MAIN CONTENT ===== */
 main {
-    padding-top: 70px;
+    /* Removed padding-top here as body padding handles fixed header space */
+    padding-top: 0;
+}
+
+/* ===== DELIVERY INFO BOX (FIXED POSITIONING AND CENTERING) ===== */
+.delivery-info {
+    background: #fff5fb;
+    border: 2px solid #f2cce3;
+    color: #df20af;
+    text-align: center;
+    padding: 20px 30px;
+    font-size: 1.05em;
+    font-weight: 500;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(223, 32, 175, 0.08);
+    /* Centering and spacing */
+    width: 80%;
+    max-width: 800px;
+    /* margin-top pushes it below body padding/fixed header area */
+    margin: 30px auto 30px auto;
+    line-height: 1.6;
 }
 
 /* ===== FOOTER ===== */
@@ -153,8 +163,6 @@ footer {
     color: #df20af;
     text-align: center;
     padding: 10px 0;
-    position: relative;
-    bottom: 0;
     width: 100%;
 }
 
@@ -229,6 +237,16 @@ footer {
     pointer-events: auto;
 }
 
+.side-popups.right {
+    position: fixed;
+    right: 0;
+    top: auto;
+    bottom: 20px;
+    width: auto;
+    height: auto;
+    pointer-events: auto;
+}
+
 .popup {
     position: absolute;
     width: 320px;
@@ -243,9 +261,12 @@ footer {
     font-size: 1.1em;
     font-weight: bold;
     opacity: 0;
-    transform: translateX(-120%);
     transition: transform 0.7s cubic-bezier(.77, 0, .18, 1), opacity 0.7s;
     pointer-events: auto;
+}
+
+.popup-left {
+    transform: translateX(-120%);
 }
 
 .popup-right {
@@ -255,30 +276,20 @@ footer {
 }
 
 /* Center popups vertically on both sides */
-.popup-left-top {
-    top: 35%;
-}
-
-.popup-left-middle {
-    top: 45%;
-}
-
-.popup-left-bottom {
-    top: 55%;
-}
-
+.popup-left-top,
 .popup-right-top {
     top: 35%;
 }
 
+.popup-left-middle,
 .popup-right-middle {
     top: 45%;
 }
 
+.popup-left-bottom,
 .popup-right-bottom {
     top: 55%;
 }
-
 
 .popup.show.popup-left {
     opacity: 1;
@@ -346,6 +357,22 @@ footer {
     text-align: right;
 }
 
+/* ===== MAPS SECTION (INDEX PAGE) ===== */
+.maps-section {
+    max-width: 800px;
+    margin: 40px auto 60px auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.maps-section iframe {
+    width: 100%;
+    height: 450px;
+    border: 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
 /* ===== BOTANISK PAGE - IMAGE GRID ===== */
 .image-grid {
     display: grid;
@@ -382,7 +409,7 @@ footer {
     min-height: 48px;
 }
 
-/* ===== KURATER PAGE LAYOUT ===== */
+/* ===== KURATER PAGE LAYOUT/FORMS ===== */
 .kurater-flex {
     display: flex;
     gap: 40px;
@@ -404,7 +431,6 @@ footer {
     max-width: 350px;
 }
 
-/* ===== CONTACT FORM (KURATER PAGE) ===== */
 .contact-form {
     display: flex;
     flex-direction: column;
@@ -422,21 +448,7 @@ footer {
 }
 
 .contact-form input,
-.contact-form textarea {
-    padding: 10px 15px;
-    border: 2px solid #e8e8e8;
-    border-radius: 8px;
-    font-size: 1em;
-    transition: all 0.3s ease;
-}
-
-.contact-form input:focus,
-.contact-form textarea:focus {
-    outline: none;
-    border-color: #df20af;
-    box-shadow: 0 0 0 3px rgba(223, 32, 175, 0.1);
-}
-
+.contact-form textarea,
 .contact-form select,
 .contact-form input[type="date"],
 .contact-form input[type="time"],
@@ -449,6 +461,8 @@ footer {
     transition: all 0.3s ease;
 }
 
+.contact-form input:focus,
+.contact-form textarea:focus,
 .contact-form select:focus,
 .contact-form input[type="date"]:focus,
 .contact-form input[type="time"]:focus,
@@ -477,7 +491,6 @@ footer {
     background: linear-gradient(135deg, #c91a9a 0%, #d44f65 100%);
 }
 
-/* ===== BUSINESS INFO ===== */
 .business-info {
     background: #fff;
     padding: 16px;
@@ -495,7 +508,6 @@ footer {
     text-decoration: none;
 }
 
-/* ===== FORM SECTIONS (FOR QUOTE FORM) ===== */
 .form-section {
     margin-bottom: 35px;
     padding-bottom: 25px;
@@ -536,7 +548,6 @@ footer {
     margin-left: 3px;
 }
 
-/* ===== CHECKBOXES AND RADIO BUTTONS ===== */
 .checkbox-group {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -587,7 +598,6 @@ footer {
     font-weight: normal;
 }
 
-/* ===== FILE UPLOAD ===== */
 .file-upload {
     border: 2px dashed #e8e8e8;
     border-radius: 8px;
@@ -620,6 +630,16 @@ footer {
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablet and larger phones */
+@media (max-width: 1024px) {
+
+    /* Hide side popups on smaller screens */
+    .side-popups {
+        display: none;
+    }
+}
+
 @media (max-width: 800px) {
     .kurater-flex {
         flex-direction: column;
@@ -634,78 +654,14 @@ footer {
 }
 
 @media (max-width: 768px) {
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-}
 
-@media (max-width: 600px) {
-    .header-flex h1 {
-        font-size: 1.1em;
-        top: 20px;
+    /* Header adjustments */
+    body {
+        padding-top: 100px;
     }
 
-    .hamburger-nav {
-        top: 12px;
-        right: 12px;
-    }
-}
-
-/* ========== Header: two-line title + opening hours ========== */
-/* Put this at the end of styles/main.css */
-
-.header-flex {
-    /* make room for two lines and keep it fixed at top */
-    padding: 18px 16px;
-    min-height: 72px;
-    /* adjust if you want more space */
-    align-items: center;
-    /* center contents vertically */
-    gap: 12px;
-}
-
-/* Target the title wrapper to stack title + hours */
-.header-title {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-/* Override the absolute positioning used earlier for the H1 */
-.header-flex h1 {
-    position: static !important;
-    left: auto !important;
-    top: auto !important;
-    transform: none !important;
-    margin: 0;
-    font-size: 1.5em;
-    pointer-events: auto;
-    color: #df20af;
-    /* keep your brand color */
-}
-
-/* Opening hours style */
-.opening-hours {
-    font-size: 0.9rem;
-    color: #df20af;
-    margin-top: 4px;
-    font-weight: 500;
-    line-height: 1;
-}
-
-/* Keep hamburger positioned at top-right but vertically centered */
-.hamburger-nav {
-    position: absolute;
-    right: 18px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-/* Slight responsive tweaks */
-@media (max-width: 768px) {
     .header-flex {
-        padding: 12px 12px;
+        padding: 12px;
         min-height: 64px;
     }
 
@@ -720,214 +676,17 @@ footer {
     .hamburger-nav {
         right: 12px;
     }
-}
 
-/* ===== FORM STYLES (MAPS) ===== */
-
-.maps-section {
-
-    max-width: 800px;
-    margin: 40px auto 60px auto;
-    padding: 0 20px;
-    text-align: center;
-}
-
-/* ===== UNIFIED WHITE HEADER FOR ALL PAGES ===== */
-header.header-flex {
-    background-color: white !important;
-    color: #df20af !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-header.header-flex h1 {
-    color: #df20af !important;
-}
-
-header.header-flex .opening-hours {
-    color: #df20af !important;
-}
-
-.hamburger span {
-    background-color: #df20af !important;
-}
-
-.menu a {
-    color: #df20af !important;
-}
-
-/* ===== DELIVERY INFO BOX ===== */
-.delivery-info {
-    background: #fff5fb;
-    border: 2px solid #f2cce3;
-    color: #df20af;
-    text-align: center;
-    padding: 55px 20px;
-    font-size: 1.05em;
-    font-weight: 500;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(223, 32, 175, 0.08);
-    width: 80%;
-    max-width: 800px;
-    margin: 110px auto 30px auto;
-    /* sits below fixed header */
-    line-height: 1.6;
-}
-
-@media (max-width: 768px) {
+    /* Delivery Info adjustments */
     .delivery-info {
         font-size: 0.95em;
         width: 90%;
-        margin: 90px auto 20px auto;
-    }
-}
-
-/* ===== ENHANCED MOBILE RESPONSIVE STYLES ===== */
-/* Add these styles to your main.css file */
-
-/* ===== BASE RESPONSIVE IMPROVEMENTS ===== */
-body {
-    overflow-x: hidden;
-}
-
-/* ===== HEADER RESPONSIVE ===== */
-@media (max-width: 768px) {
-    .header-flex {
-        padding: 12px;
-        min-height: auto;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .header-flex h1 {
-        font-size: 1.2em;
-        text-align: center;
-    }
-
-    .opening-hours {
-        font-size: 0.75rem;
-        text-align: center;
-        white-space: normal;
-        line-height: 1.3;
-    }
-
-    .hamburger-nav {
-        position: relative;
-        top: auto;
-        right: auto;
-        transform: none;
-        margin: 8px auto 0;
-    }
-
-    .hamburger {
-        width: 50px;
-        height: 42px;
-        margin: 0 auto;
-    }
-
-    .menu {
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
-        top: 50px;
-        min-width: 200px;
-    }
-}
-
-@media (max-width: 480px) {
-    .header-flex h1 {
-        font-size: 1em;
-    }
-
-    .opening-hours {
-        font-size: 0.7rem;
-    }
-}
-
-/* ===== COMPACT DELIVERY INFO BOX ===== */
-.delivery-info {
-    background: #fff5fb;
-    border: 2px solid #f2cce3;
-    color: #df20af;
-    text-align: center;
-    padding: 20px 30px;
-    /* Reduced padding */
-    font-size: 1em;
-    /* Slightly smaller */
-    font-weight: 500;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(223, 32, 175, 0.08);
-    width: fit-content;
-    /* Fit content width */
-    max-width: 600px;
-    /* Maximum width */
-    margin: 100px auto 30px auto;
-    /* Reduced top margin */
-    line-height: 1.6;
-    display: inline-block;
-    /* Ensure it wraps content */
-}
-
-/* Center the delivery info */
-body.botanisk main::before {
-    content: '';
-    display: block;
-    text-align: center;
-}
-
-/* Adjust for mobile */
-@media (max-width: 768px) {
-    .delivery-info {
-        font-size: 0.9em;
-        width: 90%;
-        max-width: 90%;
-        margin: 90px auto 20px auto;
+        margin: 20px auto;
+        /* Reduced margin top */
         padding: 15px 20px;
     }
-}
 
-@media (max-width: 480px) {
-    .delivery-info {
-        font-size: 0.85em;
-        width: 95%;
-        max-width: 95%;
-        margin: 85px auto 15px auto;
-        padding: 12px 15px;
-        line-height: 1.5;
-    }
-}
-
-/* ===== MAIN CONTENT RESPONSIVE ===== */
-@media (max-width: 768px) {
-    main {
-        padding-top: 50px;
-    }
-}
-
-@media (max-width: 480px) {
-    main {
-        padding-top: 40px;
-    }
-}
-
-/* ===== INTRO TEXT RESPONSIVE ===== */
-@media (max-width: 768px) {
-    .intro {
-        font-size: 1em;
-        padding: 15px;
-        max-height: none;
-    }
-}
-
-@media (max-width: 480px) {
-    .intro {
-        font-size: 0.9em;
-        padding: 12px;
-        line-height: 1.4;
-    }
-}
-
-/* ===== SLIDESHOW RESPONSIVE ===== */
-@media (max-width: 768px) {
+    /* Slideshow adjustments */
     .auto-slideshow {
         width: 90%;
         height: 350px;
@@ -935,51 +694,22 @@ body.botanisk main::before {
     }
 
     .mySlides {
-        width: 100%;
         height: 320px;
     }
 
     .mySlides img {
-        width: 100%;
         height: 320px;
     }
-}
 
-@media (max-width: 480px) {
-    .auto-slideshow {
-        width: 95%;
-        height: 280px;
-        margin: 20px auto;
-    }
-
-    .mySlides {
-        width: 100%;
-        height: 250px;
-    }
-
-    .mySlides img {
-        width: 100%;
-        height: 250px;
-    }
-}
-
-/* ===== SIDE POPUPS RESPONSIVE ===== */
-@media (max-width: 1024px) {
-    .side-popups {
-        display: none;
-    }
-}
-
-/* ===== REVIEWS SECTION RESPONSIVE ===== */
-@media (max-width: 768px) {
-    .reviews-section {
+    /* Reviews and Maps */
+    .reviews-section,
+    .maps-section {
         padding: 0 15px;
         margin: 30px auto 40px auto;
     }
 
     .reviews-section h2 {
         font-size: 1.5em;
-        margin-bottom: 12px;
     }
 
     .review-card {
@@ -987,12 +717,102 @@ body.botanisk main::before {
         padding: 15px;
     }
 
-    .review-text {
-        font-size: 1em;
+    .maps-section iframe {
+        height: 350px;
+    }
+
+    /* Form adjustments */
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .image-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+    }
+
+    footer {
+        font-size: 0.9em;
+    }
+}
+
+/* Smaller phones */
+@media (max-width: 600px) {
+    .header-flex h1 {
+        font-size: 1.1em;
+    }
+
+    .hamburger-nav {
+        top: 12px;
+        right: 12px;
+        transform: none;
     }
 }
 
 @media (max-width: 480px) {
+
+    /* Header adjustments */
+    body {
+        padding-top: 80px;
+    }
+
+    .header-flex {
+        min-height: auto;
+        padding: 8px 10px;
+    }
+
+    .header-flex h1 {
+        font-size: 1em;
+    }
+
+    .opening-hours {
+        font-size: 0.7rem;
+    }
+
+    .hamburger {
+        width: 44px;
+        height: 38px;
+        padding: 6px;
+    }
+
+    .hamburger span {
+        height: 6px;
+    }
+
+    .menu {
+        top: 40px;
+        min-width: 180px;
+    }
+
+    /* Delivery Info adjustments */
+    .delivery-info {
+        font-size: 0.85em;
+        width: 95%;
+        margin: 15px auto;
+        padding: 12px 15px;
+    }
+
+    /* Slideshow adjustments */
+    .auto-slideshow {
+        width: 95%;
+        height: 280px;
+        margin: 20px auto;
+    }
+
+    .mySlides {
+        height: 250px;
+    }
+
+    .mySlides img {
+        height: 250px;
+    }
+
+    /* Reviews and Maps */
+    .reviews-section,
+    .maps-section {
+        margin: 20px auto 30px auto;
+    }
+
     .reviews-section h2 {
         font-size: 1.3em;
     }
@@ -1002,325 +822,21 @@ body.botanisk main::before {
         padding: 12px;
     }
 
-    .review-text {
-        font-size: 0.95em;
-        margin-bottom: 10px;
-    }
-
-    .review-author {
-        font-size: 0.85em;
-    }
-}
-
-/* ===== MAPS SECTION RESPONSIVE ===== */
-@media (max-width: 768px) {
-    .maps-section {
-        padding: 0 15px;
-        margin: 30px auto 40px auto;
-    }
-
-    .maps-section iframe {
-        width: 100%;
-        height: 350px;
-    }
-}
-
-@media (max-width: 480px) {
     .maps-section iframe {
         height: 300px;
     }
-}
 
-/* ===== IMAGE GRID RESPONSIVE (BOTANISK PAGE) ===== */
-@media (max-width: 768px) {
-    .image-grid {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 20px;
-        padding: 0 12px;
-        margin: 30px auto;
+    /* Form adjustments */
+    .form-content {
+        padding: 20px 15px;
     }
 
-    .image-card img {
-        height: 160px;
-    }
-
-    .image-desc {
-        font-size: 0.95em;
-        padding: 10px 8px;
-        min-height: 40px;
-    }
-}
-
-@media (max-width: 480px) {
     .image-grid {
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 15px;
-        padding: 0 10px;
     }
 
-    .image-card img {
-        height: 140px;
-    }
-
-    .image-desc {
-        font-size: 0.85em;
-        padding: 8px;
-        min-height: 35px;
-    }
-}
-
-/* ===== KURATER PAGE RESPONSIVE ===== */
-@media (max-width: 768px) {
-    .container {
-        margin-top: 80px;
-        border-radius: 12px;
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-
-    .header {
-        padding: 30px 20px;
-    }
-
-    .header h1 {
-        font-size: 1.8em;
-    }
-
-    .header p {
-        font-size: 1em;
-    }
-
-    .form-content {
-        padding: 25px 20px;
-    }
-
-    .section-title {
-        font-size: 1.2em;
-    }
-
-    .form-row {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-
-    .checkbox-group {
-        grid-template-columns: 1fr;
-    }
-
-    .radio-group {
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .file-upload {
-        padding: 20px;
-    }
-
-    .submit-btn {
-        padding: 14px 30px;
-        font-size: 1em;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        margin-top: 70px;
-        border-radius: 8px;
-        margin-left: 5px;
-        margin-right: 5px;
-    }
-
-    .header {
-        padding: 20px 15px;
-    }
-
-    .header h1 {
-        font-size: 1.4em;
-    }
-
-    .header p {
-        font-size: 0.9em;
-    }
-
-    .form-content {
-        padding: 20px 15px;
-    }
-
-    .section-title {
-        font-size: 1.1em;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    input[type="date"],
-    input[type="time"],
-    input[type="number"],
-    select,
-    textarea {
-        padding: 10px 12px;
-        font-size: 0.95em;
-    }
-
-    label {
-        font-size: 0.9em;
-    }
-
-    .file-upload {
-        padding: 15px;
-    }
-
-    .file-upload-label {
-        font-size: 0.85em;
-    }
-
-    .submit-btn {
-        padding: 12px 25px;
-        font-size: 0.95em;
-    }
-}
-
-/* ===== FOOTER RESPONSIVE ===== */
-@media (max-width: 768px) {
-    footer {
-        font-size: 0.9em;
-        padding: 8px 0;
-    }
-}
-
-@media (max-width: 480px) {
     footer {
         font-size: 0.8em;
-        padding: 6px 0;
     }
-}
-
-/* ===== ADDITIONAL MOBILE OPTIMIZATIONS ===== */
-@media (max-width: 480px) {
-
-    /* Ensure all text is readable */
-    body {
-        font-size: 14px;
-    }
-
-    /* Improve touch targets */
-    button,
-    a,
-    input[type="checkbox"],
-    input[type="radio"] {
-        min-height: 44px;
-        min-width: 44px;
-    }
-
-    /* Better spacing for mobile */
-    .section {
-        margin-bottom: 25px;
-    }
-
-    /* Optimize form spacing */
-    .form-group {
-        margin-bottom: 15px;
-    }
-}
-
-/* ===== LANDSCAPE ORIENTATION FIXES ===== */
-@media (max-height: 500px) and (orientation: landscape) {
-    .delivery-info {
-        padding: 15px;
-        margin-top: 70px;
-    }
-
-    .header-flex {
-        padding: 8px;
-    }
-
-    main {
-        padding-top: 35px;
-    }
-}
-
-/* --- Fix overlap under fixed site header on admin dashboard --- */
-body {
-    padding-top: 160px !important;
-    /* push content below fixed header */
-}
-
-@media (max-width: 768px) {
-    body {
-        padding-top: 130px !important;
-        /* smaller header on mobile */
-    }
-}
-
-.dashboard-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 20px 60px;
-}
-
-.image-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-.product-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-}
-
-.product-card img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
-
-.product-card h3 {
-    color: #df20af;
-    font-size: 1.1em;
-    margin-bottom: 5px;
-}
-
-.product-card p {
-    color: #555;
-    font-size: 0.95em;
-    line-height: 1.4;
-}
-
-.product-filter {
-    text-align: center;
-    margin: 30px 0 10px;
-}
-
-.product-filter label {
-    font-size: 1em;
-    margin-right: 10px;
-    color: #444;
-}
-
-.product-filter select {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1em;
-    background-color: #fff;
-    color: #333;
-    transition: border-color 0.2s;
-}
-
-.product-filter select:focus {
-    border-color: #df20af;
-    outline: none;
 }
