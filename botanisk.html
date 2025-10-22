@@ -72,42 +72,87 @@
     </footer>
 
     <script>
-        // ⚠️ IMPORTANT: Update this URL to match your Google Sheet's published CSV link
-        // Go to: File → Share → Publish to web → Select "Sheet1" → Choose "Comma-separated values (.csv)"
-        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RhMeaE4bO57KcUZVlgc9oXG5Sp5FyJ9u_6wQmPBLvlDMOeHsM-E_iAx7cMx6CwdTZ21JKGiPgpSO/pub?gid=0&single=true&output=csv";
+        // ⚠️ UPDATE THIS: Replace with your Google Sheet's published CSV URL
+        // File → Share → Publish to web → Sheet1 → CSV format
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RhMeaE4bO57KcUZVlgc9oXG5Sp5FyJ9u_6wQmPBLvlDMOeHsM-E_iAx7cMx6CwdTZ21JKGiPgpSO/pub?output=csv";
 
         const imageGrid = document.getElementById("imageGrid");
         const categoryFilter = document.getElementById("categoryFilter");
+
+        // Function to convert Google Drive URL to working thumbnail format
+        function fixDriveUrl(url) {
+            if (!url) return "";
+
+            // Extract file ID from various Google Drive URL formats
+            let fileId = "";
+
+            // Format: https://drive.google.com/uc?export=view&id=FILE_ID
+            if (url.includes("drive.google.com/uc")) {
+                const match = url.match(/[?&]id=([^&]+)/);
+                if (match) fileId = match[1];
+            }
+            // Format: https://drive.google.com/file/d/FILE_ID/view
+            else if (url.includes("drive.google.com/file")) {
+                const match = url.match(/\/d\/([^\/]+)/);
+                if (match) fileId = match[1];
+            }
+            // Format: https://drive.google.com/open?id=FILE_ID
+            else if (url.includes("drive.google.com/open")) {
+                const match = url.match(/[?&]id=([^&]+)/);
+                if (match) fileId = match[1];
+            }
+            // Format: https://drive.google.com/thumbnail?id=FILE_ID
+            else if (url.includes("drive.google.com/thumbnail")) {
+                // Already in correct format
+                return url;
+            }
+            // Other format
+            else {
+                return url;
+            }
+
+            // Convert to thumbnail format if we found an ID
+            if (fileId) {
+                return `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
+            }
+
+            return url;
+        }
 
         async function loadProducts() {
             try {
                 const res = await fetch(SHEET_URL);
                 const text = await res.text();
 
-                // Parse CSV manually
+                // Parse CSV
                 const lines = text.trim().split('\n');
                 const products = [];
 
                 // Skip header row (index 0), start from 1
                 for (let i = 1; i < lines.length; i++) {
                     const line = lines[i];
-                    // Simple CSV parsing (assuming no commas in fields)
-                    const cols = line.split(',');
 
-                    if (cols.length >= 4) {
+                    // Handle CSV with commas in quoted fields
+                    const cols = line.split(',').map(col => col.trim().replace(/^"|"$/g, ''));
+
+                    if (cols.length >= 3 && cols[0]) { // At least name must exist
+                        const originalUrl = cols[3] || "";
+                        const fixedUrl = fixDriveUrl(originalUrl);
+
                         products.push({
-                            name: cols[0]?.trim() || "Ukendt produkt",
-                            price: cols[1]?.trim() || "",
-                            description: cols[2]?.trim() || "",
-                            imageUrl: cols[3]?.trim() || ""
+                            name: cols[0] || "Ukendt produkt",
+                            price: cols[1] || "",
+                            description: cols[2] || "",
+                            imageUrl: fixedUrl
                         });
                     }
                 }
 
+                console.log("Loaded products:", products); // Debug
                 renderProducts(products);
             } catch (err) {
                 console.error("Fejl ved indlæsning af produkter:", err);
-                imageGrid.innerHTML = "<p style='text-align: center; color: red;'>Kunne ikke indlæse produkter. Prøv igen senere. 🌸</p>";
+                imageGrid.innerHTML = "<p style='text-align: center; color: red;'>Kunne ikke indlæse produkter. Tjek konsollen for fejl. 🌸</p>";
             }
         }
 
@@ -115,15 +160,25 @@
             imageGrid.innerHTML = "";
 
             if (products.length === 0) {
-                imageGrid.innerHTML = "<p style='text-align: center;'>Ingen produkter fundet endnu 🌸</p>";
+                imageGrid.innerHTML = "<p style='text-align: center; color: #df20af;'>Ingen produkter fundet endnu 🌸</p>";
                 return;
             }
 
             products.forEach(product => {
                 const card = document.createElement("div");
                 card.classList.add("product-card");
+
+                // Add error handling for images
+                const imageHtml = product.imageUrl
+                    ? `<img src="${product.imageUrl}" alt="${product.name}" 
+                           onerror="this.src='images/placeholder.jpg'; this.onerror=null;"
+                           loading="lazy">`
+                    : `<div style="width:100%;height:220px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;border-radius:10px;">
+                           <span style="color:#999;">📷 Intet billede</span>
+                       </div>`;
+
                 card.innerHTML = `
-                    <img src="${product.imageUrl}" alt="${product.name}" onerror="this.src='images/placeholder.jpg'">
+                    ${imageHtml}
                     <h3>${product.name}</h3>
                     <p>${product.description}</p>
                     ${product.price ? `<p><b>${product.price} kr</b></p>` : ""}
@@ -135,10 +190,10 @@
         // Load products on page load
         document.addEventListener("DOMContentLoaded", loadProducts);
 
-        // Optional: Category filter functionality (you can implement this later)
+        // Optional: Category filter functionality
         categoryFilter.addEventListener("change", (e) => {
-            // TODO: Implement filtering logic
             console.log("Filter selected:", e.target.value);
+            // TODO: Implement filtering logic
         });
     </script>
 
