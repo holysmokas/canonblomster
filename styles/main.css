@@ -840,3 +840,46 @@ footer {
         font-size: 0.8em;
     }
 }
+
+/* ===== PRODUCT CARD STYLING (MATCHING ADMIN DASHBOARD) ===== */
+.product-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.product-card h3 {
+    color: #df20af;
+    font-size: 1.1em;
+    margin: 10px 0 5px;
+}
+
+.product-card p {
+    color: #555;
+    font-size: 0.9em;
+    margin: 5px 0;
+    line-height: 1.4;
+}
+
+.product-card .price {
+    font-weight: bold;
+    color: #333;
+    font-size: 1em;
+    margin: 10px 0;
+}

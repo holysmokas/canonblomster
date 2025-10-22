@@ -72,46 +72,29 @@
     </footer>
 
     <script>
-        // ⚠️ UPDATE THIS: Replace with your Google Sheet's published CSV URL
-        // File → Share → Publish to web → Sheet1 → CSV format
+        // ⚠️ CORRECT URL - DO NOT CHANGE THIS
         const SHEET_URL = "https://docs.google.com/spreadsheets/d/1YN-F-UFBNswqo_9DCqV_rhfQdZ22yMtEk1VveVv2jBs/export?format=csv&gid=0";
 
         const imageGrid = document.getElementById("imageGrid");
         const categoryFilter = document.getElementById("categoryFilter");
 
-        // Function to convert Google Drive URL to working thumbnail format
+        // Fix Drive URLs
         function fixDriveUrl(url) {
             if (!url) return "";
 
-            // Extract file ID from various Google Drive URL formats
+            // Remove any quotes or extra whitespace
+            url = url.replace(/^"|"$/g, '').trim();
+
             let fileId = "";
 
-            // Format: https://drive.google.com/uc?export=view&id=FILE_ID
             if (url.includes("drive.google.com/uc")) {
                 const match = url.match(/[?&]id=([^&]+)/);
                 if (match) fileId = match[1];
-            }
-            // Format: https://drive.google.com/file/d/FILE_ID/view
-            else if (url.includes("drive.google.com/file")) {
-                const match = url.match(/\/d\/([^\/]+)/);
-                if (match) fileId = match[1];
-            }
-            // Format: https://drive.google.com/open?id=FILE_ID
-            else if (url.includes("drive.google.com/open")) {
-                const match = url.match(/[?&]id=([^&]+)/);
-                if (match) fileId = match[1];
-            }
-            // Format: https://drive.google.com/thumbnail?id=FILE_ID
-            else if (url.includes("drive.google.com/thumbnail")) {
-                // Already in correct format
-                return url;
-            }
-            // Other format
-            else {
+            } else if (url.includes("drive.google.com/thumbnail")) {
+                // Already in thumbnail format - just return it
                 return url;
             }
 
-            // Convert to thumbnail format if we found an ID
             if (fileId) {
                 return `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
             }
