@@ -178,6 +178,70 @@ footer {
     overflow-y: auto;
 }
 
+/* ===== BOTANISK INTRO TEXT (MODERN STYLING) ===== */
+.intro-botanisk {
+    font-size: 1.05em;
+    line-height: 1.7;
+    color: #333;
+    margin: 0;
+    text-align: left;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(223, 32, 175, 0.08);
+    max-height: none;
+    border-left: 4px solid #df20af;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== PRODUCT FILTER (MODERN STYLING) ===== */
+.product-filter {
+    text-align: center;
+    margin: 40px auto 30px;
+    max-width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(223, 32, 175, 0.08);
+}
+
+.product-filter label {
+    font-size: 1.05em;
+    font-weight: 500;
+    margin-bottom: 12px;
+    display: block;
+    color: #333;
+}
+
+.product-filter select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e8e8e8;
+    border-radius: 8px;
+    font-size: 1em;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fff;
+    color: #333;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23df20af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+    padding-right: 40px;
+}
+
+.product-filter select:hover {
+    border-color: #df20af;
+}
+
+.product-filter select:focus {
+    border-color: #df20af;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(223, 32, 175, 0.1);
+}
+
 /* ===== INDEX PAGE SLIDESHOW ===== */
 .auto-slideshow {
     width: 500px;
