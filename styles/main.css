@@ -287,78 +287,89 @@ footer {
     }
 }
 
-/* ===== SIDE POPUPS (INDEX PAGE) ===== */
+/* ===== SIDE POPUPS (INDEX PAGE) - FIXED ===== */
 .side-popups.left {
     position: fixed;
     left: 0;
-    top: auto;
-    bottom: 20px;
+    top: 50%;
+    transform: translateY(-50%);
     width: auto;
     height: auto;
-    pointer-events: auto;
+    pointer-events: none;
+    z-index: 100;
 }
 
 .side-popups.right {
     position: fixed;
     right: 0;
-    top: auto;
-    bottom: 20px;
+    top: 50%;
+    transform: translateY(-50%);
     width: auto;
     height: auto;
-    pointer-events: auto;
+    pointer-events: none;
+    z-index: 100;
 }
 
 .popup {
     position: absolute;
-    width: 320px;
-    height: 48px;
+    width: 280px;
+    height: 52px;
     background: #fff;
     color: #df20af;
-    border-radius: 8px;
-    box-shadow: 0 2px 12px rgba(223, 32, 175, 0.12);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(223, 32, 175, 0.2);
     display: flex;
     align-items: center;
     padding: 0 24px;
-    font-size: 1.1em;
-    font-weight: bold;
+    font-size: 1.05em;
+    font-weight: 600;
     opacity: 0;
-    transition: transform 0.7s cubic-bezier(.77, 0, .18, 1), opacity 0.7s;
+    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.6s ease;
     pointer-events: auto;
 }
 
 .popup-left {
+    left: 0;
     transform: translateX(-120%);
 }
 
 .popup-right {
     right: 0;
-    left: auto;
     transform: translateX(120%);
 }
 
-.popup-left-top,
+.popup-left-top {
+    top: -80px;
+}
+
+.popup-left-middle {
+    top: -26px;
+}
+
+.popup-left-bottom {
+    top: 28px;
+}
+
 .popup-right-top {
-    top: 35%;
+    top: -80px;
 }
 
-.popup-left-middle,
 .popup-right-middle {
-    top: 45%;
+    top: -26px;
 }
 
-.popup-left-bottom,
 .popup-right-bottom {
-    top: 55%;
+    top: 28px;
 }
 
 .popup.show.popup-left {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(20px);
 }
 
 .popup.show.popup-right {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(-20px);
 }
 
 /* ===== REVIEWS SECTION (INDEX PAGE) ===== */
@@ -485,8 +496,6 @@ footer {
     font-size: 1em;
     margin: 10px 0;
 }
-
-
 
 /* ===== KURATER PAGE LAYOUT/FORMS ===== */
 .kurater-flex {
