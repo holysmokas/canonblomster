@@ -144,24 +144,51 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Animate left popups
+        document.addEventListener('DOMContentLoaded', () => {
             const leftPopups = document.querySelectorAll('.popup-left');
+            const rightPopups = document.querySelectorAll('.popup-right');
+            const displayTime = 3000; // visible for 3 seconds
+
+            // Function to show and hide with slide effect
+            function showPopup(popup, direction) {
+                popup.classList.add(`show-${direction}`);
+                setTimeout(() => {
+                    popup.classList.remove(`show-${direction}`);
+                    popup.classList.add('hide');
+                    setTimeout(() => popup.classList.remove('hide'), 800);
+                }, displayTime);
+            }
+
+            // Sequentially show left-side popups
             leftPopups.forEach((popup, index) => {
                 setTimeout(() => {
-                    popup.classList.add('show');
-                }, 500 + (index * 200));
+                    showPopup(popup, 'left');
+                }, index * 1500);
             });
 
-            // Animate right popups
-            const rightPopups = document.querySelectorAll('.popup-right');
+            // Sequentially show right-side popups
             rightPopups.forEach((popup, index) => {
                 setTimeout(() => {
-                    popup.classList.add('show');
-                }, 700 + (index * 200));
+                    showPopup(popup, 'right');
+                }, 800 + index * 1500);
             });
+
+            // Repeat every 10 seconds
+            setInterval(() => {
+                leftPopups.forEach((popup, index) => {
+                    setTimeout(() => {
+                        showPopup(popup, 'left');
+                    }, index * 1500);
+                });
+                rightPopups.forEach((popup, index) => {
+                    setTimeout(() => {
+                        showPopup(popup, 'right');
+                    }, 800 + index * 1500);
+                });
+            }, 10000);
         });
     </script>
+
 </body>
 
 </html>

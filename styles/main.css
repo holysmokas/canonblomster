@@ -287,19 +287,25 @@ footer {
     }
 }
 
-/* ===== CENTERED POPUPS (INDEX PAGE) ===== */
-.side-popups {
+/* ===== SIDE POPUPS (INDEX PAGE) — SLIDE & FADE ===== */
+.side-popups.left,
+.side-popups.right {
     position: fixed;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    max-width: 400px;
+    transform: translateY(-50%);
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 20px;
     z-index: 2000;
+    pointer-events: none;
+}
+
+.side-popups.left {
+    left: 0;
+}
+
+.side-popups.right {
+    right: 0;
 }
 
 .popup {
@@ -314,13 +320,35 @@ footer {
     font-size: 1.1em;
     font-weight: 600;
     opacity: 0;
-    transition: all 0.6s ease;
+    transform: translateX(0);
+    transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.8s ease;
     pointer-events: auto;
 }
 
-.popup.show {
+/* Initial hidden positions */
+.popup-left {
+    transform: translateX(-150%);
+}
+
+.popup-right {
+    transform: translateX(150%);
+}
+
+/* Show animation */
+.popup.show-left {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1.05);
+    transform: translateX(40px);
+}
+
+.popup.show-right {
+    opacity: 1;
+    transform: translateX(-40px);
+}
+
+/* Hide animation */
+.popup.hide {
+    opacity: 0;
+    transform: translateX(0);
 }
 
 
