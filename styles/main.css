@@ -287,90 +287,42 @@ footer {
     }
 }
 
-/* ===== SIDE POPUPS (INDEX PAGE) - FIXED ===== */
-.side-popups.left {
+/* ===== CENTERED POPUPS (INDEX PAGE) ===== */
+.side-popups {
     position: fixed;
-    left: 0;
     top: 50%;
-    transform: translateY(-50%);
-    width: auto;
-    height: auto;
-    pointer-events: none;
-    z-index: 100;
-}
-
-.side-popups.right {
-    position: fixed;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: auto;
-    height: auto;
-    pointer-events: none;
-    z-index: 100;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    z-index: 2000;
 }
 
 .popup {
-    position: absolute;
-    width: 280px;
-    height: 52px;
     background: #fff;
     color: #df20af;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(223, 32, 175, 0.2);
+    box-shadow: 0 4px 20px rgba(223, 32, 175, 0.25);
     display: flex;
     align-items: center;
-    padding: 0 24px;
-    font-size: 1.05em;
+    justify-content: center;
+    padding: 14px 30px;
+    font-size: 1.1em;
     font-weight: 600;
     opacity: 0;
-    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.6s ease;
+    transition: all 0.6s ease;
     pointer-events: auto;
 }
 
-.popup-left {
-    left: 0;
-    transform: translateX(-120%);
-}
-
-.popup-right {
-    right: 0;
-    transform: translateX(120%);
-}
-
-.popup-left-top {
-    top: -80px;
-}
-
-.popup-left-middle {
-    top: -26px;
-}
-
-.popup-left-bottom {
-    top: 28px;
-}
-
-.popup-right-top {
-    top: -80px;
-}
-
-.popup-right-middle {
-    top: -26px;
-}
-
-.popup-right-bottom {
-    top: 28px;
-}
-
-.popup.show.popup-left {
+.popup.show {
     opacity: 1;
-    transform: translateX(20px);
+    transform: translate(-50%, -50%) scale(1.05);
 }
 
-.popup.show.popup-right {
-    opacity: 1;
-    transform: translateX(-20px);
-}
 
 /* ===== REVIEWS SECTION (INDEX PAGE) ===== */
 .reviews-section {
