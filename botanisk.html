@@ -54,8 +54,9 @@
         <section class="product-filter">
             <label for="categoryFilter">Filtrér efter kategori:</label>
             <select id="categoryFilter">
-                <option value="all">Normalt</option>
-                <option value="bouquets">Stort</option>
+                <option value="all">Alle produkter</option>
+                <option value="normalt">Normalt</option>
+                <option value="stort">Stort</option>
             </select>
         </section>
 
@@ -75,6 +76,8 @@
 
         const imageGrid = document.getElementById("imageGrid");
         const categoryFilter = document.getElementById("categoryFilter");
+
+        let allProducts = []; // Store all products for filtering
 
         // Fix Drive URLs
         function fixDriveUrl(url) {
@@ -107,7 +110,7 @@
 
                 // Parse CSV
                 const lines = text.trim().split('\n');
-                const products = [];
+                allProducts = [];
 
                 // Skip header row (index 0), start from 1
                 for (let i = 1; i < lines.length; i++) {
@@ -119,18 +122,21 @@
                     if (cols.length >= 3 && cols[0]) { // At least name must exist
                         const originalUrl = cols[3] || "";
                         const fixedUrl = fixDriveUrl(originalUrl);
+                        const category = cols[4] ? cols[4].toLowerCase().trim() : "normalt";
 
-                        products.push({
+                        allProducts.push({
                             name: cols[0] || "Ukendt produkt",
                             price: cols[1] || "",
                             description: cols[2] || "",
-                            imageUrl: fixedUrl
+                            imageUrl: fixedUrl,
+                            category: category
                         });
                     }
                 }
 
-                console.log("Loaded products:", products); // Debug
-                renderProducts(products);
+                console.log("Loaded products:", allProducts);
+                console.log("Categories found:", allProducts.map(p => p.category));
+                renderProducts(allProducts);
             } catch (err) {
                 console.error("Fejl ved indlæsning af produkter:", err);
                 imageGrid.innerHTML = "<p style='text-align: center; color: red;'>Kunne ikke indlæse produkter. Tjek konsollen for fejl. 🌸</p>";
@@ -141,7 +147,7 @@
             imageGrid.innerHTML = "";
 
             if (products.length === 0) {
-                imageGrid.innerHTML = "<p style='text-align: center; color: #df20af;'>Ingen produkter fundet endnu 🌸</p>";
+                imageGrid.innerHTML = "<p style='text-align: center; color: #df20af;'>Ingen produkter fundet i denne kategori 🌸</p>";
                 return;
             }
 
@@ -168,13 +174,31 @@
             });
         }
 
+        // Filter products based on category selection
+        function filterProducts(category) {
+            console.log("Filtering by category:", category);
+
+            if (category === 'all') {
+                console.log("Showing all products:", allProducts.length);
+                renderProducts(allProducts);
+            } else {
+                const filtered = allProducts.filter(product => {
+                    console.log(`Product: ${product.name}, Category: "${product.category}", Match: ${product.category === category}`);
+                    return product.category === category;
+                });
+                console.log(`Found ${filtered.length} products in category "${category}"`);
+                renderProducts(filtered);
+            }
+        }
+
         // Load products on page load
         document.addEventListener("DOMContentLoaded", loadProducts);
 
-        // Optional: Category filter functionality
+        // Category filter functionality
         categoryFilter.addEventListener("change", (e) => {
-            console.log("Filter selected:", e.target.value);
-            // TODO: Implement filtering logic
+            const selectedCategory = e.target.value;
+            console.log("Filter changed to:", selectedCategory);
+            filterProducts(selectedCategory);
         });
     </script>
 
