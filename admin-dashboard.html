@@ -74,6 +74,17 @@
       margin: 10px 0;
     }
 
+    .admin-product-card .category-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      font-weight: 600;
+      margin: 8px 0;
+      background: linear-gradient(135deg, #df20af 0%, #e85d75 100%);
+      color: white;
+    }
+
     .delete-btn {
       background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
       color: white;
@@ -148,6 +159,13 @@
         <label for="productPrice">Pris (kr)</label>
         <input type="number" id="productPrice" placeholder="F.eks. 150" required>
 
+        <label for="productCategory">Kategori</label>
+        <select id="productCategory" required>
+          <option value="">Vælg kategori</option>
+          <option value="normalt">Normalt</option>
+          <option value="stort">Stort</option>
+        </select>
+
         <label for="productDescription">Beskrivelse</label>
         <textarea id="productDescription" rows="3" placeholder="Kort beskrivelse af produktet"></textarea>
 
@@ -180,7 +198,7 @@
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
     // ⚠️ UPDATE THESE URLs
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbztzbsm5WQtvLNL57OYuJxIj7R017yfsCpCXHrgCmxJJFadBzZB4GHsEkb49UWhrI4/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmBK4pcfTpQB9QT3pSrPlRKpMpNJ6gyWaKAEM7F1ayZnL4GKt0y7wqXZAvDld3Yekn/exec";
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1YN-F-UFBNswqo_9DCqV_rhfQdZ22yMtEk1VveVv2jBs/export?format=csv&gid=0";
 
     const form = document.getElementById('addProductForm');
@@ -206,11 +224,18 @@
 
       const name = document.getElementById('productName').value.trim();
       const price = document.getElementById('productPrice').value.trim();
+      const category = document.getElementById('productCategory').value.trim();
       const description = document.getElementById('productDescription').value.trim();
       const imageInput = document.getElementById('productImage');
 
       if (!imageInput.files.length) {
         statusMessage.textContent = "⚠️ Vælg venligst et billede";
+        statusMessage.style.color = "orange";
+        return;
+      }
+
+      if (!category) {
+        statusMessage.textContent = "⚠️ Vælg venligst en kategori";
         statusMessage.style.color = "orange";
         return;
       }
@@ -232,7 +257,7 @@
         reader.readAsDataURL(file);
       });
 
-      const product = { name, price, description, imageBase64, imageName, imageType };
+      const product = { name, price, category, description, imageBase64, imageName, imageType };
 
       statusMessage.textContent = "⏳ Uploader produkt...";
       statusMessage.style.color = "#555";
@@ -285,11 +310,12 @@
 
           if (cols.length >= 3 && cols[0]) {
             products.push({
-              rowIndex: i + 1, // Row number in sheet (1-indexed, +1 for header)
+              rowIndex: i + 1,
               name: cols[0] || "Ukendt produkt",
               price: cols[1] || "",
               description: cols[2] || "",
-              imageUrl: fixDriveUrl(cols[3] || "")
+              imageUrl: fixDriveUrl(cols[3] || ""),
+              category: cols[4] || "normalt"
             });
           }
         }
@@ -340,9 +366,12 @@
                <span style="color:#999;">📷 Intet billede</span>
              </div>`;
 
+        const categoryDisplay = product.category === 'stort' ? 'Stort' : 'Normalt';
+
         card.innerHTML = `
           ${imageHtml}
           <h3>${product.name}</h3>
+          <span class="category-badge">${categoryDisplay}</span>
           <p>${product.description}</p>
           <p class="price">${product.price} kr</p>
           <button class="delete-btn" data-row="${product.rowIndex}" data-name="${product.name}">
@@ -380,11 +409,8 @@
           mode: "no-cors"
         });
 
-        // Since we use no-cors, we can't read the response
-        // Just assume it worked and reload
         alert("✅ Produkt slettet!");
 
-        // Reload products after 1 second
         setTimeout(() => {
           loadProducts();
         }, 1000);
