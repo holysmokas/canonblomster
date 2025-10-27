@@ -1,6 +1,6 @@
 // Firebase + App Script Integration-- >
 
-import { auth } from "./scripts/firebase.js";
+import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
 // ⚠️ UPDATE THESE URLs
