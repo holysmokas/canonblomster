@@ -85,6 +85,26 @@
       color: white;
     }
 
+    .admin-product-card .payment-link-display {
+      font-size: 0.85em;
+      color: #666;
+      margin: 8px 0;
+      padding: 6px 10px;
+      background: #f8f8f8;
+      border-radius: 6px;
+      word-break: break-all;
+    }
+
+    .admin-product-card .payment-link-display a {
+      color: #df20af;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .admin-product-card .payment-link-display a:hover {
+      text-decoration: underline;
+    }
+
     .delete-btn {
       background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
       color: white;
@@ -168,6 +188,12 @@
 
         <label for="productDescription">Beskrivelse</label>
         <textarea id="productDescription" rows="3" placeholder="Kort beskrivelse af produktet"></textarea>
+
+        <label for="productPaymentLink">Betalingslink (Vipps/MobilePay)</label>
+        <input type="url" id="productPaymentLink" placeholder="https://vipps.no/... eller https://mobilepay.dk/...">
+        <small style="color: #666; font-size: 0.85em; display: block; margin-top: -15px; margin-bottom: 15px;">
+          💡 Valgfrit: Tilføj et betalingslink, så kunder kan købe direkte
+        </small>
 
         <label for="productImage">Upload billede</label>
         <input type="file" id="productImage" accept="image/*" required>

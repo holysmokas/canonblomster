@@ -27,25 +27,53 @@
     font-weight: 500;
 }
 
+/* Uniform styling for ALL input types including select */
 .dashboard-form input[type="text"],
 .dashboard-form input[type="number"],
+.dashboard-form input[type="url"],
+.dashboard-form select,
 .dashboard-form textarea {
     width: 100%;
     padding: 12px 15px;
     border: 2px solid #e8e8e8;
     border-radius: 8px;
     font-size: 1em;
+    font-family: "Poppins", sans-serif;
     transition: all 0.3s ease;
     margin-bottom: 20px;
+    background-color: #fff;
+    box-sizing: border-box;
+    color: #333;
 }
 
+/* Focus state for all inputs */
 .dashboard-form input:focus,
+.dashboard-form select:focus,
 .dashboard-form textarea:focus {
     outline: none;
     border-color: #df20af;
     box-shadow: 0 0 0 3px rgba(223, 32, 175, 0.1);
 }
 
+/* Select dropdown specific styling */
+.dashboard-form select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23df20af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+    padding-right: 40px;
+}
+
+/* Textarea specific styling */
+.dashboard-form textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.5;
+}
+
+/* File input styling - different but still cohesive */
 .dashboard-form input[type="file"] {
     border: 2px dashed #df20af;
     border-radius: 10px;
@@ -55,13 +83,25 @@
     transition: 0.3s;
     width: 100%;
     text-align: center;
+    font-size: 1em;
+    margin-bottom: 20px;
+    box-sizing: border-box;
 }
 
 .dashboard-form input[type="file"]:hover {
     background: #ffeef8;
+    border-color: #df20af;
 }
 
-.dashboard-form button {
+.dashboard-form input[type="file"]:focus {
+    outline: none;
+    border-color: #df20af;
+    box-shadow: 0 0 0 3px rgba(223, 32, 175, 0.1);
+}
+
+/* Submit button */
+.dashboard-form button,
+.submit-btn {
     background: linear-gradient(135deg, #df20af 0%, #e85d75 100%);
     color: #fff;
     border: none;
@@ -72,20 +112,22 @@
     font-weight: 600;
     width: 100%;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 10px;
+    box-sizing: border-box;
 }
 
-.dashboard-form button:hover {
+.dashboard-form button:hover,
+.submit-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(223, 32, 175, 0.3);
 }
 
-@media (max-width: 768px) {
-    .dashboard-container {
-        margin: 100px 20px;
-        padding: 25px;
-    }
+.dashboard-form button:active,
+.submit-btn:active {
+    transform: translateY(0);
 }
 
+/* Add another button */
 #addAnotherBtn {
     background: linear-gradient(90deg, #ff66b2, #ff3399);
     color: white;
@@ -98,5 +140,52 @@
 }
 
 #addAnotherBtn:hover {
-    opacity: 0.8;
+    opacity: 0.85;
+    transform: translateY(-2px);
+}
+
+/* Helper text styling */
+.dashboard-form small {
+    display: block;
+    color: #666;
+    font-size: 0.85em;
+    margin-top: -15px;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+/* Placeholder styling */
+.dashboard-form input::placeholder,
+.dashboard-form textarea::placeholder {
+    color: #999;
+    opacity: 1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .dashboard-container {
+        margin: 100px 20px;
+        padding: 25px;
+    }
+
+    .dashboard-form input[type="text"],
+    .dashboard-form input[type="number"],
+    .dashboard-form input[type="url"],
+    .dashboard-form select,
+    .dashboard-form textarea {
+        font-size: 16px;
+        /* Prevents zoom on iOS */
+    }
+
+    .dashboard-container h2 {
+        font-size: 1.5em;
+    }
+}
+
+/* Loading states */
+.dashboard-form button:disabled,
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
 }

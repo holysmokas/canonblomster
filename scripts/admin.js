@@ -1,10 +1,10 @@
-// Firebase + App Script Integration-- >
+// Firebase + App Script Integration
 
 import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
 // ⚠️ UPDATE THESE URLs
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmBK4pcfTpQB9QT3pSrPlRKpMpNJ6gyWaKAEM7F1ayZnL4GKt0y7wqXZAvDld3Yekn/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6QHREdRLQENBMkq8Bw_iIqtYPbVRxPCDKfTjmHzH9f4sc9BtLZYyKrq-o6YnQYyHM/exec";
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1YN-F-UFBNswqo_9DCqV_rhfQdZ22yMtEk1VveVv2jBs/export?format=csv&gid=0";
 
 const form = document.getElementById('addProductForm');
@@ -32,6 +32,7 @@ form.addEventListener('submit', async (e) => {
     const price = document.getElementById('productPrice').value.trim();
     const category = document.getElementById('productCategory').value.trim();
     const description = document.getElementById('productDescription').value.trim();
+    const paymentLink = document.getElementById('productPaymentLink').value.trim();
     const imageInput = document.getElementById('productImage');
 
     if (!imageInput.files.length) {
@@ -63,7 +64,16 @@ form.addEventListener('submit', async (e) => {
         reader.readAsDataURL(file);
     });
 
-    const product = { name, price, category, description, imageBase64, imageName, imageType };
+    const product = {
+        name,
+        price,
+        category,
+        description,
+        paymentLink, // Include payment link in the product data
+        imageBase64,
+        imageName,
+        imageType
+    };
 
     statusMessage.textContent = "⏳ Uploader produkt...";
     statusMessage.style.color = "#555";
@@ -121,7 +131,8 @@ async function loadProducts() {
                     price: cols[1] || "",
                     description: cols[2] || "",
                     imageUrl: fixDriveUrl(cols[3] || ""),
-                    category: cols[4] || "normalt"
+                    category: cols[4] || "normalt",
+                    paymentLink: cols[5] || "" // Get payment link from column 6
                 });
             }
         }
@@ -174,12 +185,20 @@ function renderProducts(products) {
 
         const categoryDisplay = product.category === 'stort' ? 'Stort' : 'Normalt';
 
+        // Display payment link if available
+        const paymentLinkHtml = product.paymentLink
+            ? `<div class="payment-link-display">
+                 💳 <a href="${product.paymentLink}" target="_blank" rel="noopener noreferrer">Betalingslink</a>
+               </div>`
+            : '';
+
         card.innerHTML = `
           ${imageHtml}
           <h3>${product.name}</h3>
           <span class="category-badge">${categoryDisplay}</span>
           <p>${product.description}</p>
           <p class="price">${product.price} kr</p>
+          ${paymentLinkHtml}
           <button class="delete-btn" data-row="${product.rowIndex}" data-name="${product.name}">
             🗑️ Slet produkt
           </button>
