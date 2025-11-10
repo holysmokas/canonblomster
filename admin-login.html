@@ -18,9 +18,7 @@
             background: linear-gradient(135deg, #ffeef8 0%, #fff5f0 100%);
             min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            flex-direction: column;
         }
 
         .login-container {
@@ -30,6 +28,7 @@
             padding: 40px;
             max-width: 400px;
             width: 100%;
+            margin: auto;
         }
 
         .login-header {
@@ -111,9 +110,22 @@
             display: block;
         }
 
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        footer p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
         @media (max-width: 480px) {
             .login-container {
                 padding: 30px 20px;
+                margin: 20px;
             }
 
             .login-header h1 {
@@ -128,7 +140,6 @@
     <header class="header-flex">
         <div class="header-title">
             <h1>CANON BLOMSTER</h1>
-
         </div>
         <nav class="hamburger-nav">
             <input type="checkbox" id="menu-toggle" />
@@ -141,7 +152,6 @@
                 <li><a href="index.html">Hjem</a></li>
                 <li><a href="botanisk.html">Botanisk</a></li>
                 <li><a href="kurater.html">Kurater</a></li>
-                <li><a href="admin-dashboard.html" class="active">Admin</a></li>
             </ul>
         </nav>
     </header>
@@ -168,6 +178,17 @@
             <button type="submit" class="login-btn" id="loginBtn">Log ind</button>
         </form>
     </div>
+
+    <footer>
+        <p>© 2025 Canon Blomster • Amagerbrogade 238B, 2300 København, Denmark • +45 32 55 78 90</p>
+        <p style="margin-top: 10px; font-size: 0.9em; color: #555;">
+            Website Built by <strong><a href="https://www.holysmokas.com" target="_blank" rel="noopener noreferrer"
+                    style="color: #df20af; text-decoration: none; font-weight: 600;"
+                    onmouseover="this.style.textDecoration='underline'"
+                    onmouseout="this.style.textDecoration='none'">Holysmokas Labs</a></strong>
+            • All Rights Reserved 2025
+        </p>
+    </footer>
 
     <script type="module">
         import { auth } from "./scripts/firebase.js";

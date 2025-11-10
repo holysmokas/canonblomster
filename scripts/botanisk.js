@@ -129,13 +129,19 @@ function renderProducts(products) {
         const card = document.createElement("div");
         card.classList.add("product-card");
 
-        // Add error handling for images
+        // Add error handling for images with hover zoom effect
         const imageHtml = product.imageUrl
-            ? `<img src="${product.imageUrl}" alt="${product.name}"
-                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                loading="lazy">
-               <div style="width:100%;height:220px;background:#f0f0f0;display:none;align-items:center;justify-content:center;border-radius:10px;">
-                 <span style="color:#999;">📷 Billede ikke tilgængeligt</span>
+            ? `<div class="product-image-container" style="position:relative;overflow:hidden;border-radius:10px;height:220px;">
+                 <img src="${product.imageUrl}" alt="${product.name}"
+                   class="product-image"
+                   style="width:100%;height:100%;object-fit:cover;transition:transform 0.3s ease;cursor:zoom-in;"
+                   onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                   loading="lazy"
+                   onmouseover="this.style.transform='scale(1.15)'"
+                   onmouseout="this.style.transform='scale(1)'">
+                 <div style="width:100%;height:220px;background:#f0f0f0;display:none;align-items:center;justify-content:center;border-radius:10px;">
+                   <span style="color:#999;">📷 Billede ikke tilgængeligt</span>
+                 </div>
                </div>`
             : `<div style="width:100%;height:220px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;border-radius:10px;">
                  <span style="color:#999;">📷 Intet billede</span>
@@ -144,7 +150,9 @@ function renderProducts(products) {
         // Add payment link button if available
         const paymentButton = product.paymentLink
             ? `<a href="${product.paymentLink}" target="_blank" rel="noopener noreferrer" 
-                  style="display:inline-block;margin-top:10px;padding:10px 20px;background:linear-gradient(135deg, #df20af 0%, #e85d75 100%);color:white;text-decoration:none;border-radius:8px;font-weight:600;transition:transform 0.2s ease;">
+                  style="display:inline-block;margin-top:10px;padding:10px 20px;background:linear-gradient(135deg, #df20af 0%, #e85d75 100%);color:white;text-decoration:none;border-radius:8px;font-weight:600;transition:transform 0.2s ease,box-shadow 0.2s ease;"
+                  onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 15px rgba(223,32,175,0.3)'"
+                  onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
                   💳 Køb nu
                </a>`
             : '';
