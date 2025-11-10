@@ -254,22 +254,7 @@
         </p>
     </footer>
 
-    <script>
-        document.getElementById('kuraterForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            alert('Tak for din forespørgsel! Vi kontakter dig snarest.');
-            // Add your form submission logic here
-        });
-
-        // File upload preview
-        document.getElementById('fileUpload').addEventListener('change', function (e) {
-            const files = e.target.files;
-            const label = document.querySelector('.file-upload-label');
-            if (files.length > 0) {
-                label.innerHTML = `📷 ${files.length} billede(r) valgt<br><span class="help-text">Klik for at ændre</span>`;
-            }
-        });
-    </script>
+    <script src="scripts/kurater.js"></script>
 
 </body>
 
