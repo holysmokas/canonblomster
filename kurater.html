@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kurater – Canon Blomster</title>
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/kurater.css">
     <link rel="icon" type="image/jpeg" href="images/favicon.jpeg">
 </head>
 
@@ -39,18 +40,210 @@
         🌺 <strong>Resten af Amager</strong>: 100 kr.
     </div>
 
-    <main>
-        <section class="kurater-intro">
-            <h2>Kurater & Arrangementer</h2>
-            <p>Velkommen til vores kuratorsside! Her kan du bestille specialdesignede blomsterarrangementer til alle
-                anledninger.</p>
-        </section>
+    <div class="container">
+        <div class="header">
+            <h1>🌺 Blomster Kurater</h1>
+            <p>Specialdesignede arrangementer til alle anledninger</p>
+        </div>
 
-        <!-- Add your kurater content here -->
+        <div class="form-content">
+            <form id="kuraterForm">
+                <!-- Kontakt Information -->
+                <div class="section">
+                    <h2 class="section-title">Kontakt Information</h2>
 
-    </main>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Fulde Navn <span class="required">*</span></label>
+                            <input type="text" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email <span class="required">*</span></label>
+                            <input type="email" name="email" required>
+                        </div>
+                    </div>
 
-    <footer>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Telefon <span class="required">*</span></label>
+                            <input type="tel" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Foretrukket Kontaktmetode</label>
+                            <select name="contactMethod">
+                                <option value="email">Email</option>
+                                <option value="phone">Telefon</option>
+                                <option value="both">Begge</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event Detaljer -->
+                <div class="section">
+                    <h2 class="section-title">Event Detaljer</h2>
+
+                    <div class="form-group">
+                        <label>Event Type <span class="required">*</span></label>
+                        <select name="eventType" required>
+                            <option value="">Vælg event type</option>
+                            <option value="wedding">Bryllup</option>
+                            <option value="funeral">Begravelse</option>
+                            <option value="birthday">Fødselsdag</option>
+                            <option value="corporate">Firma Event</option>
+                            <option value="anniversary">Jubilæum</option>
+                            <option value="other">Andet</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Event Dato <span class="required">*</span></label>
+                            <input type="date" name="eventDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Event Tidspunkt</label>
+                            <input type="time" name="eventTime">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Event Lokation</label>
+                        <input type="text" name="eventLocation" placeholder="Adresse eller venue navn">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Antal Gæster (estimeret)</label>
+                        <input type="number" name="guestCount" min="1">
+                    </div>
+                </div>
+
+                <!-- Blomster Præferencer -->
+                <div class="section">
+                    <h2 class="section-title">Blomster Præferencer</h2>
+
+                    <div class="form-group">
+                        <label>Foretrukne Blomster</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="roses" name="flowers" value="roses">
+                                <label for="roses">Roser</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="tulips" name="flowers" value="tulips">
+                                <label for="tulips">Tulipaner</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="lilies" name="flowers" value="lilies">
+                                <label for="lilies">Liljer</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="orchids" name="flowers" value="orchids">
+                                <label for="orchids">Orkidéer</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="peonies" name="flowers" value="peonies">
+                                <label for="peonies">Pæoner</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="hydrangeas" name="flowers" value="hydrangeas">
+                                <label for="hydrangeas">Hortensia</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Farve Præferencer</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="white" name="colors" value="white">
+                                <label for="white">Hvid</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="red" name="colors" value="red">
+                                <label for="red">Rød</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="pink" name="colors" value="pink">
+                                <label for="pink">Lyserød</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="yellow" name="colors" value="yellow">
+                                <label for="yellow">Gul</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="purple" name="colors" value="purple">
+                                <label for="purple">Lilla</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="orange" name="colors" value="orange">
+                                <label for="orange">Orange</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Stil</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="modern" name="style" value="modern">
+                                <label for="modern">Moderne</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="classic" name="style" value="classic">
+                                <label for="classic">Klassisk</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="rustic" name="style" value="rustic">
+                                <label for="rustic">Rustik</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="romantic" name="style" value="romantic">
+                                <label for="romantic">Romantisk</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Budget & Tilføjelser -->
+                <div class="section">
+                    <h2 class="section-title">Budget & Tilføjelser</h2>
+
+                    <div class="form-group">
+                        <label>Budget (DKK)</label>
+                        <select name="budget">
+                            <option value="">Vælg budget range</option>
+                            <option value="500-1000">500 - 1.000 kr</option>
+                            <option value="1000-2500">1.000 - 2.500 kr</option>
+                            <option value="2500-5000">2.500 - 5.000 kr</option>
+                            <option value="5000+">5.000+ kr</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Specielle Ønsker eller Beskeder</label>
+                        <textarea name="specialRequests"
+                            placeholder="Fortæl os om specielle ønsker, allergier, eller andre vigtige detaljer..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Inspirationsbilleder (valgfrit)</label>
+                        <div class="file-upload">
+                            <input type="file" id="fileUpload" name="images" accept="image/*" multiple>
+                            <label for="fileUpload" class="file-upload-label">
+                                📷 Klik for at uploade billeder<br>
+                                <span class="help-text">Du kan uploade flere billeder</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">📮 Send Forespørgsel</button>
+            </form>
+        </div>
+    </div>
+
+    <footer style="margin-top: 40px; text-align: center; padding: 30px 20px; background: white;">
         <p>© 2025 Canon Blomster • Amagerbrogade 238B, 2300 København, Denmark • +45 32 55 78 90</p>
         <p style="margin-top: 10px; font-size: 0.9em; color: #555;">
             Website Built by <strong><a href="https://www.holysmokas.com" target="_blank" rel="noopener noreferrer"
@@ -60,6 +253,23 @@
             • All Rights Reserved 2025
         </p>
     </footer>
+
+    <script>
+        document.getElementById('kuraterForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Tak for din forespørgsel! Vi kontakter dig snarest.');
+            // Add your form submission logic here
+        });
+
+        // File upload preview
+        document.getElementById('fileUpload').addEventListener('change', function (e) {
+            const files = e.target.files;
+            const label = document.querySelector('.file-upload-label');
+            if (files.length > 0) {
+                label.innerHTML = `📷 ${files.length} billede(r) valgt<br><span class="help-text">Klik for at ændre</span>`;
+            }
+        });
+    </script>
 
 </body>
 
