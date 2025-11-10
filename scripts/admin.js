@@ -13,6 +13,40 @@ const statusMessage = document.getElementById('statusMessage');
 const logoutLink = document.getElementById('logoutLink');
 const productsGrid = document.getElementById('productsGrid');
 
+// Proper CSV parser that handles quoted fields with commas
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        const nextChar = line[i + 1];
+
+        if (char === '"') {
+            if (inQuotes && nextChar === '"') {
+                // Escaped quote
+                current += '"';
+                i++; // Skip next quote
+            } else {
+                // Toggle quote state
+                inQuotes = !inQuotes;
+            }
+        } else if (char === ',' && !inQuotes) {
+            // End of field
+            result.push(current.trim());
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+
+    // Add last field
+    result.push(current.trim());
+
+    return result;
+}
+
 // Auth Guard
 onAuthStateChanged(auth, (user) => {
     if (!user) {
@@ -69,7 +103,7 @@ form.addEventListener('submit', async (e) => {
         price,
         category,
         description,
-        paymentLink, // Include payment link in the product data
+        paymentLink,
         imageBase64,
         imageName,
         imageType
@@ -120,9 +154,15 @@ async function loadProducts() {
         const lines = text.trim().split('\n');
         const products = [];
 
+        console.log(`Admin: Total lines in CSV: ${lines.length}`);
+
         for (let i = 1; i < lines.length; i++) {
             const line = lines[i];
-            const cols = line.split(',').map(col => col.trim().replace(/^"|"$/g, ''));
+
+            // Use proper CSV parser
+            const cols = parseCSVLine(line);
+
+            console.log(`Admin Row ${i}:`, cols);
 
             if (cols.length >= 3 && cols[0]) {
                 products.push({
@@ -132,11 +172,12 @@ async function loadProducts() {
                     description: cols[2] || "",
                     imageUrl: fixDriveUrl(cols[3] || ""),
                     category: cols[4] || "normalt",
-                    paymentLink: cols[5] || "" // Get payment link from column 6
+                    paymentLink: cols[5] || ""
                 });
             }
         }
 
+        console.log("Admin: Loaded products:", products);
         renderProducts(products);
     } catch (err) {
         console.error("Fejl ved indlæsning:", err);
@@ -148,13 +189,22 @@ async function loadProducts() {
 function fixDriveUrl(url) {
     if (!url) return "";
 
+    // Remove any quotes or extra whitespace
+    url = url.replace(/^"|"$/g, '').trim();
+
     let fileId = "";
 
     if (url.includes("drive.google.com/uc")) {
         const match = url.match(/[?&]id=([^&]+)/);
         if (match) fileId = match[1];
     } else if (url.includes("drive.google.com/thumbnail")) {
-        return url;
+        // Already in thumbnail format - extract the ID and reconstruct
+        const match = url.match(/[?&]id=([^&]+)/);
+        if (match) fileId = match[1];
+    } else if (url.includes("drive.google.com/file/d/")) {
+        // Extract file ID from /file/d/ format
+        const match = url.match(/\/file\/d\/([^\/]+)/);
+        if (match) fileId = match[1];
     }
 
     if (fileId) {
@@ -178,7 +228,11 @@ function renderProducts(products) {
         card.classList.add("admin-product-card");
 
         const imageHtml = product.imageUrl
-            ? `<img src="${product.imageUrl}" alt="${product.name}" loading="lazy">`
+            ? `<img src="${product.imageUrl}" alt="${product.name}" loading="lazy" 
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+               <div style="width:100%;height:200px;background:#f0f0f0;display:none;align-items:center;justify-content:center;border-radius:10px;">
+                 <span style="color:#999;">📷 Billede ikke tilgængeligt</span>
+               </div>`
             : `<div style="width:100%;height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;border-radius:10px;">
                <span style="color:#999;">📷 Intet billede</span>
              </div>`;
