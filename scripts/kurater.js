@@ -1,6 +1,6 @@
 // Kurater Form Submission Handler
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjdQbvz2gZi0rBfi2Njr-r787vymY3RrFxqEWJbCC-ZYI9MxqNxyXZMG1ZzpKfq2uQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyu0aiZ5wTa9L1NCeXyy9ZDyPMLNFJmDuir_8gnOEB-XPNKBFrevhSLD5LOmr6mEyF9/exec";
 
 document.getElementById('kuraterForm').addEventListener('submit', async function (e) {
     e.preventDefault();

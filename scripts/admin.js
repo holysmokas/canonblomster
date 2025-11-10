@@ -4,7 +4,7 @@ import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
 // ⚠️ UPDATE THESE URLs
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjdQbvz2gZi0rBfi2Njr-r787vymY3RrFxqEWJbCC-ZYI9MxqNxyXZMG1ZzpKfq2uQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyu0aiZ5wTa9L1NCeXyy9ZDyPMLNFJmDuir_8gnOEB-XPNKBFrevhSLD5LOmr6mEyF9/exec";
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1YN-F-UFBNswqo_9DCqV_rhfQdZ22yMtEk1VveVv2jBs/export?format=csv&gid=0";
 
 const form = document.getElementById('addProductForm');
