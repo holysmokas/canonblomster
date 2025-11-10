@@ -4,6 +4,11 @@ const SHEET_URL = "https://docs.google.com/spreadsheets/d/1YN-F-UFBNswqo_9DCqV_r
 const imageGrid = document.getElementById("imageGrid");
 const categoryFilter = document.getElementById("categoryFilter");
 
+// Image modal elements
+const imageModal = document.getElementById("imageModal");
+const modalImage = document.getElementById("modalImage");
+const closeModal = document.querySelector(".close-modal");
+
 let allProducts = []; // Store all products for filtering
 
 // Proper CSV parser that handles quoted fields with commas
@@ -93,22 +98,27 @@ async function loadProducts() {
                 const fixedUrl = fixDriveUrl(originalUrl);
                 const category = cols[4] ? cols[4].toLowerCase().trim() : "normalt";
                 const paymentLink = cols[5] ? cols[5].trim() : ""; // Get payment link from column 6
+                const available = cols[6] ? cols[6].toLowerCase().trim() : "yes"; // Get availability from column 7
 
-                const product = {
-                    name: cols[0] || "Ukendt produkt",
-                    price: cols[1] || "",
-                    description: cols[2] || "",
-                    imageUrl: fixedUrl,
-                    category: category,
-                    paymentLink: paymentLink
-                };
+                // Only show available products to customers
+                if (available === "yes") {
+                    const product = {
+                        name: cols[0] || "Ukendt produkt",
+                        price: cols[1] || "",
+                        description: cols[2] || "",
+                        imageUrl: fixedUrl,
+                        category: category,
+                        paymentLink: paymentLink,
+                        available: available
+                    };
 
-                console.log(`Product ${i}:`, product);
-                allProducts.push(product);
+                    console.log(`Product ${i}:`, product);
+                    allProducts.push(product);
+                }
             }
         }
 
-        console.log("Loaded products:", allProducts);
+        console.log("Loaded available products:", allProducts);
         console.log("Categories found:", allProducts.map(p => p.category));
         renderProducts(allProducts);
     } catch (err) {
@@ -129,16 +139,15 @@ function renderProducts(products) {
         const card = document.createElement("div");
         card.classList.add("product-card");
 
-        // Add error handling for images with hover zoom effect
+        // Add image with click handler for modal
         const imageHtml = product.imageUrl
             ? `<div class="product-image-container" style="position:relative;overflow:hidden;border-radius:10px;height:220px;">
                  <img src="${product.imageUrl}" alt="${product.name}"
-                   class="product-image"
-                   style="width:100%;height:100%;object-fit:cover;transition:transform 0.3s ease;cursor:zoom-in;"
+                   class="product-image product-thumbnail"
+                   data-full-url="${product.imageUrl}"
+                   style="width:100%;height:100%;object-fit:cover;cursor:pointer;"
                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                   loading="lazy"
-                   onmouseover="this.style.transform='scale(1.15)'"
-                   onmouseout="this.style.transform='scale(1)'">
+                   loading="lazy">
                  <div style="width:100%;height:220px;background:#f0f0f0;display:none;align-items:center;justify-content:center;border-radius:10px;">
                    <span style="color:#999;">📷 Billede ikke tilgængeligt</span>
                  </div>
@@ -165,6 +174,34 @@ function renderProducts(products) {
             ${paymentButton}
         `;
         imageGrid.appendChild(card);
+    });
+
+    // Attach image click listeners
+    attachImageClickListeners();
+}
+
+// Image click listeners for popup
+function attachImageClickListeners() {
+    document.querySelectorAll('.product-thumbnail').forEach(img => {
+        img.addEventListener('click', () => {
+            modalImage.src = img.getAttribute('data-full-url');
+            imageModal.style.display = "flex";
+        });
+    });
+}
+
+// Close image modal
+if (closeModal) {
+    closeModal.addEventListener('click', () => {
+        imageModal.style.display = "none";
+    });
+}
+
+if (imageModal) {
+    imageModal.addEventListener('click', (e) => {
+        if (e.target === imageModal) {
+            imageModal.style.display = "none";
+        }
     });
 }
 

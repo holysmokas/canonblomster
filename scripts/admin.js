@@ -4,7 +4,7 @@ import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
 // ⚠️ UPDATE THESE URLs
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwkXss0fVhGQfCZgfN8p3BS0lvJtg-zigFa1QjEmuOSAHfWB_gRV_-gF3ZqC8cwu-Ez/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjdQbvz2gZi0rBfi2Njr-r787vymY3RrFxqEWJbCC-ZYI9MxqNxyXZMG1ZzpKfq2uQ/exec";
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1YN-F-UFBNswqo_9DCqV_rhfQdZ22yMtEk1VveVv2jBs/export?format=csv&gid=0";
 
 const form = document.getElementById('addProductForm');
@@ -12,6 +12,19 @@ const addAnotherBtn = document.getElementById('addAnotherBtn');
 const statusMessage = document.getElementById('statusMessage');
 const logoutLink = document.getElementById('logoutLink');
 const productsGrid = document.getElementById('productsGrid');
+
+// Image modal elements
+const imageModal = document.getElementById('imageModal');
+const modalImage = document.getElementById('modalImage');
+const closeModal = document.querySelector('.close-modal');
+
+// Edit modal elements
+const editModal = document.getElementById('editModal');
+const editForm = document.getElementById('editProductForm');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
+const editStatusMessage = document.getElementById('editStatusMessage');
+
+let currentEditProduct = null;
 
 // Proper CSV parser that handles quoted fields with commas
 function parseCSVLine(line) {
@@ -25,15 +38,12 @@ function parseCSVLine(line) {
 
         if (char === '"') {
             if (inQuotes && nextChar === '"') {
-                // Escaped quote
                 current += '"';
-                i++; // Skip next quote
+                i++;
             } else {
-                // Toggle quote state
                 inQuotes = !inQuotes;
             }
         } else if (char === ',' && !inQuotes) {
-            // End of field
             result.push(current.trim());
             current = '';
         } else {
@@ -41,9 +51,7 @@ function parseCSVLine(line) {
         }
     }
 
-    // Add last field
     result.push(current.trim());
-
     return result;
 }
 
@@ -58,7 +66,7 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// Handle form submission
+// Handle form submission (Add new product)
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -106,7 +114,8 @@ form.addEventListener('submit', async (e) => {
         paymentLink,
         imageBase64,
         imageName,
-        imageType
+        imageType,
+        available: "yes" // Default to available
     };
 
     statusMessage.textContent = "⏳ Uploader produkt...";
@@ -126,7 +135,6 @@ form.addEventListener('submit', async (e) => {
         form.style.display = "none";
         addAnotherBtn.style.display = "inline-block";
 
-        // Reload products after 2 seconds
         setTimeout(() => {
             loadProducts();
         }, 2000);
@@ -158,8 +166,6 @@ async function loadProducts() {
 
         for (let i = 1; i < lines.length; i++) {
             const line = lines[i];
-
-            // Use proper CSV parser
             const cols = parseCSVLine(line);
 
             console.log(`Admin Row ${i}:`, cols);
@@ -172,7 +178,8 @@ async function loadProducts() {
                     description: cols[2] || "",
                     imageUrl: fixDriveUrl(cols[3] || ""),
                     category: cols[4] || "normalt",
-                    paymentLink: cols[5] || ""
+                    paymentLink: cols[5] || "",
+                    available: cols[6] || "yes" // Column 7 for availability
                 });
             }
         }
@@ -188,8 +195,6 @@ async function loadProducts() {
 // Fix Drive URLs
 function fixDriveUrl(url) {
     if (!url) return "";
-
-    // Remove any quotes or extra whitespace
     url = url.replace(/^"|"$/g, '').trim();
 
     let fileId = "";
@@ -198,11 +203,9 @@ function fixDriveUrl(url) {
         const match = url.match(/[?&]id=([^&]+)/);
         if (match) fileId = match[1];
     } else if (url.includes("drive.google.com/thumbnail")) {
-        // Already in thumbnail format - extract the ID and reconstruct
         const match = url.match(/[?&]id=([^&]+)/);
         if (match) fileId = match[1];
     } else if (url.includes("drive.google.com/file/d/")) {
-        // Extract file ID from /file/d/ format
         const match = url.match(/\/file\/d\/([^\/]+)/);
         if (match) fileId = match[1];
     }
@@ -227,8 +230,14 @@ function renderProducts(products) {
         const card = document.createElement("div");
         card.classList.add("admin-product-card");
 
+        // Add unavailable class if product is not available
+        if (product.available === "no") {
+            card.classList.add("unavailable");
+        }
+
         const imageHtml = product.imageUrl
             ? `<img src="${product.imageUrl}" alt="${product.name}" loading="lazy" 
+                class="product-thumbnail" data-full-url="${product.imageUrl}"
                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                <div style="width:100%;height:200px;background:#f0f0f0;display:none;align-items:center;justify-content:center;border-radius:10px;">
                  <span style="color:#999;">📷 Billede ikke tilgængeligt</span>
@@ -238,8 +247,9 @@ function renderProducts(products) {
              </div>`;
 
         const categoryDisplay = product.category === 'stort' ? 'Stort' : 'Normalt';
+        const availabilityStatus = product.available === "no" ? "Ikke tilgængelig" : "Tilgængelig";
+        const availabilityClass = product.available === "no" ? "unavailable-badge" : "available-badge";
 
-        // Display payment link if available
         const paymentLinkHtml = product.paymentLink
             ? `<div class="payment-link-display">
                  💳 <a href="${product.paymentLink}" target="_blank" rel="noopener noreferrer">Betalingslink</a>
@@ -250,18 +260,195 @@ function renderProducts(products) {
           ${imageHtml}
           <h3>${product.name}</h3>
           <span class="category-badge">${categoryDisplay}</span>
+          <span class="availability-badge ${availabilityClass}">${availabilityStatus}</span>
           <p>${product.description}</p>
           <p class="price">${product.price} kr</p>
           ${paymentLinkHtml}
-          <button class="delete-btn" data-row="${product.rowIndex}" data-name="${product.name}">
-            🗑️ Slet produkt
-          </button>
+          <div class="admin-actions">
+            <button class="edit-btn" data-row="${product.rowIndex}" data-product='${JSON.stringify(product)}'>
+              ✏️ Rediger
+            </button>
+            <button class="toggle-availability-btn" data-row="${product.rowIndex}" data-available="${product.available}">
+              ${product.available === "no" ? "✅ Aktivér" : "🚫 Deaktivér"}
+            </button>
+            <button class="delete-btn" data-row="${product.rowIndex}" data-name="${product.name}">
+              🗑️ Slet
+            </button>
+          </div>
         `;
 
         productsGrid.appendChild(card);
     });
 
-    // Attach delete listeners
+    // Attach listeners
+    attachImageClickListeners();
+    attachEditListeners();
+    attachToggleAvailabilityListeners();
+    attachDeleteListeners();
+}
+
+// Image click listeners for popup
+function attachImageClickListeners() {
+    document.querySelectorAll('.product-thumbnail').forEach(img => {
+        img.addEventListener('click', () => {
+            modalImage.src = img.getAttribute('data-full-url');
+            imageModal.style.display = "flex";
+        });
+    });
+}
+
+// Close image modal
+closeModal.addEventListener('click', () => {
+    imageModal.style.display = "none";
+});
+
+imageModal.addEventListener('click', (e) => {
+    if (e.target === imageModal) {
+        imageModal.style.display = "none";
+    }
+});
+
+// Edit listeners
+function attachEditListeners() {
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', handleEdit);
+    });
+}
+
+// Handle edit
+function handleEdit(e) {
+    const btn = e.currentTarget;
+    const productData = JSON.parse(btn.getAttribute('data-product'));
+
+    currentEditProduct = productData;
+
+    // Populate edit form
+    document.getElementById('editProductName').value = productData.name;
+    document.getElementById('editProductPrice').value = productData.price;
+    document.getElementById('editProductCategory').value = productData.category;
+    document.getElementById('editProductDescription').value = productData.description;
+    document.getElementById('editProductPaymentLink').value = productData.paymentLink || "";
+
+    // Show modal
+    editModal.style.display = "flex";
+}
+
+// Cancel edit
+cancelEditBtn.addEventListener('click', () => {
+    editModal.style.display = "none";
+    editForm.reset();
+    editStatusMessage.textContent = "";
+    currentEditProduct = null;
+});
+
+// Handle edit form submission
+editForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!currentEditProduct) return;
+
+    const name = document.getElementById('editProductName').value.trim();
+    const price = document.getElementById('editProductPrice').value.trim();
+    const category = document.getElementById('editProductCategory').value.trim();
+    const description = document.getElementById('editProductDescription').value.trim();
+    const paymentLink = document.getElementById('editProductPaymentLink').value.trim();
+    const imageInput = document.getElementById('editProductImage');
+
+    editStatusMessage.textContent = "⏳ Opdaterer produkt...";
+    editStatusMessage.style.color = "#555";
+
+    try {
+        const updateData = {
+            action: "update",
+            row: currentEditProduct.rowIndex,
+            name,
+            price,
+            category,
+            description,
+            paymentLink,
+            available: currentEditProduct.available
+        };
+
+        // If new image is uploaded
+        if (imageInput.files.length > 0) {
+            const file = imageInput.files[0];
+            const reader = new FileReader();
+
+            const imageBase64 = await new Promise((resolve) => {
+                reader.onload = () => {
+                    resolve(reader.result.split(",")[1]);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            updateData.imageBase64 = imageBase64;
+            updateData.imageName = file.name;
+            updateData.imageType = file.type;
+        }
+
+        await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updateData),
+        });
+
+        editStatusMessage.textContent = "✅ Produkt opdateret!";
+        editStatusMessage.style.color = "green";
+
+        setTimeout(() => {
+            editModal.style.display = "none";
+            editForm.reset();
+            editStatusMessage.textContent = "";
+            currentEditProduct = null;
+            loadProducts();
+        }, 1500);
+
+    } catch (err) {
+        console.error("Fejl ved opdatering:", err);
+        editStatusMessage.textContent = "❌ Fejl: " + err.message;
+        editStatusMessage.style.color = "red";
+    }
+});
+
+// Toggle availability listeners
+function attachToggleAvailabilityListeners() {
+    document.querySelectorAll('.toggle-availability-btn').forEach(btn => {
+        btn.addEventListener('click', handleToggleAvailability);
+    });
+}
+
+// Handle toggle availability
+async function handleToggleAvailability(e) {
+    const btn = e.currentTarget;
+    const rowIndex = btn.getAttribute('data-row');
+    const currentAvailability = btn.getAttribute('data-available');
+    const newAvailability = currentAvailability === "yes" ? "no" : "yes";
+
+    btn.disabled = true;
+    btn.textContent = "⏳ Opdaterer...";
+
+    try {
+        const toggleUrl = `${SCRIPT_URL}?action=toggleAvailability&row=${rowIndex}&available=${newAvailability}`;
+
+        await fetch(toggleUrl, {
+            method: "GET",
+            mode: "no-cors"
+        });
+
+        setTimeout(() => {
+            loadProducts();
+        }, 1000);
+
+    } catch (err) {
+        console.error("Fejl ved skift af tilgængelighed:", err);
+        alert("❌ Kunne ikke ændre tilgængelighed: " + err.message);
+        btn.disabled = false;
+    }
+}
+
+// Delete listeners
+function attachDeleteListeners() {
     document.querySelectorAll('.delete-btn').forEach(btn => {
         btn.addEventListener('click', handleDelete);
     });

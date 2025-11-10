@@ -26,7 +26,7 @@
 
     .products-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 25px;
       margin-top: 20px;
     }
@@ -41,6 +41,11 @@
       position: relative;
     }
 
+    .admin-product-card.unavailable {
+      opacity: 0.6;
+      border: 2px solid #e74c3c;
+    }
+
     .admin-product-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
@@ -52,6 +57,12 @@
       object-fit: cover;
       border-radius: 10px;
       margin-bottom: 10px;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .admin-product-card img:hover {
+      opacity: 0.8;
     }
 
     .admin-product-card h3 {
@@ -80,9 +91,27 @@
       border-radius: 20px;
       font-size: 0.8em;
       font-weight: 600;
-      margin: 8px 0;
+      margin: 8px 5px;
       background: linear-gradient(135deg, #df20af 0%, #e85d75 100%);
       color: white;
+    }
+
+    .admin-product-card .availability-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      font-weight: 600;
+      margin: 8px 5px;
+      color: white;
+    }
+
+    .available-badge {
+      background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    }
+
+    .unavailable-badge {
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
     }
 
     .admin-product-card .payment-link-display {
@@ -105,6 +134,49 @@
       text-decoration: underline;
     }
 
+    .admin-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .edit-btn {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9em;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+    }
+
+    .edit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    }
+
+    .toggle-availability-btn {
+      background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9em;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+    }
+
+    .toggle-availability-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+    }
+
     .delete-btn {
       background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
       color: white;
@@ -114,7 +186,6 @@
       cursor: pointer;
       font-weight: 600;
       font-size: 0.9em;
-      margin-top: 10px;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       width: 100%;
     }
@@ -124,7 +195,9 @@
       box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
     }
 
-    .delete-btn:disabled {
+    .delete-btn:disabled,
+    .edit-btn:disabled,
+    .toggle-availability-btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
@@ -142,6 +215,160 @@
       color: #df20af;
       font-size: 1.1em;
       padding: 40px;
+    }
+
+    /* Image Modal Styles */
+    .image-modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .image-modal img {
+      max-width: 90%;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 10001;
+    }
+
+    .close-modal:hover {
+      color: #df20af;
+    }
+
+    /* Edit Modal Styles */
+    .edit-modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .edit-modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .edit-modal-content h2 {
+      color: #df20af;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .edit-modal-content label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+      margin-top: 15px;
+    }
+
+    .edit-modal-content input[type="text"],
+    .edit-modal-content input[type="number"],
+    .edit-modal-content input[type="url"],
+    .edit-modal-content select,
+    .edit-modal-content textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e8e8e8;
+      border-radius: 8px;
+      font-size: 1em;
+      font-family: "Poppins", sans-serif;
+      transition: all 0.3s ease;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+
+    .edit-modal-content input:focus,
+    .edit-modal-content select:focus,
+    .edit-modal-content textarea:focus {
+      outline: none;
+      border-color: #df20af;
+      box-shadow: 0 0 0 3px rgba(223, 32, 175, 0.1);
+    }
+
+    .edit-modal-content input[type="file"] {
+      border: 2px dashed #df20af;
+      border-radius: 10px;
+      padding: 15px;
+      background: #fff5fb;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    .edit-modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .edit-modal-actions button {
+      flex: 1;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .update-btn {
+      background: linear-gradient(135deg, #df20af 0%, #e85d75 100%);
+      color: white;
+    }
+
+    .update-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(223, 32, 175, 0.3);
+    }
+
+    .cancel-btn {
+      background: #6c757d;
+      color: white;
+    }
+
+    .cancel-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+    }
+
+    #editStatusMessage {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -213,6 +440,51 @@
       </div>
     </div>
   </main>
+
+  <!-- IMAGE MODAL -->
+  <div id="imageModal" class="image-modal">
+    <span class="close-modal">&times;</span>
+    <img id="modalImage" src="" alt="Full size product image">
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div id="editModal" class="edit-modal">
+    <div class="edit-modal-content">
+      <h2>✏️ Rediger produkt</h2>
+      <form id="editProductForm">
+        <label for="editProductName">Produktnavn</label>
+        <input type="text" id="editProductName" required>
+
+        <label for="editProductPrice">Pris (kr)</label>
+        <input type="number" id="editProductPrice" required>
+
+        <label for="editProductCategory">Kategori</label>
+        <select id="editProductCategory" required>
+          <option value="normalt">Normalt</option>
+          <option value="stort">Stort</option>
+        </select>
+
+        <label for="editProductDescription">Beskrivelse</label>
+        <textarea id="editProductDescription" rows="3"></textarea>
+
+        <label for="editProductPaymentLink">Betalingslink</label>
+        <input type="url" id="editProductPaymentLink" placeholder="Valgfrit">
+
+        <label for="editProductImage">Nyt billede (valgfrit)</label>
+        <input type="file" id="editProductImage" accept="image/*">
+        <small style="color: #666; font-size: 0.85em; display: block; margin-top: -10px; margin-bottom: 15px;">
+          💡 Efterlad tom for at beholde nuværende billede
+        </small>
+
+        <div class="edit-modal-actions">
+          <button type="submit" class="update-btn">✅ Gem ændringer</button>
+          <button type="button" id="cancelEditBtn" class="cancel-btn">❌ Annuller</button>
+        </div>
+
+        <p id="editStatusMessage"></p>
+      </form>
+    </div>
+  </div>
 
   <footer class="site-footer">
     <p>© 2025 Canon Blomster • Amagerbrogade 238B, 2300 København, Denmark • +45 32 55 78 90</p>
