@@ -1,6 +1,6 @@
 // Kurater Form Submission Handler
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyu0aiZ5wTa9L1NCeXyy9ZDyPMLNFJmDuir_8gnOEB-XPNKBFrevhSLD5LOmr6mEyF9/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuIf2xc7cfpP4k185eiv-PVbIkYkETMGMio7q9bomS0vQwQSS8OMIJAQ8UF2bjR5Cl/exec";
 
 // Create custom popup
 function showPopup(message, type = 'info') {
