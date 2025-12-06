@@ -7,6 +7,47 @@
     <title>Canon Blomster</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="icon" type="image/jpeg" href="images/favicon.jpeg">
+    <style>
+        /* Shop Button Styles */
+        .shop-button-container {
+            text-align: center;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .shop-btn {
+            display: inline-block;
+            padding: 18px 45px;
+            background: linear-gradient(135deg, #df20af 0%, #e85d75 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(223, 32, 175, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .shop-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(223, 32, 175, 0.5);
+            background: linear-gradient(135deg, #e85d75 0%, #df20af 100%);
+        }
+
+        .shop-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .shop-btn {
+                padding: 15px 35px;
+                font-size: 1.1em;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -38,6 +79,11 @@
         🌺 <strong>Resten af Amager</strong>: 100 kr.
     </div>
 
+    <!-- FIRST BUTTON: Between delivery info and slideshow -->
+    <div class="shop-button-container">
+        <a href="botanisk.html" class="shop-btn">🛍️ Butik</a>
+    </div>
+
     <main>
         <a href="botanisk.html">
             <div class="auto-slideshow">
@@ -59,6 +105,11 @@
             </div>
         </a>
 
+        <!-- SECOND BUTTON: Between slideshow and video -->
+        <div class="shop-button-container">
+            <a href="botanisk.html" class="shop-btn">🌸 Se vores produkter</a>
+        </div>
+
         <section class="video-section" aria-label="Introduktionsvideo om Canon Blomster"
             style="margin: 30px auto; max-width: 600px;">
             <iframe width="100%" height="350" src="https://www.youtube.com/embed/09MHqivCEL0?rel=0" frameborder="0"
@@ -66,6 +117,7 @@
                 allowfullscreen style="display: block;">
             </iframe>
         </section>
+
         <section class="reviews-section" aria-label="Kundeanmeldelser">
             <h2>Kundeanmeldelser</h2>
             <div class="reviews-container">
@@ -96,6 +148,12 @@
                 </article>
             </div>
         </section>
+
+        <!-- THIRD BUTTON: Between reviews and map -->
+        <div class="shop-button-container">
+            <a href="botanisk.html" class="shop-btn">🌺 Shoppe</a>
+        </div>
+
         <section class="maps-section" aria-label="Butikkens placering">
             <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2251.4767353231255!2d12.611672377320161!3d55.64591667304484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4653aca985d9f60b%3A0x29f40141e32fcae6!2sCanon%20Blomster!5e0!3m2!1sen!2sus!4v1760950475572!5m2!1sen!2sus"
