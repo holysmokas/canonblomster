@@ -69,9 +69,16 @@ function showSlides() {
 }
 
 // =============================================================================
-// SIDE POPUPS
+// SIDE POPUPS - Only show once per session
 // =============================================================================
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if popups have already been shown in this session
+    const hasSeenPopups = sessionStorage.getItem('popupsShown');
+
+    if (hasSeenPopups) {
+        return; // Exit if already shown
+    }
+
     const leftPopups = document.querySelectorAll('.popup-left');
     const rightPopups = document.querySelectorAll('.popup-right');
     const displayTime = 3000; // visible for 3 seconds
@@ -100,19 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 800 + index * 1500);
     });
 
-    // Repeat every 10 seconds
-    setInterval(() => {
-        leftPopups.forEach((popup, index) => {
-            setTimeout(() => {
-                showPopup(popup, 'left');
-            }, index * 1500);
-        });
-        rightPopups.forEach((popup, index) => {
-            setTimeout(() => {
-                showPopup(popup, 'right');
-            }, 800 + index * 1500);
-        });
-    }, 10000);
+    // Mark popups as shown for this session
+    sessionStorage.setItem('popupsShown', 'true');
 });
-
 
