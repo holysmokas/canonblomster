@@ -1,4 +1,47 @@
+// =============================================================================
+// CONTACT PROTECTION - Obfuscate email and phone from bots
+// =============================================================================
+function revealPhone() {
+    // Decoded: +45 32 55 78 90
+    const parts = ['45', '32', '55', '78', '90'];
+    const phone = '+' + parts.join(' ');
 
+    const el = document.querySelector('.phone-protected');
+    if (el) {
+        el.innerHTML = `<a href="tel:+45${parts.slice(1).join('')}">${phone}</a>`;
+        el.style.background = '#e8f5e9';
+    }
+}
+
+function revealEmail() {
+    // Obfuscated email to prevent bot scraping
+    const user = 'canonblomster';
+    const domain = 'gmail';
+    const tld = 'com';
+    const email = user + '@' + domain + '.' + tld;
+
+    const el = document.querySelector('.email-protected');
+    if (el) {
+        el.innerHTML = `<a href="mailto:${email}">${email}</a>`;
+        el.style.background = '#e8f5e9';
+    }
+}
+
+// Auto-reveal after user interaction (more user-friendly)
+let hasInteracted = false;
+document.addEventListener('click', function () {
+    if (!hasInteracted) {
+        hasInteracted = true;
+        setTimeout(() => {
+            revealPhone();
+            revealEmail();
+        }, 1000);
+    }
+}, { once: true });
+
+// =============================================================================
+// SLIDESHOW
+// =============================================================================
 let slideIndex = 0;
 showSlides();
 
@@ -25,8 +68,9 @@ function showSlides() {
     setTimeout(showSlides, 3000);
 }
 
-
-
+// =============================================================================
+// SIDE POPUPS
+// =============================================================================
 document.addEventListener('DOMContentLoaded', () => {
     const leftPopups = document.querySelectorAll('.popup-left');
     const rightPopups = document.querySelectorAll('.popup-right');

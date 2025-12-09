@@ -28,7 +28,6 @@
                 <li><a href="index.html">Hjemside</a></li>
                 <li><a href="botanisk.html">Botanisk</a></li>
                 <li><a href="kurater.html">Kurater</a></li>
-                <li><a href="admin-login.html">Login</a></li>
             </ul>
         </nav>
     </header>
@@ -48,7 +47,19 @@
 
         <div class="form-content">
             <form id="kuraterForm">
+                <div style="position: absolute; left: -5000px; opacity: 0; pointer-events: none;" aria-hidden="true">
+                    <label for="honeypot">Leave this field empty</label>
+                    <input type="text" id="honeypot" name="honeypot" tabindex="-1" autocomplete="off">
+                </div>
+
+                <!-- Rest of your form continues here... -->
                 <!-- Kontakt Information -->
+                <div class="section">
+                    <h2 class="section-title">Kontakt Information</h2>
+                    <!-- ... your existing form fields ... -->
+                </div>
+                <!-- Kontakt Information -->
+
                 <div class="section">
                     <h2 class="section-title">Kontakt Information</h2>
 
@@ -243,8 +254,26 @@
         </div>
     </div>
 
-    <footer style="margin-top: 40px; text-align: center; padding: 30px 20px; background: white;">
-        <p>© 2025 Canon Blomster • Amagerbrogade 238B, 2300 København, Denmark • +45 32 55 78 90</p>
+    <!-- PROTECTED FOOTER - Replace your existing footer with this -->
+    <footer>
+        <p>© 2025 Canon Blomster • Amagerbrogade 238B, 2300 København, Denmark</p>
+
+        <div class="contact-info" style="margin: 15px 0;">
+            <span class="phone-protected"
+                style="display:inline-block; padding:8px 15px; background:#f8f8f8; border-radius:8px; cursor:pointer; transition:all 0.3s ease; margin:5px;"
+                onclick="revealPhone()" onmouseover="this.style.background='#ffeef8'"
+                onmouseout="this.style.background='#f8f8f8'">
+                📞 Klik for telefonnummer
+            </span>
+            <span style="margin: 0 5px; color: #999;">•</span>
+            <span class="email-protected"
+                style="display:inline-block; padding:8px 15px; background:#f8f8f8; border-radius:8px; cursor:pointer; transition:all 0.3s ease; margin:5px;"
+                onclick="revealEmail()" onmouseover="this.style.background='#ffeef8'"
+                onmouseout="this.style.background='#f8f8f8'">
+                ✉️ Klik for email
+            </span>
+        </div>
+
         <p style="margin-top: 10px; font-size: 0.9em; color: #555;">
             Website Built by <strong><a href="https://www.holysmokas.com" target="_blank" rel="noopener noreferrer"
                     style="color: #df20af; text-decoration: none; font-weight: 600;"
@@ -253,6 +282,33 @@
             www.holysmokas.com • All Rights Reserved 2025
         </p>
     </footer>
+
+    <style>
+        /* Additional footer styles */
+        .contact-info a {
+            color: #df20af;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .contact-info {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .contact-info span:not(.phone-protected):not(.email-protected) {
+                display: none !important;
+                /* Hide the bullet separator on mobile */
+            }
+        }
+    </style>
 
     <script src="scripts/kurater.js"></script>
 
