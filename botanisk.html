@@ -8,8 +8,16 @@
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
 
+        // STEP 1: Define default consent state (denied)
+        gtag('consent', 'default', {
+            'analytics_storage': 'denied',
+            'ad_storage': 'denied',
+            'wait_for_update': 500
+        });
+
+        // STEP 2: Initialize GA4
+        gtag('js', new Date());
         gtag('config', 'G-V5SMV5177H');
     </script>
 
@@ -82,6 +90,33 @@
 </head>
 
 <body class="botanisk">
+    <div id="consent-banner"
+        style="position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 20px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 1000; border-top: 3px solid #df20af; font-family: sans-serif; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px;">
+        <div class="consent-text" style="flex-basis: 70%; min-width: 300px;">
+            <h3 style="margin: 0 0 5px 0; font-size: 1.2em; color: #333;">Vi værdsætter dit privatliv</h3>
+            <p style="margin: 0; font-size: 0.9em; color: #555;">
+                Vi bruger cookies til at forbedre din oplevelse, analysere trafik og vise dig relevant indhold.
+                Vælg selv hvilke cookies du accepterer.
+            </p>
+        </div>
+        <div class="consent-actions" style="flex-basis: auto; display: flex; gap: 10px;">
+            <button id="accept-all"
+                style="padding: 10px 15px; background-color: #df20af; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s;">
+                Accepter Alle
+            </button>
+            <button id="reject-all"
+                style="padding: 10px 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s;">
+                Afvis Alle
+            </button>
+        </div>
+    </div>
+
+    <div id="consent-preference-link" style="position: fixed; bottom: 10px; left: 10px; z-index: 999; display: none;">
+        <button onclick="document.getElementById('consent-banner').style.display='flex';"
+            style="padding: 8px 12px; background: #fff; color: #df20af; border: 1px solid #df20af; border-radius: 5px; cursor: pointer; font-size: 0.8em;">
+            ⚙️ Cookie Indstillinger
+        </button>
+    </div>
 
     <header class="header-flex">
         <div class="header-title">
@@ -188,6 +223,7 @@
         }
     </style>
 
+    <script src="scripts/consents.js"></script>
     <script src="scripts/botanisk.js"></script>
 
 </body>
