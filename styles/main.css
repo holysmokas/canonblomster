@@ -24,113 +24,6 @@ body {
     overflow: hidden;
 }
 
-/* ===== HEADER (UNIFIED STYLES) ===== */
-.header-flex {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    padding: 18px 16px;
-    min-height: 72px;
-    z-index: 3000;
-    pointer-events: auto;
-    box-sizing: border-box;
-    background-color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.header-title {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.header-flex h1 {
-    margin: 0;
-    font-size: 1.5em;
-    color: #df20af;
-    pointer-events: auto;
-    position: static;
-    transform: none;
-}
-
-.opening-hours {
-    font-size: 0.9rem;
-    color: #df20af;
-    margin-top: 4px;
-    letter-spacing: 0.3px;
-    font-weight: 500;
-    line-height: 1;
-}
-
-/* ===== HAMBURGER MENU ===== */
-.hamburger-nav {
-    position: absolute;
-    right: 18px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: auto;
-}
-
-.hamburger {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 56px;
-    height: 48px;
-    cursor: pointer;
-    z-index: 1001;
-    background: rgba(255, 255, 255, 0.6);
-    padding: 8px;
-    border-radius: 10px;
-    backdrop-filter: blur(4px);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-}
-
-.hamburger span {
-    display: block;
-    height: 8px;
-    width: 100%;
-    background: #df20af;
-    border-radius: 8px;
-    transition: 0.3s;
-}
-
-#menu-toggle {
-    display: none;
-}
-
-.menu {
-    display: none;
-    position: absolute;
-    top: 40px;
-    right: 0;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    list-style: none;
-    padding: 16px 24px;
-    z-index: 1000;
-}
-
-.menu li {
-    margin: 12px 0;
-}
-
-.menu a {
-    color: #df20af;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.1em;
-}
-
-#menu-toggle:checked+.hamburger+.menu {
-    display: block;
-}
 
 /* ===== MAIN CONTENT ===== */
 main {
@@ -1066,98 +959,150 @@ footer {
     }
 }
 
-/* Logo Styles for Header */
+/* ===== LOGO STYLES FOR HEADER - FIXED LAYOUT ===== */
+/* This section replaces the header styles at the top of main.css */
+
 .header-flex {
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 30px;
+    padding: 15px 20px;
     background: white;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 1000;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 3000;
+    gap: 15px;
+    box-sizing: border-box;
 }
 
 .header-logo {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
+    flex-shrink: 0;
     display: flex;
     align-items: center;
-    gap: 10px;
     text-decoration: none;
+    order: 1;
 }
 
 .header-logo img {
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
     object-fit: contain;
     border-radius: 50%;
     transition: transform 0.3s ease;
 }
 
 .header-logo:hover img {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
-/* Alternative: Emoji/Icon Logo */
-.header-logo-icon {
-    font-size: 2.5em;
-    line-height: 1;
-    transition: transform 0.3s ease;
-}
-
-.header-logo:hover .header-logo-icon {
-    transform: rotate(15deg) scale(1.1);
-}
-
-/* Adjust header title for logo space */
+/* Center the header title with proper spacing */
 .header-title {
-    margin-left: 70px;
-    /* Make space for logo */
-    text-align: center;
     flex: 1;
+    text-align: center;
+    order: 2;
+    margin: 0;
+    padding: 0 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header-title h1 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #df20af;
+    line-height: 1.2;
+}
+
+.opening-hours {
+    font-size: 0.85rem;
+    color: #df20af;
+    margin-top: 4px;
+    letter-spacing: 0.3px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+/* Hamburger stays on the right */
+.hamburger-nav {
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    order: 3;
+    flex-shrink: 0;
+}
+
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 56px;
+    height: 48px;
+    cursor: pointer;
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 8px;
+    border-radius: 10px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.hamburger span {
+    display: block;
+    height: 8px;
+    width: 100%;
+    background: #df20af;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+#menu-toggle {
+    display: none;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 16px 24px;
+    z-index: 1000;
+}
+
+.menu li {
+    margin: 12px 0;
+}
+
+.menu a {
+    color: #df20af;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+#menu-toggle:checked+.hamburger+.menu {
+    display: block;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .header-logo img {
-        width: 40px;
-        height: 40px;
-    }
-
-    .header-logo-icon {
-        font-size: 2em;
-    }
-
-    .header-title {
-        margin-left: 50px;
-    }
-
-    .header-title h1 {
-        font-size: 1.5em;
-    }
-
-    .opening-hours {
-        font-size: 0.7em;
-    }
-}
-
-@media (max-width: 480px) {
-    .header-logo {
-        left: 10px;
+    .header-flex {
+        padding: 12px 15px;
+        gap: 10px;
     }
 
     .header-logo img {
-        width: 35px;
-        height: 35px;
-    }
-
-    .header-title {
-        margin-left: 45px;
+        width: 45px;
+        height: 45px;
     }
 
     .header-title h1 {
@@ -1165,7 +1110,61 @@ footer {
     }
 
     .opening-hours {
+        font-size: 0.75rem;
+    }
+
+    .hamburger {
+        width: 50px;
+        height: 44px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-flex {
+        padding: 10px 12px;
+    }
+
+    .header-logo img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .header-title h1 {
+        font-size: 1.1em;
+    }
+
+    .opening-hours {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-flex {
+        padding: 8px 10px;
+        gap: 8px;
+    }
+
+    .header-logo img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .header-title h1 {
+        font-size: 0.95em;
+    }
+
+    .opening-hours {
         display: none;
         /* Hide on very small screens */
+    }
+
+    .hamburger {
+        width: 44px;
+        height: 38px;
+        padding: 6px;
+    }
+
+    .hamburger span {
+        height: 6px;
     }
 }
