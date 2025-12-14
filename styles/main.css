@@ -1065,3 +1065,107 @@ footer {
         font-size: 1.1em;
     }
 }
+
+/* Logo Styles for Header */
+.header-flex {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 30px;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-logo {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.header-logo img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.header-logo:hover img {
+    transform: scale(1.1);
+}
+
+/* Alternative: Emoji/Icon Logo */
+.header-logo-icon {
+    font-size: 2.5em;
+    line-height: 1;
+    transition: transform 0.3s ease;
+}
+
+.header-logo:hover .header-logo-icon {
+    transform: rotate(15deg) scale(1.1);
+}
+
+/* Adjust header title for logo space */
+.header-title {
+    margin-left: 70px;
+    /* Make space for logo */
+    text-align: center;
+    flex: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .header-logo img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .header-logo-icon {
+        font-size: 2em;
+    }
+
+    .header-title {
+        margin-left: 50px;
+    }
+
+    .header-title h1 {
+        font-size: 1.5em;
+    }
+
+    .opening-hours {
+        font-size: 0.7em;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-logo {
+        left: 10px;
+    }
+
+    .header-logo img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .header-title {
+        margin-left: 45px;
+    }
+
+    .header-title h1 {
+        font-size: 1.2em;
+    }
+
+    .opening-hours {
+        display: none;
+        /* Hide on very small screens */
+    }
+}
