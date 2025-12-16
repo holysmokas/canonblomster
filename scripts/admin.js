@@ -5,7 +5,7 @@ import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuIf2xc7cfpP4k185eiv-PVbIkYkETMGMio7q9bomS0vQwQSS8OMIJAQ8UF2bjR5Cl/exec";
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1YN-F-UFBNswqo_9DCqV_rhfQdZ22yMtEk1VveVv2jBs/export?format=csv&gid=0";
-
+                       
 const form = document.getElementById('addProductForm');
 const addAnotherBtn = document.getElementById('addAnotherBtn');
 const statusMessage = document.getElementById('statusMessage');
