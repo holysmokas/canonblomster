@@ -3,9 +3,10 @@
 import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
+// ⚠️ IMPORTANT: Update this URL after redeploying your Google Apps Script
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuIf2xc7cfpP4k185eiv-PVbIkYkETMGMio7q9bomS0vQwQSS8OMIJAQ8UF2bjR5Cl/exec";
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1YN-F-UFBNswqo_9DCqV_rhfQdZ22yMtEk1VveVv2jBs/export?format=csv&gid=0";
-                       
+
 const form = document.getElementById('addProductForm');
 const addAnotherBtn = document.getElementById('addAnotherBtn');
 const statusMessage = document.getElementById('statusMessage');
@@ -22,6 +23,17 @@ const cancelEditBtn = document.getElementById('cancelEditBtn');
 const editStatusMessage = document.getElementById('editStatusMessage');
 
 let currentEditProduct = null;
+
+// ===========================
+// DEBUG MODE - Set to true to see console logs
+// ===========================
+const DEBUG = true;
+
+function debugLog(...args) {
+    if (DEBUG) {
+        console.log('[Canon Admin]', ...args);
+    }
+}
 
 // Create custom popup
 function showPopup(message, type = 'info') {
@@ -196,6 +208,8 @@ form.addEventListener('submit', async (e) => {
     statusMessage.style.color = "#555";
 
     try {
+        debugLog('Adding product:', { name, price, category });
+
         await fetch(SCRIPT_URL, {
             method: "POST",
             mode: "no-cors",
@@ -211,9 +225,10 @@ form.addEventListener('submit', async (e) => {
 
         showPopup("✅ Produkt tilføjet!", "success");
 
+        // Longer delay to allow Google Sheets to update
         setTimeout(() => {
             loadProducts();
-        }, 2000);
+        }, 3000);
 
     } catch (err) {
         console.error("❌ Fejl:", err);
@@ -230,19 +245,27 @@ addAnotherBtn.addEventListener("click", () => {
 });
 
 async function loadProducts() {
+    debugLog('Loading products...');
+
     try {
-        const res = await fetch(SHEET_CSV_URL);
+        // Add cache-busting to prevent stale data
+        const cacheBuster = new Date().getTime();
+        const res = await fetch(`${SHEET_CSV_URL}&_cb=${cacheBuster}`);
         const text = await res.text();
+
+        debugLog('CSV response received, length:', text.length);
 
         const lines = text.trim().split('\n');
         const products = [];
+
+        debugLog('Total lines in CSV:', lines.length);
 
         for (let i = 1; i < lines.length; i++) {
             const line = lines[i];
             const cols = parseCSVLine(line);
 
             if (cols.length >= 3 && cols[0]) {
-                products.push({
+                const product = {
                     rowIndex: i + 1,
                     name: cols[0] || "Ukendt produkt",
                     price: cols[1] || "",
@@ -251,10 +274,13 @@ async function loadProducts() {
                     category: cols[4] || "normalt",
                     paymentLink: cols[5] || "",
                     available: cols[6] || "yes"
-                });
+                };
+                products.push(product);
+                debugLog(`Product ${i}:`, product.name, 'Row:', product.rowIndex);
             }
         }
 
+        debugLog('Total products loaded:', products.length);
         renderProducts(products);
     } catch (err) {
         console.error("Fejl ved indlæsning:", err);
@@ -323,6 +349,9 @@ function renderProducts(products) {
                </div>`
             : '';
 
+        // Escape product data for JSON embedding
+        const safeProduct = JSON.stringify(product).replace(/'/g, "&#39;");
+
         card.innerHTML = `
           ${imageHtml}
           <h3>${product.name}</h3>
@@ -332,7 +361,7 @@ function renderProducts(products) {
           <p class="price">${product.price} kr</p>
           ${paymentLinkHtml}
           <div class="admin-actions">
-            <button class="edit-btn" data-row="${product.rowIndex}" data-product='${JSON.stringify(product)}'>
+            <button class="edit-btn" data-row="${product.rowIndex}" data-product='${safeProduct}'>
               ✏️ Rediger
             </button>
             <button class="toggle-availability-btn" data-row="${product.rowIndex}" data-available="${product.available}">
@@ -380,17 +409,23 @@ function attachEditListeners() {
 
 function handleEdit(e) {
     const btn = e.currentTarget;
-    const productData = JSON.parse(btn.getAttribute('data-product'));
+    try {
+        const productData = JSON.parse(btn.getAttribute('data-product'));
+        debugLog('Editing product:', productData);
 
-    currentEditProduct = productData;
+        currentEditProduct = productData;
 
-    document.getElementById('editProductName').value = productData.name;
-    document.getElementById('editProductPrice').value = productData.price;
-    document.getElementById('editProductCategory').value = productData.category;
-    document.getElementById('editProductDescription').value = productData.description;
-    document.getElementById('editProductPaymentLink').value = productData.paymentLink || "";
+        document.getElementById('editProductName').value = productData.name;
+        document.getElementById('editProductPrice').value = productData.price;
+        document.getElementById('editProductCategory').value = productData.category;
+        document.getElementById('editProductDescription').value = productData.description;
+        document.getElementById('editProductPaymentLink').value = productData.paymentLink || "";
 
-    editModal.style.display = "flex";
+        editModal.style.display = "flex";
+    } catch (err) {
+        console.error('Error parsing product data:', err);
+        showPopup("❌ Kunne ikke åbne redigeringsvindue", "error");
+    }
 }
 
 cancelEditBtn.addEventListener('click', () => {
@@ -403,7 +438,10 @@ cancelEditBtn.addEventListener('click', () => {
 editForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    if (!currentEditProduct) return;
+    if (!currentEditProduct) {
+        debugLog('No product selected for edit');
+        return;
+    }
 
     const name = document.getElementById('editProductName').value.trim();
     const price = document.getElementById('editProductPrice').value.trim();
@@ -427,6 +465,8 @@ editForm.addEventListener('submit', async (e) => {
             available: currentEditProduct.available
         };
 
+        debugLog('Sending update:', updateData);
+
         if (imageInput.files.length > 0) {
             const file = imageInput.files[0];
             const reader = new FileReader();
@@ -441,6 +481,7 @@ editForm.addEventListener('submit', async (e) => {
             updateData.imageBase64 = imageBase64;
             updateData.imageName = file.name;
             updateData.imageType = file.type;
+            debugLog('New image attached');
         }
 
         await fetch(SCRIPT_URL, {
@@ -449,6 +490,8 @@ editForm.addEventListener('submit', async (e) => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updateData),
         });
+
+        debugLog('Update request sent');
 
         editStatusMessage.textContent = "✅ Produkt opdateret!";
         editStatusMessage.style.color = "green";
@@ -461,7 +504,7 @@ editForm.addEventListener('submit', async (e) => {
             editStatusMessage.textContent = "";
             currentEditProduct = null;
             loadProducts();
-        }, 1500);
+        }, 2000);
 
     } catch (err) {
         console.error("Fejl ved opdatering:", err);
@@ -483,22 +526,28 @@ async function handleToggleAvailability(e) {
     const currentAvailability = btn.getAttribute('data-available');
     const newAvailability = currentAvailability === "yes" ? "no" : "yes";
 
+    debugLog('Toggle availability:', { rowIndex, currentAvailability, newAvailability });
+
     btn.disabled = true;
     btn.textContent = "⏳ Opdaterer...";
 
     try {
         const toggleUrl = `${SCRIPT_URL}?action=toggleAvailability&row=${rowIndex}&available=${newAvailability}`;
+        debugLog('Toggle URL:', toggleUrl);
 
         await fetch(toggleUrl, {
             method: "GET",
             mode: "no-cors"
         });
 
+        debugLog('Toggle request sent');
+
         showPopup("✅ Tilgængelighed opdateret!", "success");
 
+        // Longer delay to allow Google Sheets to update
         setTimeout(() => {
             loadProducts();
-        }, 1000);
+        }, 2000);
 
     } catch (err) {
         console.error("Fejl ved skift af tilgængelighed:", err);
@@ -518,23 +567,29 @@ async function handleDelete(e) {
     const rowIndex = btn.getAttribute('data-row');
     const productName = btn.getAttribute('data-name');
 
+    debugLog('Delete requested:', { rowIndex, productName });
+
     showConfirm(`Er du sikker på at du vil slette "${productName}"?`, async () => {
         btn.disabled = true;
         btn.textContent = "Sletter...";
 
         try {
             const deleteUrl = `${SCRIPT_URL}?action=delete&row=${rowIndex}`;
+            debugLog('Delete URL:', deleteUrl);
 
             await fetch(deleteUrl, {
                 method: "GET",
                 mode: "no-cors"
             });
 
+            debugLog('Delete request sent');
+
             showPopup("✅ Produkt slettet!", "success");
 
+            // Longer delay to allow Google Sheets to update
             setTimeout(() => {
                 loadProducts();
-            }, 1000);
+            }, 2000);
 
         } catch (err) {
             console.error("Fejl ved sletning:", err);
@@ -565,3 +620,7 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// Log that the script loaded
+debugLog('Admin.js loaded successfully');
+debugLog('Script URL:', SCRIPT_URL);
